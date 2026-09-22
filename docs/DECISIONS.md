@@ -63,6 +63,7 @@ Niveles del responsable: N2 = recomendación con aprobación; N3 = requiere revi
 | Nueva | Colores por faceta | Máximo 8; valores menos frecuentes en «Otros» | `profiles/default.json` (`max_colors_per_facet`) |
 | Nueva | Perfil ampliado | Se agregaron facetas `element_kind`, `info_domain`, `sensitivity`, `status`, `origin`, `source_type` y tipos de dato `texto_libre`, `compuesto`, `archivo` sin modificar los parámetros visuales existentes | `profiles/default.json` |
 | Nueva | Reglas compartidas | `config/inference.json` es la fuente de verdad de inferencia para backend y visor; los YAML de estándares y cronología se convierten a JSON al sincronizar | `frontend/scripts/sync-data.mjs` |
+| M7 (aplicación) | Publicación en Vercel solicitada por Inti (2026-09-22) | Se publica solo el visor con las muestras; la carga de documentos queda desactivada en la compilación pública (`VITE_PUBLIC_DEPLOY=true`) y se habilita solo en instalación local o institucional | `frontend/src/ui/sources.ts`, `frontend/vercel.json` |
 | Nueva | Fixture interno | `info_para_presentacion.docx` no se versiona (repositorio público); las pruebas que lo usan se omiten si falta | `.gitignore`, `tests/conftest.py` |
 
 ## Observaciones del documento fuente pendientes (equipo de registro)

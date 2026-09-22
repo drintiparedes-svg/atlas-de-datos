@@ -9,8 +9,20 @@ import { downloadAgf } from "./relations";
 interface QueueItem { name: string; size: number; status: "en cola" | "extrayendo" | "pendiente de confirmación" | "publicado" | "error"; detail?: string; result?: IngestResult; file: File }
 export const queue: QueueItem[] = [];
 
+/** Decisión M7 (N3): el módulo con carga de documentos no se expone en URLs públicas. En un despliegue público
+ *  (VITE_PUBLIC_DEPLOY=true) la zona de carga se reemplaza por instrucciones para ejecutarlo en el equipo propio. */
+export const PUBLIC_DEPLOY = import.meta.env.VITE_PUBLIC_DEPLOY === "true";
+
 export function renderFuentes(app: App): string {
   const srcs = app.agf.sources;
+  if (PUBLIC_DEPLOY) return `
+    <div class="eyebrow">Fuentes · ${srcs.length}</div>
+    <h2>Documentos del proyecto</h2>
+    <div class="alert"><b>Carga desactivada en esta versión pública.</b> Por política del proyecto (decisión M7), la carga de documentos solo se habilita en una instalación local o institucional con autenticación. Esta URL muestra las muestras publicadas.</div>
+    <p>Para cargar tus propios documentos: clona el repositorio, ejecuta <code>npm run dev</code> en <code>frontend/</code> y usa la pestaña Fuentes; o genera un AGF con <code>atlas ingest</code> y ábrelo con <code>?agf=</code>.</p>
+    <h3>Fuentes cargadas · ${srcs.length}</h3>
+    ${srcs.map((s) => `<div class="src-row"><span><button class="chip" data-id="${esc(s.id)}">${esc(s.title || s.name)}</button></span><span class="st">${esc(app.pv.valueLabel("source_type", s.facets?.source_type))}</span><span class="meta">${esc(s.adapter || "")} · ${app.agf.nodes.filter((n) => n.kind === "element" && n.source_id === s.id).length} elementos</span></div>`).join("")}
+    <div style="margin-top:.8rem"><button class="btn" id="download-agf">Descargar AGF del proyecto</button></div>`;
   return `
     <div class="eyebrow">Fuentes · ${srcs.length}</div>
     <h2>Documentos del proyecto</h2>
@@ -26,13 +38,13 @@ export function renderFuentes(app: App): string {
 
 export function afterFuentes(app: App) {
   const body = app.body, drop = body.querySelector<HTMLElement>("#drop"), input = body.querySelector<HTMLInputElement>("#file-input");
+  body.querySelector("#download-agf")?.addEventListener("click", () => downloadAgf(app));
   if (!drop || !input) return;
   const add = (files: FileList | File[]) => { for (const f of Array.from(files)) queue.push({ name: f.name, size: f.size, status: "en cola", file: f }); app.renderTab(); void process(app); };
   input.addEventListener("change", () => { if (input.files) add(input.files); });
   drop.addEventListener("dragover", (e) => { e.preventDefault(); drop.classList.add("over"); });
   drop.addEventListener("dragleave", () => drop.classList.remove("over"));
   drop.addEventListener("drop", (e) => { e.preventDefault(); drop.classList.remove("over"); if (e.dataTransfer?.files) add(e.dataTransfer.files); });
-  body.querySelector("#download-agf")?.addEventListener("click", () => downloadAgf(app));
   body.querySelector("#relate-now")?.addEventListener("click", async () => {
     const n = await proposeRelations(app.agf);
     app.toast(`${n} relaciones nuevas propuestas.`); app.rebuildModel(false); app.renderTab();

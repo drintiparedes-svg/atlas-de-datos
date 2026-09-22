@@ -5,6 +5,7 @@ import { LAYER_LABEL, type VNode } from "../model";
 import { facetOrigin, facetValue, UNCLASSIFIED } from "../profile";
 import { state } from "../state";
 import type { AgfEdge, AgfNode } from "../types";
+import { PUBLIC_DEPLOY } from "./sources";
 
 const EDGE_VERB: Record<string, [string, string]> = {
   precedes: ["Anterior a", "Posterior a"], same_as: ["Equivale a", "Equivale a"], references: ["Referencia a", "Referenciado por"],
@@ -45,6 +46,7 @@ function intro(app: App): string {
     <button class="qbtn" data-go="relaciones"><b>¿Cómo se relacionan dos datos?</b><span>Elige dos datos y el Atlas muestra el camino que los une y explica cada paso.</span></button>
     <button class="qbtn" data-go="secciones"><b>¿Cómo se organiza el documento?</b><span>Lista de ${what} con su composición.</span></button>
     <button class="qbtn" data-go="traza"><b>¿Qué falta o hay que corregir?</b><span>${s.findings} hallazgos de calidad con prioridad y «qué hacer».</span></button>
+    <p style="font-size:.78rem">Muestras: <a class="wl" href="?agf=./data/oncologia.agf.json&aud=explorar">diccionario oncológico</a> · <a class="wl" href="?agf=./data/proyecto_registro.agf.json&aud=explorar">proyecto de 4 fuentes</a>.</p>
     <dl class="kv" style="margin-top:1rem">
       <dt>Fuentes</dt><dd>${s.sources}</dd>
       <dt>Secciones</dt><dd>${s.secs}${s.subs ? ` (+ ${s.subs} subsecciones)` : ""}</dd>
@@ -87,7 +89,8 @@ function introExpert(app: App): string {
       <li><b>← Atrás</b> (o Alt + ←) vuelve al paso anterior; <b>Inicio</b> regresa a esta portada.</li>
       <li>Activa las capas (terminologías, cronología, equivalencias, referencias, parecidos) para ver relaciones transversales.</li>
       <li>Los anillos alrededor de un nodo indican hallazgos de calidad: rojo = bloqueante, dorado = importante, punteado = menor. El detalle está en Trazabilidad.</li>
-      <li>Pestaña <b>Fuentes</b>: carga documentos (docx, csv, xlsx, md, json, sql) sin que salgan de este equipo.</li>
+      <li>Pestaña <b>Fuentes</b>: carga documentos (docx, csv, xlsx, md, json, sql) sin que salgan de este equipo${PUBLIC_DEPLOY ? " (desactivada en esta versión pública; ver la pestaña)" : ""}.</li>
+      <li>Muestras: <a class="wl" href="?agf=./data/oncologia.agf.json">diccionario oncológico</a> · <a class="wl" href="?agf=./data/proyecto_registro.agf.json">proyecto de 4 fuentes</a>.</li>
     </ul>`;
 }
 

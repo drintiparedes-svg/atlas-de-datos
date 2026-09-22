@@ -26,6 +26,9 @@ Primera versión construida a partir del paquete de traspaso. Fases F0, F1 y F2 
 - Capas genéricas por tipo de arista; tema claro u oscuro; API `window.__atlas` para pruebas.
 - 10 pruebas Playwright: caso dorado, reagrupación, etiquetas y capturas claro/oscuro, búsqueda y notas, modo Explorar, proyecto, carga en navegador (csv, sql, md, docx), guardia, paridad hash.
 
+### Publicación
+- Compilación pública (`VITE_PUBLIC_DEPLOY=true`) que desactiva la carga de documentos según M7; `frontend/vercel.json`; enlaces a las muestras en la portada.
+
 ### Documentación
 - `docs/GUIA-USO.md`, `docs/MODELOS-ABIERTOS.md`, README y decisiones nuevas en `docs/DECISIONS.md`.
 
