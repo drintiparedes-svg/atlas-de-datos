@@ -72,7 +72,7 @@ def test_search_and_path(csv_agf, sql_agf, md_agf, sample_agf):
     assert S.shortest_path(g, "el:fecha-de-nacimiento", "no-existe") is None
 
 
-def test_memory_export_excludes_proposed_by_default(tmp_path, sample_agf, profile):
+def test_memory_export_excludes_proposed_by_default(tmp_path, sample_agf, profile, csv_agf):
     g = json.loads(json.dumps(sample_agf))
     r = memory.export(g, tmp_path / "m0", profile)
     assert r["nodes"] == 0 and r["fichas"] == 0, "sin validación humana no hay memoria confiable"
