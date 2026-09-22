@@ -1,10 +1,7 @@
 /** Estado compartido del visor y bus de eventos mínimo. */
 import type { Mode, Scope, View } from "./model";
 
-export type Audience = "explorar" | "experto";
-
 export interface State {
-  audience: Audience;
   mode: Mode;
   view: View;
   groupBy: string;
@@ -19,7 +16,6 @@ export interface State {
 }
 
 export const state: State = {
-  audience: "explorar",
   mode: "detalle",
   view: "combinada",
   groupBy: "data_type",

@@ -1,13 +1,13 @@
 # Guía de uso del Atlas de Datos
 
-El Atlas responde tres preguntas sobre la información de un proyecto: **qué existe**, **cómo se organiza** y **cómo se relaciona**. Está diseñado para dos públicos que usan la misma aplicación:
+El Atlas responde tres preguntas sobre la información de un proyecto: **qué existe**, **cómo se organiza** y **cómo se relaciona**. Una misma pantalla sirve a quien solo busca saber qué datos existen y a quien trabaja con datos; la diferencia está en el **nivel de detalle** de la barra superior:
 
-| Público | Modo | Qué ve |
-|---|---|---|
-| Personas que solo quieren saber qué datos existen o cómo se relacionan dos datos concretos | **Explorar** | Portada con preguntas guiadas, grafo simplificado, buscador con explicación, inventario, camino entre dos datos, hallazgos con «qué hacer». |
-| Personas expertas en datos (informática médica, ciencia de datos, ingeniería) | **Experto** | Todo lo anterior más vistas Estructura / Combinada / Por tipo, capas transversales, «Agrupar por» cualquier faceta, fuerzas, carga de documentos, revisión de equivalencias y descarga del AGF. |
+| Nivel | Qué muestra |
+|---|---|
+| **Simplificada** (predeterminado) | Solo secciones (o fuentes) con un anillo de composición; cada una se abre con un clic. Portada con preguntas guiadas. |
+| **Detallada** | Red completa: vistas Estructura, Combinada y Por tipo, capas, «Agrupar por» cualquier faceta y fuerzas. |
 
-El selector **Explorar · Experto** está en la barra superior. La elección se recuerda en el navegador.
+Todas las pestañas (Nota, Proyectos, Secciones, Facetas, Relaciones, Fuentes, Trazabilidad) están disponibles en ambos niveles. La elección se recuerda en el navegador.
 
 ## 1. Poner en marcha
 
@@ -33,7 +33,7 @@ Muestras incluidas (`samples/`):
 | `proyecto_registro.agf.json` | Proyecto con 4 fuentes: el diccionario, una planilla sintética, un esquema SQL ficticio y una minuta markdown, con 43 equivalencias propuestas. Abrir con `?agf=./data/proyecto_registro.agf.json`. |
 | `*.vectors.json` | Índices de vectores (proveedor `hash`) para búsqueda semántica en el navegador. |
 
-## 2. Modo Explorar (para quien busca saber qué existe)
+## 2. Portada y preguntas guiadas
 
 La portada ofrece cinco preguntas:
 
@@ -47,7 +47,7 @@ En el grafo, cada círculo grande es una sección (o una fuente, en un proyecto)
 
 Todo lo marcado como **# inferido** fue propuesto por reglas o por modelos y aún no fue validado por una persona. El Atlas nunca presenta una inferencia como un hecho.
 
-## 3. Modo Experto
+## 3. Controles del nivel Detallada
 
 - **Nivel de detalle:** Simplificada (secciones con anillo de composición) o Detallada (red completa).
 - **Vista:** Estructura (fiel al documento), Combinada (grupos de metadata por faceta dentro de cada sección) o Por tipo (catálogo).

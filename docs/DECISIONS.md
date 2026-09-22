@@ -14,7 +14,7 @@ Niveles del responsable: N2 = recomendación con aprobación; N3 = requiere revi
 | T5 | El módulo es agnóstico al tipo de documento; el diccionario oncológico es el primer caso de prueba | 2026-09-22 | Inti |
 | T6 | Propósito final: memoria estructurada para agentes de IA | 2026-09-22 | Inti |
 | T7 | Nombre visible "Atlas de Datos Oncológicos" | 2026-09-22 | Inti |
-| T8 | Dos públicos en la misma aplicación: modo Explorar (guiado, simplificado) y modo Experto (todos los controles) | 2026-09-22 | Inti (solicitud de construcción) |
+| T8 | Un solo público: se elimina el selector Explorar/Experto; quedan los niveles Simplificada (predeterminado, con portada guiada) y Detallada, con todas las pestañas siempre visibles | 2026-09-22 | Inti (revisión de la construcción) |
 | T9 | Modelos abiertos para búsqueda y equivalencias: proveedor `hash` sin red como base, `multilingual-e5-small` (sentence-transformers) y Ollama como opcionales con `AI_ENABLED=true` | 2026-09-22 | Inti (solicitud de construcción) |
 
 ## Abiertas

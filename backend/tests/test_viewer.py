@@ -51,7 +51,7 @@ def browser():
         b.close()
 
 
-def open_page(browser, server, query="?aud=experto&mode=detalle"):
+def open_page(browser, server, query="?mode=detalle"):
     page = browser.new_page(viewport={"width": 1440, "height": 900})
     errors: list[str] = []
     page.on("pageerror", lambda e: errors.append(str(e)))
@@ -113,11 +113,11 @@ def test_labels_do_not_overlap_and_screenshots(browser, server):
           return out.length; }""")
         assert boxes > 20, "deben mostrarse etiquetas de secciones, facetas y grupos"
         page.screenshot(path=str(SHOTS / f"detallada_{theme}.png"))
-        page.evaluate("window.__atlas.setAudience('explorar')")
+        page.evaluate("window.__atlas.setMode('simple')")
         page.wait_for_timeout(800)
         page.evaluate("window.__atlas.settle()")
         page.wait_for_timeout(400)
-        page.screenshot(path=str(SHOTS / f"explorar_{theme}.png"))
+        page.screenshot(path=str(SHOTS / f"simplificada_{theme}.png"))
         assert not errors, errors
         page.close()
 
@@ -141,12 +141,11 @@ def test_search_and_note_navigation(browser, server):
     page.close()
 
 
-def test_explore_mode_hides_expert_controls(browser, server):
-    page, errors = open_page(browser, server, "?aud=explorar")
-    assert page.evaluate("document.body.dataset.audience") == "explorar"
+def test_simplified_mode_and_guided_home(browser, server):
+    page, errors = open_page(browser, server, "?mode=simple")
     assert stats(page)["mode"] == "simple"
-    assert page.locator("#tabs button[data-tab=fuentes]").is_hidden()
-    assert page.locator("#f-rep").is_hidden()
+    assert page.locator("#tabs button[data-tab=fuentes]").is_visible()
+    assert page.locator("#f-rep").is_visible()
     body = page.inner_text("#panel-body")
     assert "¿Cómo se relacionan dos datos?" in body and "Buscar un dato" in body
     page.click("button.qbtn[data-go=proyectos]")
@@ -156,7 +155,7 @@ def test_explore_mode_hides_expert_controls(browser, server):
 
 
 def test_project_sample_inventory_relations_and_path(browser, server):
-    page, errors = open_page(browser, server, "?aud=experto&mode=detalle&agf=./data/proyecto_registro.agf.json")
+    page, errors = open_page(browser, server, "?mode=detalle&agf=./data/proyecto_registro.agf.json")
     s = stats(page)
     assert s["scope"]["level"] == "project" and s["elements"] > 20
     page.click("#tabs button[data-tab=proyectos]")
@@ -183,7 +182,7 @@ def test_project_sample_inventory_relations_and_path(browser, server):
 
 def test_browser_ingest_of_synthetic_fixtures(browser, server):
     """F2: carga en el navegador sin red. csv, sql y md producen las mismas cifras que el backend."""
-    page, errors = open_page(browser, server, "?aud=experto&mode=detalle&agf=./data/registro_sintetico.agf.json")
+    page, errors = open_page(browser, server, "?mode=detalle&agf=./data/registro_sintetico.agf.json")
     page.click("#tabs button[data-tab=fuentes]")
     page.set_input_files("#file-input", [str(FIX / "esquema_registro.sql"), str(FIX / "minuta_registro.md")])
     page.wait_for_timeout(2500)
@@ -202,7 +201,7 @@ def test_browser_ingest_of_synthetic_fixtures(browser, server):
 
 @pytest.mark.skipif(not DOCX.exists(), reason="fixture interno de FALP ausente")
 def test_browser_ingest_docx_reproduces_golden(browser, server):
-    page, errors = open_page(browser, server, "?aud=experto&mode=detalle&agf=./data/registro_sintetico.agf.json")
+    page, errors = open_page(browser, server, "?mode=detalle&agf=./data/registro_sintetico.agf.json")
     page.click("#tabs button[data-tab=fuentes]")
     page.set_input_files("#file-input", [str(DOCX)])
     page.wait_for_timeout(2500)
@@ -260,7 +259,7 @@ def test_projects_tab_end_to_end_with_backend(browser, server, tmp_path):
             break
         time.sleep(0.1)
     try:
-        page, errors = open_page(browser, server, "?aud=experto&mode=detalle")
+        page, errors = open_page(browser, server, "?mode=detalle")
         page.click("#tabs button[data-tab=proyectos]")
         page.fill("#api-url", f"http://127.0.0.1:{port}")
         page.fill("#api-token", "e2e-token")

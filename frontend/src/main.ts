@@ -1,6 +1,6 @@
 /** Arranque del visor: carga perfil + AGF (+ índice de vectores), inicializa UI y expone `window.__atlas` para pruebas. */
 import { App } from "./app";
-import { state, type Audience } from "./state";
+import { state } from "./state";
 import { loadInferenceConfig } from "./infer";
 import { fnv1a, hashOne } from "./search/hash";
 import type { Agf, Profile, VectorIndex } from "./types";
@@ -44,10 +44,11 @@ async function boot() {
   });
 
   app.load(agf, profile, vectors);
-  let aud: Audience = (params.get("aud") as Audience) || "explorar";
-  try { aud = (params.get("aud") as Audience) || (localStorage.getItem("atlas.audience") as Audience) || "explorar"; } catch { /* sin almacenamiento */ }
-  if (params.get("mode") === "detalle" || params.get("mode") === "simple") { app.setAudience(aud, false); app.setMode(params.get("mode") as "simple" | "detalle", false); }
-  else app.setAudience(aud);
+  let mode: "simple" | "detalle" = "simple";
+  try { mode = (localStorage.getItem("atlas.mode") as "simple" | "detalle") || "simple"; } catch { /* sin almacenamiento */ }
+  const pm = params.get("mode");
+  if (pm === "detalle" || pm === "simple") mode = pm;
+  app.setMode(mode, false);
   if (params.get("view")) app.setView(params.get("view") as never);
   app.rebuild();
   app.syncBack();
@@ -76,7 +77,6 @@ async function boot() {
     setView: (v: "estructura" | "combinada" | "tipo") => { app.setView(v); app.rebuild(); },
     setGroupBy: (f: string) => app.setGroupBy(f),
     setLayer: (l: string, on: boolean) => { on ? state.layers.add(l) : state.layers.delete(l); app.rebuild(); },
-    setAudience: (a: Audience) => app.setAudience(a),
     search: (q: string) => app.index!.search(q),
     load: (agf: Agf, vectors: VectorIndex | null = null) => app.load(agf, profile, vectors),
     settle: () => { app.graph.prewarm(); app.graph.fit(); },

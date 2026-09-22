@@ -22,10 +22,6 @@ export function initSettings(app: App) {
     if (b.dataset.mode === state.mode) return;
     app.remember(); app.setMode(b.dataset.mode as "simple" | "detalle");
   }));
-  document.querySelectorAll<HTMLButtonElement>(".modeseg button[data-aud]").forEach((b) => b.addEventListener("click", () => {
-    if (b.dataset.aud === state.audience) return;
-    app.remember(); app.setAudience(b.dataset.aud as "explorar" | "experto");
-  }));
   $("btn-expand-all").addEventListener("click", () => { app.remember(); for (const s of app.model.sections) state.expanded.add(s.id); app.rebuild(); setTimeout(() => app.graph.fit(), 900); });
   $("btn-collapse-all").addEventListener("click", () => { app.remember(); state.expanded.clear(); app.rebuild(); setTimeout(() => app.graph.fit(), 600); });
   const gb = $("group-by") as HTMLSelectElement;

@@ -2,14 +2,14 @@
 
 Grafo de conocimiento navegable, tipo Obsidian, para entender **qué información existe** en los documentos de un proyecto, **cómo se organiza** su metadata y **cómo se relaciona** entre fuentes; y para convertir lo validado en **memoria para agentes de IA**. Primer caso: el diccionario de variables del registro oncológico (FALP).
 
-Sirve a dos públicos con la misma aplicación: quienes solo quieren saber qué datos existen o cómo se relacionan dos datos concretos (modo **Explorar**), y quienes trabajan con datos y necesitan vistas, facetas, capas, carga de documentos y revisión de equivalencias (modo **Experto**). Guía completa: `docs/GUIA-USO.md`.
+Sirve a quienes solo quieren saber qué datos existen o cómo se relacionan dos datos concretos y a quienes trabajan con datos: la misma aplicación, con dos niveles de detalle (**Simplificada** y **Detallada**). Guía completa: `docs/GUIA-USO.md`.
 
 ## Qué contiene
 
 ```
 backend/atlas/     paquete Python: adaptadores → AGF, inferencia, calidad, relaciones, embeddings, memoria, CLI `atlas`
 backend/tests/     38 pruebas: caso dorado, adaptadores, inferencia, proyecto multi fuente, memoria, visor (Playwright)
-frontend/          visor TypeScript + Vite: motor canvas del prototipo, dos públicos, búsqueda híbrida, inventario, relaciones, carga en el navegador
+frontend/          visor TypeScript + Vite: motor canvas del prototipo, dos niveles de detalle, búsqueda híbrida, inventario, relaciones, carga en el navegador
 schemas/agf-1.0.json   contrato Atlas Graph Format 1.0
 profiles/default.json  perfil de visualización (tokens, facetas y colores, formas, fuerzas, etiquetas)
 config/                facetas, estándares, cronología oncológica, reglas de calidad, reglas de inferencia (inference.json, compartido por backend y visor)

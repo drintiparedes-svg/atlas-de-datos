@@ -15,7 +15,7 @@ const EDGE_VERB: Record<string, [string, string]> = {
 
 export function renderNota(app: App): string {
   const n = app.selected;
-  if (!n) return state.audience === "explorar" ? intro(app) : introExpert(app);
+  if (!n) return intro(app);
   switch (n.kind) {
     case "element": return noteElement(app, n);
     case "section": case "source": return n.kind === "source" ? noteSource(app, n) : noteSection(app, n);
@@ -38,59 +38,34 @@ function intro(app: App): string {
   const s = stats(app), m = app.model;
   const what = m.isProject ? "fuentes" : "secciones";
   return `
-    <div class="eyebrow">Explorar · ${esc(app.agf.project.name)}</div>
+    <div class="eyebrow">${esc(app.agf.project.name)}</div>
     <h2>¿Qué información existe y cómo se relaciona?</h2>
-    <p>Cada punto del grafo es un dato descrito en los documentos del proyecto. El color indica ${esc(app.pv.facetLabel(state.groupBy).toLowerCase())}; los círculos grandes son ${what}. Empieza por una de estas preguntas:</p>
+    <p>Cada punto del grafo es un dato descrito en los documentos del proyecto. El color indica ${esc(app.pv.facetLabel(state.groupBy).toLowerCase())}; los círculos grandes son ${what}. Empieza por una de estas preguntas o explora el grafo directamente.</p>
     <button class="qbtn" data-go="search"><b>Buscar un dato</b><span>Escribe un nombre o una idea («fecha de diagnóstico», «biomarcadores», «comuna»). También encuentra parecidos.</span></button>
-    <button class="qbtn" data-go="proyectos"><b>¿Qué tipos de información hay?</b><span>Inventario: cuántos datos existen por tipo, dominio y sensibilidad, y qué falta por clasificar.</span></button>
+    <button class="qbtn" data-go="proyectos"><b>¿Qué tipos de información hay?</b><span>Proyectos e inventario: cuántos datos existen por tipo, dominio y sensibilidad, y qué falta por clasificar.</span></button>
     <button class="qbtn" data-go="relaciones"><b>¿Cómo se relacionan dos datos?</b><span>Elige dos datos y el Atlas muestra el camino que los une y explica cada paso.</span></button>
     <button class="qbtn" data-go="secciones"><b>¿Cómo se organiza el documento?</b><span>Lista de ${what} con su composición.</span></button>
     <button class="qbtn" data-go="traza"><b>¿Qué falta o hay que corregir?</b><span>${s.findings} hallazgos de calidad con prioridad y «qué hacer».</span></button>
-    <p style="font-size:.78rem">Muestras: <a class="wl" href="?agf=./data/oncologia.agf.json&aud=explorar">diccionario oncológico</a> · <a class="wl" href="?agf=./data/proyecto_registro.agf.json&aud=explorar">proyecto de 4 fuentes</a>.</p>
+    <p style="font-size:.78rem">Muestras: <a class="wl" href="?agf=./data/oncologia.agf.json">diccionario oncológico</a> · <a class="wl" href="?agf=./data/proyecto_registro.agf.json">proyecto de 4 fuentes</a>.</p>
     <dl class="kv" style="margin-top:1rem">
       <dt>Fuentes</dt><dd>${s.sources}</dd>
       <dt>Secciones</dt><dd>${s.secs}${s.subs ? ` (+ ${s.subs} subsecciones)` : ""}</dd>
-      <dt>Datos</dt><dd>${s.all.length}</dd>
-      ${s.proposed ? `<dt>Equivalencias</dt><dd>${s.proposed} propuestas por revisar</dd>` : ""}
-    </dl>
-    ${app.composition(m.elements.length ? m.elements : s.all.map((e) => ({ value: m.valueMap.get(facetValue(e, state.groupBy)) || UNCLASSIFIED })))}
-    <h3>Cómo leerlo</h3>
-    <ul class="rules">
-      <li>Pasa el cursor por un punto para ver con qué se conecta; haz clic para abrir su nota.</li>
-      <li>En el grafo, un clic sobre una ${m.isProject ? "fuente" : "sección"} la abre y muestra sus datos agrupados.</li>
-      <li><b>← Atrás</b> vuelve al paso anterior; <b>Inicio</b> regresa a esta portada.</li>
-      <li>Los anillos alrededor de un punto marcan hallazgos: rojo = bloqueante, dorado = importante, punteado = menor.</li>
-      <li>Lo marcado como <span class="inf" style="color:var(--warn)">inferido</span> fue propuesto por reglas o modelos y aún no está validado.</li>
-    </ul>`;
-}
-
-function introExpert(app: App): string {
-  const s = stats(app), m = app.model;
-  return `
-    <div class="eyebrow">Propuesta · grafo de conocimiento</div>
-    <h2>${esc(app.agf.project.name)}, como red navegable</h2>
-    <p>Cada elemento es una nota; cada ${m.isProject ? "fuente" : "sección"}, un nodo central. El color identifica ${esc(app.pv.facetLabel(state.groupBy).toLowerCase())} y los grupos anillados reúnen, dentro de cada ${m.isProject ? "fuente" : "sección"}, la metadata del mismo valor. Cambia la faceta en «Agrupar por»: los grupos se recalculan sin reprocesar.</p>
-    <dl class="kv">
-      <dt>Fuentes</dt><dd>${s.sources}</dd>
-      <dt>Secciones</dt><dd>${s.secs}</dd>
-      <dt>Subsecciones</dt><dd>${s.subs}</dd>
       <dt>Elementos</dt><dd>${s.all.length}</dd>
       <dt>Facetas</dt><dd>${app.pv.groupableFacets().length} (${esc(app.pv.facetLabel(state.groupBy))} activa)</dd>
       <dt>Vocabularios</dt><dd>${app.agf.nodes.filter((x) => x.kind === "vocabulary").length} (inferidos)</dd>
-      <dt>Hallazgos</dt><dd>${s.findings}</dd>
+      ${s.proposed ? `<dt>Equivalencias</dt><dd>${s.proposed} propuestas por revisar</dd>` : ""}
       ${app.index?.semanticAvailable ? `<dt>Búsqueda</dt><dd>léxica + vectores (${esc(app.index.provider!)} · ${esc(app.index.model)})</dd>` : `<dt>Búsqueda</dt><dd>léxica (sin índice de vectores)</dd>`}
     </dl>
     ${app.composition(m.elements.length ? m.elements : s.all.map((e) => ({ value: m.valueMap.get(facetValue(e, state.groupBy)) || UNCLASSIFIED })))}
     <h3>Cómo leerlo</h3>
     <ul class="rules">
-      <li>Pasa el cursor por un nodo para aislar su vecindario; haz clic para abrir su nota.</li>
-      <li>Arriba eliges el nivel de detalle: <b>Simplificada</b> (${m.isProject ? "fuentes" : "secciones"}, se abren con un clic) o <b>Detallada</b> (red completa).</li>
-      <li>En la versión detallada, cambia de vista en Ajustes: Estructura (fiel al documento), Combinada o Por tipo.</li>
+      <li>Pasa el cursor por un punto para ver con qué se conecta; haz clic para abrir su nota.</li>
+      <li>Arriba eliges el nivel de detalle: <b>Simplificada</b> (${what}, se abren con un clic) o <b>Detallada</b> (red completa con vistas Estructura, Combinada y Por tipo en Ajustes).</li>
+      <li>En Ajustes, «Agrupar por» cambia la faceta que colorea y agrupa; las capas muestran terminologías, cronología, equivalencias, referencias y parecidos.</li>
       <li><b>← Atrás</b> (o Alt + ←) vuelve al paso anterior; <b>Inicio</b> regresa a esta portada.</li>
-      <li>Activa las capas (terminologías, cronología, equivalencias, referencias, parecidos) para ver relaciones transversales.</li>
-      <li>Los anillos alrededor de un nodo indican hallazgos de calidad: rojo = bloqueante, dorado = importante, punteado = menor. El detalle está en Trazabilidad.</li>
-      <li>Pestaña <b>Fuentes</b>: carga documentos (docx, csv, xlsx, md, json, sql) sin que salgan de este equipo${PUBLIC_DEPLOY ? " (desactivada en esta versión pública; ver la pestaña)" : ""}.</li>
-      <li>Muestras: <a class="wl" href="?agf=./data/oncologia.agf.json">diccionario oncológico</a> · <a class="wl" href="?agf=./data/proyecto_registro.agf.json">proyecto de 4 fuentes</a>.</li>
+      <li>Los anillos alrededor de un punto marcan hallazgos: rojo = bloqueante, dorado = importante, punteado = menor. El detalle está en Trazabilidad.</li>
+      <li>Lo marcado como <span style="color:var(--warn)">inferido</span> fue propuesto por reglas o modelos y aún no está validado.</li>
+      <li>Pestaña <b>Fuentes</b>: carga documentos (docx, csv, xlsx, sql, md, json) sin que salgan de este equipo${PUBLIC_DEPLOY ? " (desactivada en esta versión pública)" : ""}. Pestaña <b>Proyectos</b>: gestión con el backend.</li>
     </ul>`;
 }
 

@@ -4,13 +4,13 @@ import { esc, pad } from "./lib/text";
 import { Model, type Scope, type View, type VNode, type Mode } from "./model";
 import { currentTheme, ProfileView, UNCLASSIFIED } from "./profile";
 import { SearchIndex } from "./search/search";
-import { emit, state, type Audience } from "./state";
+import { emit, state } from "./state";
 import type { Agf, AgfNode, Profile, VectorIndex } from "./types";
 
 export type Tab = "nota" | "proyectos" | "secciones" | "facetas" | "relaciones" | "fuentes" | "traza";
 export type TabRenderer = (app: App) => string;
 
-interface Snapshot { sel: string | null; tab: Tab; view: View; mode: Mode; expanded: string[]; groupBy: string; scope: Scope; audience: Audience }
+interface Snapshot { sel: string | null; tab: Tab; view: View; mode: Mode; expanded: string[]; groupBy: string; scope: Scope }
 
 export class App {
   agf!: Agf;
@@ -85,7 +85,7 @@ export class App {
 
   /* ── navegación ── */
   snapshot(): Snapshot {
-    return { sel: this.selected ? this.selected.id : null, tab: this.tab, view: state.view, mode: state.mode, expanded: [...state.expanded], groupBy: state.groupBy, scope: { ...state.scope }, audience: state.audience };
+    return { sel: this.selected ? this.selected.id : null, tab: this.tab, view: state.view, mode: state.mode, expanded: [...state.expanded], groupBy: state.groupBy, scope: { ...state.scope } };
   }
   remember() {
     const s = this.snapshot(), top = this.history[this.history.length - 1];
@@ -104,7 +104,6 @@ export class App {
   goBack() {
     const s = this.history.pop(); if (!s) return;
     let rebuildModel = false, rb = false;
-    if (s.audience !== state.audience) this.setAudience(s.audience, false);
     if (s.groupBy !== state.groupBy) { state.groupBy = s.groupBy; rebuildModel = true; }
     if (JSON.stringify(s.scope) !== JSON.stringify(state.scope)) { state.scope = s.scope; rebuildModel = true; }
     if (s.mode !== state.mode) { this.setMode(s.mode, false); rb = true; }
@@ -156,6 +155,7 @@ export class App {
   setMode(m: Mode, withFit = true) {
     state.mode = m;
     document.querySelectorAll(".modeseg button[data-mode]").forEach((b) => b.classList.toggle("on", (b as HTMLElement).dataset.mode === m));
+    try { localStorage.setItem("atlas.mode", m); } catch { /* sin almacenamiento */ }
     emit("settings");
     this.rebuild();
     if (withFit) setTimeout(() => this.graph.fit(), 600);
@@ -163,15 +163,6 @@ export class App {
   }
   setView(v: View) { state.view = v; emit("settings"); }
   setGroupBy(f: string) { this.remember(); state.groupBy = f; this.rebuildModel(false); this.graph.prewarm(); setTimeout(() => this.graph.fit(), 300); emit("settings"); if (this.tab !== "nota" || !this.selected) this.renderTab(); }
-  setAudience(a: Audience, withMode = true) {
-    state.audience = a; document.body.dataset.audience = a;
-    try { localStorage.setItem("atlas.audience", a); } catch { /* sin almacenamiento */ }
-    document.querySelectorAll(".modeseg button[data-aud]").forEach((b) => b.classList.toggle("on", (b as HTMLElement).dataset.aud === a));
-    document.querySelectorAll<HTMLButtonElement>("#tabs button[data-tab]").forEach((b) => { b.hidden = a === "explorar" && ["facetas", "fuentes"].includes(b.dataset.tab!); });
-    if (withMode) this.setMode(a === "explorar" ? "simple" : "detalle");
-    if (this.tab === "nota" && !this.selected) this.renderTab();
-    emit("audience");
-  }
   toggleTheme() {
     const t = currentTheme() === "dark" ? "light" : "dark";
     document.documentElement.setAttribute("data-theme", t);

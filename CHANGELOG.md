@@ -32,6 +32,9 @@ Primera versión construida a partir del paquete de traspaso. Fases F0, F1 y F2 
 - Seguridad: `X-Atlas-Token`, CORS restringido, extensiones y tamaño limitados, sin filas de datos, IA apagada por defecto.
 - Visor: pestaña **Proyectos** (antes Inventario) con gestión de proyectos contra el backend e inventario; vista «Por tipo» (antes «Por faceta»); revisión de equivalencias persistida cuando hay backend. 3 pruebas de API y 1 prueba de integración visor + backend.
 
+### Consolidación de niveles (2026-09-22, tercera entrega)
+- Se elimina el selector Explorar/Experto (T8). Quedan Simplificada (predeterminado) y Detallada; una sola portada guiada y todas las pestañas y controles siempre visibles.
+
 ### Publicación
 - Compilación pública (`VITE_PUBLIC_DEPLOY=true`) que desactiva la carga de documentos según M7; `frontend/vercel.json`; enlaces a las muestras en la portada.
 

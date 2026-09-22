@@ -17,13 +17,9 @@
     <input id="search" type="search" placeholder="Buscar un dato, sección, tipo o pregunta…" autocomplete="off" aria-label="Buscar en el grafo" aria-expanded="false" aria-controls="search-results">
     <div id="search-results" class="search-results" hidden role="listbox"></div>
   </div>
-  <div class="modeseg" role="group" aria-label="Público">
-    <button id="aud-explorar" data-aud="explorar" title="Lectura guiada: qué existe, dónde está y cómo se relaciona">Explorar</button>
-    <button id="aud-experto" data-aud="experto" title="Todos los controles: vistas, capas, facetas, fuentes y relaciones">Experto</button>
-  </div>
   <div class="modeseg" role="group" aria-label="Nivel de detalle">
-    <button id="mode-simple" data-mode="simple">Simplificada</button>
-    <button id="mode-detalle" data-mode="detalle" class="on">Detallada</button>
+    <button id="mode-simple" data-mode="simple" title="Solo secciones con su composición; se abren con un clic">Simplificada</button>
+    <button id="mode-detalle" data-mode="detalle" class="on" title="Red completa: vistas, capas y facetas">Detallada</button>
   </div>
   <button class="icon-btn" id="btn-settings" aria-expanded="true" aria-controls="settings">Ajustes</button>
   <button class="icon-btn" id="btn-panel" aria-controls="panel">Nota</button>
@@ -51,13 +47,13 @@
   <h4>Capas</h4>
   <div id="layer-filters"></div>
   <label class="row"><input type="checkbox" id="labels-all"> Mostrar todas las etiquetas</label>
-  <p class="view-hint expert-only">Las etiquetas nunca se superponen: las que no caben se ocultan (o se acortan al número de sección) y aparecen al acercar el zoom o al pasar el cursor.</p>
+  <p class="view-hint">Las etiquetas nunca se superponen: las que no caben se ocultan (o se acortan al número de sección) y aparecen al acercar el zoom o al pasar el cursor.</p>
   <div id="simple-tools" hidden style="display:flex;gap:.35rem;margin-top:.4rem;flex-wrap:wrap">
     <button class="icon-btn" id="btn-expand-all">Abrir todas</button>
     <button class="icon-btn" id="btn-collapse-all">Cerrar todas</button>
   </div>
 
-  <div class="expert-only">
+  <div>
     <h4>Fuerzas</h4>
     <div class="slider"><label for="f-rep">Separar</label><input type="range" id="f-rep" min="200" max="12000" step="100" value="1700"><output id="o-rep" class="n">1700</output></div>
     <div class="slider"><label for="f-len">Distancia</label><input type="range" id="f-len" min="0.3" max="3" step="0.05" value="1"><output id="o-len" class="n">1,00×</output></div>
