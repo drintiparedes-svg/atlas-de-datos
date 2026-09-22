@@ -28,15 +28,24 @@ Donde el PLAN sea más específico que la SPEC, prevalece el PLAN.
 | `scripts/reference_parser.py` | Parser de referencia del docx (16 / 6 / 87, 0 sin clasificar) | Verificado |
 | `backend/tests/fixtures/` | `info_para_presentacion.docx` y `golden_expected.json` | Caso dorado |
 | `backend/tests/test_golden.py` | 3 pruebas del caso dorado y del AGF | En verde |
+| `backend/atlas/` | Paquete Python: adaptadores, inferencia, calidad, relaciones, embeddings, memoria, CLI `atlas` | Construido 2026-09-22, 28 pruebas |
+| `frontend/` | Visor TypeScript + Vite (motor del prototipo, dos públicos, búsqueda, inventario, relaciones, fuentes) | Construido 2026-09-22, 10 pruebas Playwright |
+| `config/inference.json` | Reglas de inferencia compartidas por backend y visor | Borrador |
+| `samples/proyecto_registro.agf.json` | Proyecto de 4 fuentes con equivalencias propuestas | Válido contra el esquema |
+| `docs/GUIA-USO.md`, `docs/MODELOS-ABIERTOS.md` | Guía para ambos públicos; modelos abiertos y límites verificados | 2026-09-22 |
 
 ## Comandos
 
 ```bash
 python -m venv .venv && source .venv/bin/activate
-pip install -r requirements-dev.txt
-pytest -q backend/tests            # debe quedar en verde antes y después de cada cambio
+pip install -r requirements-dev.txt   # instala backend/ en modo editable (comando `atlas`), pytest y playwright
+pytest -q backend/tests               # debe quedar en verde antes y después de cada cambio
 python scripts/reference_parser.py backend/tests/fixtures/info_para_presentacion.docx
+cd frontend && npm install && npm run build   # visor; con dist/ presente, pytest también corre las pruebas del visor (Chromium)
+npm run dev                                   # http://127.0.0.1:5173 (?agf=./data/proyecto_registro.agf.json para el proyecto)
 ```
+
+El fixture `info_para_presentacion.docx` no está en el repositorio público: colócalo localmente en `backend/tests/fixtures/` para las pruebas del caso dorado (se omiten si falta).
 
 ## Forma de trabajo
 

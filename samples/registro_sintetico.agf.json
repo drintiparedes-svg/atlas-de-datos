@@ -1,0 +1,1349 @@
+{
+ "agf_version": "1.0",
+ "project": {
+  "id": "prj_registro-sintetico",
+  "name": "registro_sintetico"
+ },
+ "profile": "default",
+ "sources": [
+  {
+   "id": "src_registro-sintetico",
+   "name": "registro_sintetico.csv",
+   "sha256": "e900362c7a851ab07d9ca6e640eeb42dd501344f91da2e67f991157b4c342516",
+   "facets": {
+    "source_type": "tabla"
+   },
+   "adapter": "tabla@1.0",
+   "ingested_at": "2026-09-22T15:59:17+00:00",
+   "status": "proposed",
+   "title": "registro_sintetico",
+   "unparsed": [],
+   "unparsed_count": 0,
+   "personal_data_guard": {
+    "hits": {
+     "rut_chileno": 0,
+     "email": 0,
+     "telefono_cl": 0,
+     "fecha_con_nombre": 0
+    },
+    "confirmed_by_user": false
+   }
+  }
+ ],
+ "nodes": [
+  {
+   "id": "root",
+   "kind": "project_root",
+   "name": "registro_sintetico",
+   "source_id": "src_registro-sintetico",
+   "origin": "inferred",
+   "status": "proposed",
+   "confidence": 0.6,
+   "rationale": "Nombre de la raíz propuesto desde el título del documento; confirmar (decisión D6)."
+  },
+  {
+   "id": "sec:src_registro-sintetico:registro-sintetico",
+   "kind": "section",
+   "source_id": "src_registro-sintetico",
+   "name": "registro_sintetico",
+   "order": 1,
+   "origin": "extracted",
+   "status": "proposed",
+   "confidence": 1.0,
+   "provenance": {
+    "locator": {
+     "file": "registro_sintetico.csv"
+    },
+    "excerpt": "200 filas leídas (máximo 5000); solo se conservan estadísticas por columna."
+   },
+   "description": "200 filas leídas (máximo 5000); solo se conservan estadísticas por columna."
+  },
+  {
+   "id": "el:id-caso",
+   "kind": "element",
+   "source_id": "src_registro-sintetico",
+   "parent_id": "sec:src_registro-sintetico:registro-sintetico",
+   "section_id": "sec:src_registro-sintetico:registro-sintetico",
+   "name": "id_caso",
+   "facets": {
+    "element_kind": "column",
+    "data_type": "identificador"
+   },
+   "facet_origin": {
+    "element_kind": "extracted",
+    "data_type": "inferred"
+   },
+   "facet_confidence": {
+    "data_type": 0.75
+   },
+   "facet_rationale": {
+    "data_type": "valores casi todos únicos y cortos"
+   },
+   "note": null,
+   "origin": "extracted",
+   "status": "proposed",
+   "confidence": 1.0,
+   "cardinality": "unknown",
+   "required": null,
+   "provenance": {
+    "locator": {
+     "file": "registro_sintetico.csv",
+     "column": 0
+    },
+    "excerpt": "id_caso"
+   },
+   "stats": {
+    "rows": 200,
+    "non_null": 200,
+    "null_pct": 0.0,
+    "distinct": 200,
+    "format_example": "aa-99999"
+   }
+  },
+  {
+   "id": "el:fecha-nacimiento",
+   "kind": "element",
+   "source_id": "src_registro-sintetico",
+   "parent_id": "sec:src_registro-sintetico:registro-sintetico",
+   "section_id": "sec:src_registro-sintetico:registro-sintetico",
+   "name": "fecha_nacimiento",
+   "facets": {
+    "element_kind": "column",
+    "data_type": "fecha",
+    "info_domain": "demografico"
+   },
+   "facet_origin": {
+    "element_kind": "extracted",
+    "data_type": "inferred",
+    "info_domain": "inferred"
+   },
+   "facet_confidence": {
+    "data_type": 0.95,
+    "info_domain": 0.75
+   },
+   "facet_rationale": {
+    "data_type": "todos los valores tienen formato de fecha",
+    "info_domain": "léxico del elemento: «nacimiento»"
+   },
+   "note": null,
+   "origin": "extracted",
+   "status": "proposed",
+   "confidence": 1.0,
+   "cardinality": "unknown",
+   "required": null,
+   "provenance": {
+    "locator": {
+     "file": "registro_sintetico.csv",
+     "column": 1
+    },
+    "excerpt": "fecha_nacimiento"
+   },
+   "stats": {
+    "rows": 200,
+    "non_null": 200,
+    "null_pct": 0.0,
+    "distinct": 200,
+    "format_example": "9999-99-99"
+   }
+  },
+  {
+   "id": "el:sexo",
+   "kind": "element",
+   "source_id": "src_registro-sintetico",
+   "parent_id": "sec:src_registro-sintetico:registro-sintetico",
+   "section_id": "sec:src_registro-sintetico:registro-sintetico",
+   "name": "sexo",
+   "facets": {
+    "element_kind": "column",
+    "data_type": "categorica",
+    "info_domain": "demografico",
+    "sensitivity": "dato_personal"
+   },
+   "facet_origin": {
+    "element_kind": "extracted",
+    "data_type": "inferred",
+    "info_domain": "inferred",
+    "sensitivity": "inferred"
+   },
+   "facet_confidence": {
+    "data_type": 0.85,
+    "info_domain": 0.75,
+    "sensitivity": 0.85
+   },
+   "facet_rationale": {
+    "data_type": "2 valores distintos en 200 filas",
+    "info_domain": "léxico del elemento: «sexo»",
+    "sensitivity": "léxico «sexo» (clasificación provisional, pendiente de revisión legal)"
+   },
+   "note": null,
+   "origin": "extracted",
+   "status": "proposed",
+   "confidence": 1.0,
+   "cardinality": "unknown",
+   "required": null,
+   "provenance": {
+    "locator": {
+     "file": "registro_sintetico.csv",
+     "column": 2
+    },
+    "excerpt": "sexo"
+   },
+   "value_domain": [
+    "F",
+    "M"
+   ],
+   "stats": {
+    "rows": 200,
+    "non_null": 200,
+    "null_pct": 0.0,
+    "distinct": 2,
+    "format_example": "a"
+   }
+  },
+  {
+   "id": "el:region-vivienda",
+   "kind": "element",
+   "source_id": "src_registro-sintetico",
+   "parent_id": "sec:src_registro-sintetico:registro-sintetico",
+   "section_id": "sec:src_registro-sintetico:registro-sintetico",
+   "name": "region_vivienda",
+   "facets": {
+    "element_kind": "column",
+    "data_type": "categorica",
+    "vocabulary": "cut",
+    "info_domain": "territorial"
+   },
+   "facet_origin": {
+    "element_kind": "extracted",
+    "data_type": "inferred",
+    "vocabulary": "inferred",
+    "info_domain": "inferred"
+   },
+   "facet_confidence": {
+    "data_type": 0.85,
+    "vocabulary": 0.75,
+    "info_domain": 0.75
+   },
+   "facet_rationale": {
+    "data_type": "6 valores distintos en 200 filas",
+    "vocabulary": "patrón «region» de CUT",
+    "info_domain": "léxico del elemento: «region»"
+   },
+   "note": null,
+   "origin": "extracted",
+   "status": "proposed",
+   "confidence": 1.0,
+   "cardinality": "unknown",
+   "required": null,
+   "provenance": {
+    "locator": {
+     "file": "registro_sintetico.csv",
+     "column": 3
+    },
+    "excerpt": "region_vivienda"
+   },
+   "value_domain": [
+    "Araucanía",
+    "Biobío",
+    "Maule",
+    "Metropolitana",
+    "O'Higgins",
+    "Valparaíso"
+   ],
+   "stats": {
+    "rows": 200,
+    "non_null": 200,
+    "null_pct": 0.0,
+    "distinct": 6,
+    "format_example": "aaaaaaaaa"
+   }
+  },
+  {
+   "id": "el:comuna-vivienda",
+   "kind": "element",
+   "source_id": "src_registro-sintetico",
+   "parent_id": "sec:src_registro-sintetico:registro-sintetico",
+   "section_id": "sec:src_registro-sintetico:registro-sintetico",
+   "name": "comuna_vivienda",
+   "facets": {
+    "element_kind": "column",
+    "data_type": "categorica",
+    "vocabulary": "cut",
+    "info_domain": "territorial",
+    "sensitivity": "dato_personal"
+   },
+   "facet_origin": {
+    "element_kind": "extracted",
+    "data_type": "inferred",
+    "vocabulary": "inferred",
+    "info_domain": "inferred",
+    "sensitivity": "inferred"
+   },
+   "facet_confidence": {
+    "data_type": 0.85,
+    "vocabulary": 0.75,
+    "info_domain": 0.75,
+    "sensitivity": 0.85
+   },
+   "facet_rationale": {
+    "data_type": "8 valores distintos en 200 filas",
+    "vocabulary": "patrón «comuna» de CUT",
+    "info_domain": "léxico del elemento: «comuna»",
+    "sensitivity": "léxico «comuna» (clasificación provisional, pendiente de revisión legal)"
+   },
+   "note": null,
+   "origin": "extracted",
+   "status": "proposed",
+   "confidence": 1.0,
+   "cardinality": "unknown",
+   "required": null,
+   "provenance": {
+    "locator": {
+     "file": "registro_sintetico.csv",
+     "column": 4
+    },
+    "excerpt": "comuna_vivienda"
+   },
+   "value_domain": [
+    "Concepción",
+    "Providencia",
+    "Rancagua",
+    "Santiago",
+    "Talca",
+    "Temuco",
+    "Viña del Mar",
+    "Ñuñoa"
+   ],
+   "stats": {
+    "rows": 200,
+    "non_null": 200,
+    "null_pct": 0.0,
+    "distinct": 8,
+    "format_example": "aaaaaaaaaaa"
+   }
+  },
+  {
+   "id": "el:prevision-diagnostico",
+   "kind": "element",
+   "source_id": "src_registro-sintetico",
+   "parent_id": "sec:src_registro-sintetico:registro-sintetico",
+   "section_id": "sec:src_registro-sintetico:registro-sintetico",
+   "name": "prevision_diagnostico",
+   "facets": {
+    "element_kind": "column",
+    "data_type": "categorica",
+    "info_domain": "diagnostico",
+    "sensitivity": "dato_sensible_salud"
+   },
+   "facet_origin": {
+    "element_kind": "extracted",
+    "data_type": "inferred",
+    "info_domain": "inferred",
+    "sensitivity": "inferred"
+   },
+   "facet_confidence": {
+    "data_type": 0.85,
+    "info_domain": 0.75,
+    "sensitivity": 0.8
+   },
+   "facet_rationale": {
+    "data_type": "5 valores distintos en 200 filas",
+    "info_domain": "léxico del elemento: «diagnostic»",
+    "sensitivity": "léxico «diagnost» (clasificación provisional, pendiente de revisión legal)"
+   },
+   "note": null,
+   "origin": "extracted",
+   "status": "proposed",
+   "confidence": 1.0,
+   "cardinality": "unknown",
+   "required": null,
+   "provenance": {
+    "locator": {
+     "file": "registro_sintetico.csv",
+     "column": 5
+    },
+    "excerpt": "prevision_diagnostico"
+   },
+   "value_domain": [
+    "FONASA A",
+    "FONASA B",
+    "FONASA C",
+    "FONASA D",
+    "ISAPRE"
+   ],
+   "stats": {
+    "rows": 200,
+    "non_null": 200,
+    "null_pct": 0.0,
+    "distinct": 5,
+    "format_example": "aaaaaa"
+   }
+  },
+  {
+   "id": "el:fecha-emision-dx",
+   "kind": "element",
+   "source_id": "src_registro-sintetico",
+   "parent_id": "sec:src_registro-sintetico:registro-sintetico",
+   "section_id": "sec:src_registro-sintetico:registro-sintetico",
+   "name": "fecha_emision_dx",
+   "facets": {
+    "element_kind": "column",
+    "data_type": "fecha"
+   },
+   "facet_origin": {
+    "element_kind": "extracted",
+    "data_type": "inferred"
+   },
+   "facet_confidence": {
+    "data_type": 0.95
+   },
+   "facet_rationale": {
+    "data_type": "todos los valores tienen formato de fecha"
+   },
+   "note": null,
+   "origin": "extracted",
+   "status": "proposed",
+   "confidence": 1.0,
+   "cardinality": "unknown",
+   "required": null,
+   "provenance": {
+    "locator": {
+     "file": "registro_sintetico.csv",
+     "column": 6
+    },
+    "excerpt": "fecha_emision_dx"
+   },
+   "stats": {
+    "rows": 200,
+    "non_null": 200,
+    "null_pct": 0.0,
+    "distinct": 194,
+    "format_example": "9999-99-99"
+   }
+  },
+  {
+   "id": "el:diagnostico-cie10",
+   "kind": "element",
+   "source_id": "src_registro-sintetico",
+   "parent_id": "sec:src_registro-sintetico:registro-sintetico",
+   "section_id": "sec:src_registro-sintetico:registro-sintetico",
+   "name": "diagnostico_cie10",
+   "facets": {
+    "element_kind": "column",
+    "data_type": "codigo",
+    "info_domain": "diagnostico",
+    "sensitivity": "dato_sensible_salud"
+   },
+   "facet_origin": {
+    "element_kind": "extracted",
+    "data_type": "inferred",
+    "info_domain": "inferred",
+    "sensitivity": "inferred"
+   },
+   "facet_confidence": {
+    "data_type": 0.85,
+    "info_domain": 0.75,
+    "sensitivity": 0.8
+   },
+   "facet_rationale": {
+    "data_type": "todos los valores siguen un patrón de código (CIE, CIE-O o TNM)",
+    "info_domain": "léxico del elemento: «diagnostic»",
+    "sensitivity": "léxico «diagnost» (clasificación provisional, pendiente de revisión legal)"
+   },
+   "note": null,
+   "origin": "extracted",
+   "status": "proposed",
+   "confidence": 1.0,
+   "cardinality": "unknown",
+   "required": null,
+   "provenance": {
+    "locator": {
+     "file": "registro_sintetico.csv",
+     "column": 7
+    },
+    "excerpt": "diagnostico_cie10"
+   },
+   "stats": {
+    "rows": 200,
+    "non_null": 200,
+    "null_pct": 0.0,
+    "distinct": 8,
+    "format_example": "a99.9"
+   }
+  },
+  {
+   "id": "el:codigo-topografia-cieo",
+   "kind": "element",
+   "source_id": "src_registro-sintetico",
+   "parent_id": "sec:src_registro-sintetico:registro-sintetico",
+   "section_id": "sec:src_registro-sintetico:registro-sintetico",
+   "name": "codigo_topografia_cieo",
+   "facets": {
+    "element_kind": "column",
+    "data_type": "codigo",
+    "vocabulary": "cieo",
+    "info_domain": "diagnostico",
+    "sensitivity": "dato_sensible_salud"
+   },
+   "facet_origin": {
+    "element_kind": "extracted",
+    "data_type": "inferred",
+    "vocabulary": "inferred",
+    "info_domain": "inferred",
+    "sensitivity": "inferred"
+   },
+   "facet_confidence": {
+    "data_type": 0.85,
+    "vocabulary": 0.75,
+    "info_domain": 0.75,
+    "sensitivity": 0.8
+   },
+   "facet_rationale": {
+    "data_type": "todos los valores siguen un patrón de código (CIE, CIE-O o TNM)",
+    "vocabulary": "patrón «topografia» de CIE-O-3",
+    "info_domain": "léxico del elemento: «topografia»",
+    "sensitivity": "léxico «cie» (clasificación provisional, pendiente de revisión legal)"
+   },
+   "note": null,
+   "origin": "extracted",
+   "status": "proposed",
+   "confidence": 1.0,
+   "cardinality": "unknown",
+   "required": null,
+   "provenance": {
+    "locator": {
+     "file": "registro_sintetico.csv",
+     "column": 8
+    },
+    "excerpt": "codigo_topografia_cieo"
+   },
+   "stats": {
+    "rows": 200,
+    "non_null": 200,
+    "null_pct": 0.0,
+    "distinct": 8,
+    "format_example": "a99.9"
+   }
+  },
+  {
+   "id": "el:codigo-morfologia-cieo",
+   "kind": "element",
+   "source_id": "src_registro-sintetico",
+   "parent_id": "sec:src_registro-sintetico:registro-sintetico",
+   "section_id": "sec:src_registro-sintetico:registro-sintetico",
+   "name": "codigo_morfologia_cieo",
+   "facets": {
+    "element_kind": "column",
+    "data_type": "codigo",
+    "vocabulary": "cieo",
+    "info_domain": "diagnostico",
+    "sensitivity": "dato_sensible_salud"
+   },
+   "facet_origin": {
+    "element_kind": "extracted",
+    "data_type": "inferred",
+    "vocabulary": "inferred",
+    "info_domain": "inferred",
+    "sensitivity": "inferred"
+   },
+   "facet_confidence": {
+    "data_type": 0.85,
+    "vocabulary": 0.75,
+    "info_domain": 0.75,
+    "sensitivity": 0.8
+   },
+   "facet_rationale": {
+    "data_type": "todos los valores siguen un patrón de código (CIE, CIE-O o TNM)",
+    "vocabulary": "patrón «morfologia» de CIE-O-3",
+    "info_domain": "léxico del elemento: «morfologia»",
+    "sensitivity": "léxico «cie» (clasificación provisional, pendiente de revisión legal)"
+   },
+   "note": null,
+   "origin": "extracted",
+   "status": "proposed",
+   "confidence": 1.0,
+   "cardinality": "unknown",
+   "required": null,
+   "provenance": {
+    "locator": {
+     "file": "registro_sintetico.csv",
+     "column": 9
+    },
+    "excerpt": "codigo_morfologia_cieo"
+   },
+   "stats": {
+    "rows": 200,
+    "non_null": 200,
+    "null_pct": 0.0,
+    "distinct": 5,
+    "format_example": "9999/9"
+   }
+  },
+  {
+   "id": "el:ctnm",
+   "kind": "element",
+   "source_id": "src_registro-sintetico",
+   "parent_id": "sec:src_registro-sintetico:registro-sintetico",
+   "section_id": "sec:src_registro-sintetico:registro-sintetico",
+   "name": "ctnm",
+   "facets": {
+    "element_kind": "column",
+    "data_type": "codigo",
+    "vocabulary": "tnm",
+    "info_domain": "diagnostico",
+    "sensitivity": "dato_sensible_salud"
+   },
+   "facet_origin": {
+    "element_kind": "extracted",
+    "data_type": "inferred",
+    "vocabulary": "inferred",
+    "info_domain": "inferred",
+    "sensitivity": "inferred"
+   },
+   "facet_confidence": {
+    "data_type": 0.85,
+    "vocabulary": 0.75,
+    "info_domain": 0.75,
+    "sensitivity": 0.8
+   },
+   "facet_rationale": {
+    "data_type": "todos los valores siguen un patrón de código (CIE, CIE-O o TNM)",
+    "vocabulary": "patrón «tnm» de TNM",
+    "info_domain": "léxico del elemento: «tnm»",
+    "sensitivity": "léxico «tnm» (clasificación provisional, pendiente de revisión legal)"
+   },
+   "note": null,
+   "origin": "extracted",
+   "status": "proposed",
+   "confidence": 1.0,
+   "cardinality": "unknown",
+   "required": null,
+   "provenance": {
+    "locator": {
+     "file": "registro_sintetico.csv",
+     "column": 10
+    },
+    "excerpt": "ctnm"
+   },
+   "stats": {
+    "rows": 200,
+    "non_null": 200,
+    "null_pct": 0.0,
+    "distinct": 6,
+    "format_example": "aa9a9a9"
+   }
+  },
+  {
+   "id": "el:estadio-dx",
+   "kind": "element",
+   "source_id": "src_registro-sintetico",
+   "parent_id": "sec:src_registro-sintetico:registro-sintetico",
+   "section_id": "sec:src_registro-sintetico:registro-sintetico",
+   "name": "estadio_dx",
+   "facets": {
+    "element_kind": "column",
+    "data_type": "categorica",
+    "info_domain": "diagnostico",
+    "sensitivity": "dato_sensible_salud"
+   },
+   "facet_origin": {
+    "element_kind": "extracted",
+    "data_type": "inferred",
+    "info_domain": "inferred",
+    "sensitivity": "inferred"
+   },
+   "facet_confidence": {
+    "data_type": 0.85,
+    "info_domain": 0.75,
+    "sensitivity": 0.8
+   },
+   "facet_rationale": {
+    "data_type": "4 valores distintos en 200 filas",
+    "info_domain": "léxico del elemento: «estadio»",
+    "sensitivity": "léxico «estadio» (clasificación provisional, pendiente de revisión legal)"
+   },
+   "note": null,
+   "origin": "extracted",
+   "status": "proposed",
+   "confidence": 1.0,
+   "cardinality": "unknown",
+   "required": null,
+   "provenance": {
+    "locator": {
+     "file": "registro_sintetico.csv",
+     "column": 11
+    },
+    "excerpt": "estadio_dx"
+   },
+   "value_domain": [
+    "I",
+    "II",
+    "III",
+    "IV"
+   ],
+   "stats": {
+    "rows": 200,
+    "non_null": 200,
+    "null_pct": 0.0,
+    "distinct": 4,
+    "format_example": "aa"
+   }
+  },
+  {
+   "id": "el:metastasis-dx",
+   "kind": "element",
+   "source_id": "src_registro-sintetico",
+   "parent_id": "sec:src_registro-sintetico:registro-sintetico",
+   "section_id": "sec:src_registro-sintetico:registro-sintetico",
+   "name": "metastasis_dx",
+   "facets": {
+    "element_kind": "column",
+    "data_type": "binario",
+    "info_domain": "diagnostico",
+    "sensitivity": "dato_sensible_salud"
+   },
+   "facet_origin": {
+    "element_kind": "extracted",
+    "data_type": "inferred",
+    "info_domain": "inferred",
+    "sensitivity": "inferred"
+   },
+   "facet_confidence": {
+    "data_type": 0.9,
+    "info_domain": 0.75,
+    "sensitivity": 0.8
+   },
+   "facet_rationale": {
+    "data_type": "valores dentro de {si, no, desconocido}",
+    "info_domain": "léxico del elemento: «metastasis»",
+    "sensitivity": "léxico «metastasis» (clasificación provisional, pendiente de revisión legal)"
+   },
+   "note": null,
+   "origin": "extracted",
+   "status": "proposed",
+   "confidence": 1.0,
+   "cardinality": "unknown",
+   "required": null,
+   "provenance": {
+    "locator": {
+     "file": "registro_sintetico.csv",
+     "column": 12
+    },
+    "excerpt": "metastasis_dx"
+   },
+   "value_domain": [
+    "Desconocido",
+    "No",
+    "Si"
+   ],
+   "stats": {
+    "rows": 200,
+    "non_null": 200,
+    "null_pct": 0.0,
+    "distinct": 3,
+    "format_example": "aaaaaaaaaaa"
+   }
+  },
+  {
+   "id": "el:fecha-comite",
+   "kind": "element",
+   "source_id": "src_registro-sintetico",
+   "parent_id": "sec:src_registro-sintetico:registro-sintetico",
+   "section_id": "sec:src_registro-sintetico:registro-sintetico",
+   "name": "fecha_comite",
+   "facets": {
+    "element_kind": "column",
+    "data_type": "fecha",
+    "info_domain": "tratamiento",
+    "sensitivity": "dato_sensible_salud"
+   },
+   "facet_origin": {
+    "element_kind": "extracted",
+    "data_type": "inferred",
+    "info_domain": "inferred",
+    "sensitivity": "inferred"
+   },
+   "facet_confidence": {
+    "data_type": 0.95,
+    "info_domain": 0.75,
+    "sensitivity": 0.8
+   },
+   "facet_rationale": {
+    "data_type": "todos los valores tienen formato de fecha",
+    "info_domain": "léxico del elemento: «comite»",
+    "sensitivity": "léxico «comite» (clasificación provisional, pendiente de revisión legal)"
+   },
+   "note": null,
+   "origin": "extracted",
+   "status": "proposed",
+   "confidence": 1.0,
+   "cardinality": "unknown",
+   "required": null,
+   "provenance": {
+    "locator": {
+     "file": "registro_sintetico.csv",
+     "column": 13
+    },
+    "excerpt": "fecha_comite"
+   },
+   "stats": {
+    "rows": 200,
+    "non_null": 200,
+    "null_pct": 0.0,
+    "distinct": 195,
+    "format_example": "9999-99-99"
+   }
+  },
+  {
+   "id": "el:fecha-inicio-tratamiento",
+   "kind": "element",
+   "source_id": "src_registro-sintetico",
+   "parent_id": "sec:src_registro-sintetico:registro-sintetico",
+   "section_id": "sec:src_registro-sintetico:registro-sintetico",
+   "name": "fecha_inicio_tratamiento",
+   "facets": {
+    "element_kind": "column",
+    "data_type": "fecha",
+    "info_domain": "tratamiento",
+    "sensitivity": "dato_sensible_salud"
+   },
+   "facet_origin": {
+    "element_kind": "extracted",
+    "data_type": "inferred",
+    "info_domain": "inferred",
+    "sensitivity": "inferred"
+   },
+   "facet_confidence": {
+    "data_type": 0.95,
+    "info_domain": 0.75,
+    "sensitivity": 0.8
+   },
+   "facet_rationale": {
+    "data_type": "todos los valores tienen formato de fecha",
+    "info_domain": "léxico del elemento: «tratamiento»",
+    "sensitivity": "léxico «tratamiento» (clasificación provisional, pendiente de revisión legal)"
+   },
+   "note": null,
+   "origin": "extracted",
+   "status": "proposed",
+   "confidence": 1.0,
+   "cardinality": "unknown",
+   "required": null,
+   "provenance": {
+    "locator": {
+     "file": "registro_sintetico.csv",
+     "column": 14
+    },
+    "excerpt": "fecha_inicio_tratamiento"
+   },
+   "stats": {
+    "rows": 200,
+    "non_null": 200,
+    "null_pct": 0.0,
+    "distinct": 194,
+    "format_example": "9999-99-99"
+   }
+  },
+  {
+   "id": "el:intencion-tratamiento",
+   "kind": "element",
+   "source_id": "src_registro-sintetico",
+   "parent_id": "sec:src_registro-sintetico:registro-sintetico",
+   "section_id": "sec:src_registro-sintetico:registro-sintetico",
+   "name": "intencion_tratamiento",
+   "facets": {
+    "element_kind": "column",
+    "data_type": "categorica",
+    "info_domain": "tratamiento",
+    "sensitivity": "dato_sensible_salud"
+   },
+   "facet_origin": {
+    "element_kind": "extracted",
+    "data_type": "inferred",
+    "info_domain": "inferred",
+    "sensitivity": "inferred"
+   },
+   "facet_confidence": {
+    "data_type": 0.85,
+    "info_domain": 0.75,
+    "sensitivity": 0.8
+   },
+   "facet_rationale": {
+    "data_type": "2 valores distintos en 200 filas",
+    "info_domain": "léxico del elemento: «tratamiento»",
+    "sensitivity": "léxico «tratamiento» (clasificación provisional, pendiente de revisión legal)"
+   },
+   "note": null,
+   "origin": "extracted",
+   "status": "proposed",
+   "confidence": 1.0,
+   "cardinality": "unknown",
+   "required": null,
+   "provenance": {
+    "locator": {
+     "file": "registro_sintetico.csv",
+     "column": 15
+    },
+    "excerpt": "intencion_tratamiento"
+   },
+   "value_domain": [
+    "Curativa",
+    "Paliativa"
+   ],
+   "stats": {
+    "rows": 200,
+    "non_null": 200,
+    "null_pct": 0.0,
+    "distinct": 2,
+    "format_example": "aaaaaaaa"
+   }
+  },
+  {
+   "id": "el:her2-mama",
+   "kind": "element",
+   "source_id": "src_registro-sintetico",
+   "parent_id": "sec:src_registro-sintetico:registro-sintetico",
+   "section_id": "sec:src_registro-sintetico:registro-sintetico",
+   "name": "her2_mama",
+   "facets": {
+    "element_kind": "column",
+    "data_type": "categorica",
+    "info_domain": "biomarcadores_laboratorio",
+    "sensitivity": "dato_sensible_salud"
+   },
+   "facet_origin": {
+    "element_kind": "extracted",
+    "data_type": "inferred",
+    "info_domain": "inferred",
+    "sensitivity": "inferred"
+   },
+   "facet_confidence": {
+    "data_type": 0.85,
+    "info_domain": 0.75,
+    "sensitivity": 0.8
+   },
+   "facet_rationale": {
+    "data_type": "3 valores distintos en 156 filas",
+    "info_domain": "léxico del elemento: «her2»",
+    "sensitivity": "léxico «her2» (clasificación provisional, pendiente de revisión legal)"
+   },
+   "note": null,
+   "origin": "extracted",
+   "status": "proposed",
+   "confidence": 1.0,
+   "cardinality": "unknown",
+   "required": null,
+   "provenance": {
+    "locator": {
+     "file": "registro_sintetico.csv",
+     "column": 16
+    },
+    "excerpt": "her2_mama"
+   },
+   "value_domain": [
+    "Equívoco",
+    "Negativo",
+    "Positivo"
+   ],
+   "stats": {
+    "rows": 200,
+    "non_null": 156,
+    "null_pct": 22.0,
+    "distinct": 3,
+    "format_example": "aaaaaaaa"
+   }
+  },
+  {
+   "id": "el:ki67-pct",
+   "kind": "element",
+   "source_id": "src_registro-sintetico",
+   "parent_id": "sec:src_registro-sintetico:registro-sintetico",
+   "section_id": "sec:src_registro-sintetico:registro-sintetico",
+   "name": "ki67_pct",
+   "facets": {
+    "element_kind": "column",
+    "data_type": "numerica",
+    "info_domain": "biomarcadores_laboratorio",
+    "sensitivity": "dato_sensible_salud"
+   },
+   "facet_origin": {
+    "element_kind": "extracted",
+    "data_type": "inferred",
+    "info_domain": "inferred",
+    "sensitivity": "inferred"
+   },
+   "facet_confidence": {
+    "data_type": 0.9,
+    "info_domain": 0.75,
+    "sensitivity": 0.8
+   },
+   "facet_rationale": {
+    "data_type": "todos los valores son números",
+    "info_domain": "léxico del elemento: «ki67»",
+    "sensitivity": "léxico «ki67» (clasificación provisional, pendiente de revisión legal)"
+   },
+   "note": null,
+   "origin": "extracted",
+   "status": "proposed",
+   "confidence": 1.0,
+   "cardinality": "unknown",
+   "required": null,
+   "provenance": {
+    "locator": {
+     "file": "registro_sintetico.csv",
+     "column": 17
+    },
+    "excerpt": "ki67_pct"
+   },
+   "stats": {
+    "rows": 200,
+    "non_null": 200,
+    "null_pct": 0.0,
+    "distinct": 87,
+    "format_example": "99"
+   }
+  },
+  {
+   "id": "el:estado-vital",
+   "kind": "element",
+   "source_id": "src_registro-sintetico",
+   "parent_id": "sec:src_registro-sintetico:registro-sintetico",
+   "section_id": "sec:src_registro-sintetico:registro-sintetico",
+   "name": "estado_vital",
+   "facets": {
+    "element_kind": "column",
+    "data_type": "binario"
+   },
+   "facet_origin": {
+    "element_kind": "extracted",
+    "data_type": "inferred"
+   },
+   "facet_confidence": {
+    "data_type": 0.9
+   },
+   "facet_rationale": {
+    "data_type": "valores dentro de {vivo, fallecido}"
+   },
+   "note": null,
+   "origin": "extracted",
+   "status": "proposed",
+   "confidence": 1.0,
+   "cardinality": "unknown",
+   "required": null,
+   "provenance": {
+    "locator": {
+     "file": "registro_sintetico.csv",
+     "column": 18
+    },
+    "excerpt": "estado_vital"
+   },
+   "value_domain": [
+    "Fallecido",
+    "Vivo"
+   ],
+   "stats": {
+    "rows": 200,
+    "non_null": 200,
+    "null_pct": 0.0,
+    "distinct": 2,
+    "format_example": "aaaa"
+   }
+  },
+  {
+   "id": "el:fecha-defuncion",
+   "kind": "element",
+   "source_id": "src_registro-sintetico",
+   "parent_id": "sec:src_registro-sintetico:registro-sintetico",
+   "section_id": "sec:src_registro-sintetico:registro-sintetico",
+   "name": "fecha_defuncion",
+   "facets": {
+    "element_kind": "column",
+    "data_type": "fecha",
+    "info_domain": "evolucion_desenlace",
+    "sensitivity": "dato_sensible_salud"
+   },
+   "facet_origin": {
+    "element_kind": "extracted",
+    "data_type": "inferred",
+    "info_domain": "inferred",
+    "sensitivity": "inferred"
+   },
+   "facet_confidence": {
+    "data_type": 0.95,
+    "info_domain": 0.75,
+    "sensitivity": 0.8
+   },
+   "facet_rationale": {
+    "data_type": "todos los valores tienen formato de fecha",
+    "info_domain": "léxico del elemento: «defuncion»",
+    "sensitivity": "léxico «defuncion» (clasificación provisional, pendiente de revisión legal)"
+   },
+   "note": null,
+   "origin": "extracted",
+   "status": "proposed",
+   "confidence": 1.0,
+   "cardinality": "unknown",
+   "required": null,
+   "provenance": {
+    "locator": {
+     "file": "registro_sintetico.csv",
+     "column": 19
+    },
+    "excerpt": "fecha_defuncion"
+   },
+   "stats": {
+    "rows": 200,
+    "non_null": 53,
+    "null_pct": 73.5,
+    "distinct": 53,
+    "format_example": "9999-99-99"
+   }
+  },
+  {
+   "id": "el:observaciones",
+   "kind": "element",
+   "source_id": "src_registro-sintetico",
+   "parent_id": "sec:src_registro-sintetico:registro-sintetico",
+   "section_id": "sec:src_registro-sintetico:registro-sintetico",
+   "name": "observaciones",
+   "facets": {
+    "element_kind": "column",
+    "data_type": "texto_libre"
+   },
+   "facet_origin": {
+    "element_kind": "extracted",
+    "data_type": "inferred"
+   },
+   "facet_confidence": {
+    "data_type": 0.8
+   },
+   "facet_rationale": {
+    "data_type": "longitud media 74 caracteres"
+   },
+   "note": null,
+   "origin": "extracted",
+   "status": "proposed",
+   "confidence": 1.0,
+   "cardinality": "unknown",
+   "required": null,
+   "provenance": {
+    "locator": {
+     "file": "registro_sintetico.csv",
+     "column": 20
+    },
+    "excerpt": "observaciones"
+   },
+   "stats": {
+    "rows": 200,
+    "non_null": 152,
+    "null_pct": 24.0,
+    "distinct": 3,
+    "format_example": "aaaa aaaaaaaaaa aa aaaaa"
+   }
+  },
+  {
+   "id": "voc:cut",
+   "kind": "vocabulary",
+   "name": "CUT",
+   "full_name": "Código Único Territorial (Chile)",
+   "origin": "inferred",
+   "status": "proposed"
+  },
+  {
+   "id": "voc:cieo",
+   "kind": "vocabulary",
+   "name": "CIE-O-3",
+   "full_name": "Clasificación Internacional de Enfermedades para Oncología, 3.ª edición (OMS)",
+   "origin": "inferred",
+   "status": "proposed"
+  },
+  {
+   "id": "voc:tnm",
+   "kind": "vocabulary",
+   "name": "TNM",
+   "full_name": "Sistema TNM de estadificación (AJCC / UICC)",
+   "origin": "inferred",
+   "status": "proposed"
+  }
+ ],
+ "edges": [
+  {
+   "id": "e1",
+   "kind": "contains",
+   "source": "root",
+   "target": "sec:src_registro-sintetico:registro-sintetico"
+  },
+  {
+   "id": "e2",
+   "kind": "contains",
+   "source": "sec:src_registro-sintetico:registro-sintetico",
+   "target": "el:id-caso"
+  },
+  {
+   "id": "e3",
+   "kind": "contains",
+   "source": "sec:src_registro-sintetico:registro-sintetico",
+   "target": "el:fecha-nacimiento"
+  },
+  {
+   "id": "e4",
+   "kind": "contains",
+   "source": "sec:src_registro-sintetico:registro-sintetico",
+   "target": "el:sexo"
+  },
+  {
+   "id": "e5",
+   "kind": "contains",
+   "source": "sec:src_registro-sintetico:registro-sintetico",
+   "target": "el:region-vivienda"
+  },
+  {
+   "id": "e6",
+   "kind": "contains",
+   "source": "sec:src_registro-sintetico:registro-sintetico",
+   "target": "el:comuna-vivienda"
+  },
+  {
+   "id": "e7",
+   "kind": "contains",
+   "source": "sec:src_registro-sintetico:registro-sintetico",
+   "target": "el:prevision-diagnostico"
+  },
+  {
+   "id": "e8",
+   "kind": "contains",
+   "source": "sec:src_registro-sintetico:registro-sintetico",
+   "target": "el:fecha-emision-dx"
+  },
+  {
+   "id": "e9",
+   "kind": "contains",
+   "source": "sec:src_registro-sintetico:registro-sintetico",
+   "target": "el:diagnostico-cie10"
+  },
+  {
+   "id": "e10",
+   "kind": "contains",
+   "source": "sec:src_registro-sintetico:registro-sintetico",
+   "target": "el:codigo-topografia-cieo"
+  },
+  {
+   "id": "e11",
+   "kind": "contains",
+   "source": "sec:src_registro-sintetico:registro-sintetico",
+   "target": "el:codigo-morfologia-cieo"
+  },
+  {
+   "id": "e12",
+   "kind": "contains",
+   "source": "sec:src_registro-sintetico:registro-sintetico",
+   "target": "el:ctnm"
+  },
+  {
+   "id": "e13",
+   "kind": "contains",
+   "source": "sec:src_registro-sintetico:registro-sintetico",
+   "target": "el:estadio-dx"
+  },
+  {
+   "id": "e14",
+   "kind": "contains",
+   "source": "sec:src_registro-sintetico:registro-sintetico",
+   "target": "el:metastasis-dx"
+  },
+  {
+   "id": "e15",
+   "kind": "contains",
+   "source": "sec:src_registro-sintetico:registro-sintetico",
+   "target": "el:fecha-comite"
+  },
+  {
+   "id": "e16",
+   "kind": "contains",
+   "source": "sec:src_registro-sintetico:registro-sintetico",
+   "target": "el:fecha-inicio-tratamiento"
+  },
+  {
+   "id": "e17",
+   "kind": "contains",
+   "source": "sec:src_registro-sintetico:registro-sintetico",
+   "target": "el:intencion-tratamiento"
+  },
+  {
+   "id": "e18",
+   "kind": "contains",
+   "source": "sec:src_registro-sintetico:registro-sintetico",
+   "target": "el:her2-mama"
+  },
+  {
+   "id": "e19",
+   "kind": "contains",
+   "source": "sec:src_registro-sintetico:registro-sintetico",
+   "target": "el:ki67-pct"
+  },
+  {
+   "id": "e20",
+   "kind": "contains",
+   "source": "sec:src_registro-sintetico:registro-sintetico",
+   "target": "el:estado-vital"
+  },
+  {
+   "id": "e21",
+   "kind": "contains",
+   "source": "sec:src_registro-sintetico:registro-sintetico",
+   "target": "el:fecha-defuncion"
+  },
+  {
+   "id": "e22",
+   "kind": "contains",
+   "source": "sec:src_registro-sintetico:registro-sintetico",
+   "target": "el:observaciones"
+  },
+  {
+   "id": "e23",
+   "kind": "coded_with",
+   "source": "el:region-vivienda",
+   "target": "voc:cut",
+   "layer": "std",
+   "origin": "inferred",
+   "status": "proposed"
+  },
+  {
+   "id": "e24",
+   "kind": "coded_with",
+   "source": "el:comuna-vivienda",
+   "target": "voc:cut",
+   "layer": "std",
+   "origin": "inferred",
+   "status": "proposed"
+  },
+  {
+   "id": "e25",
+   "kind": "coded_with",
+   "source": "el:codigo-topografia-cieo",
+   "target": "voc:cieo",
+   "layer": "std",
+   "origin": "inferred",
+   "status": "proposed"
+  },
+  {
+   "id": "e26",
+   "kind": "coded_with",
+   "source": "el:codigo-morfologia-cieo",
+   "target": "voc:cieo",
+   "layer": "std",
+   "origin": "inferred",
+   "status": "proposed"
+  },
+  {
+   "id": "e27",
+   "kind": "coded_with",
+   "source": "el:ctnm",
+   "target": "voc:tnm",
+   "layer": "std",
+   "origin": "inferred",
+   "status": "proposed"
+  }
+ ],
+ "findings": []
+}

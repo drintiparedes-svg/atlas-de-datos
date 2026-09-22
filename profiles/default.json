@@ -43,7 +43,10 @@
         "binario",
         "numerica",
         "codigo",
-        "identificador"
+        "identificador",
+        "texto_libre",
+        "compuesto",
+        "archivo"
       ],
       "values": {
         "fecha": {
@@ -117,6 +120,443 @@
           ],
           "color_dark": "#a3adbf",
           "color_light": "#66728a"
+        },
+        "texto_libre": {
+          "label": "Texto libre",
+          "plural": "Textos libres",
+          "definition": "Texto sin estructura fija (observaciones, comentarios).",
+          "quality_rules": [
+            "Declarar longitud máxima o esquema.",
+            "Registrar codificación (UTF-8) y formato."
+          ],
+          "color_dark": "#e8875a",
+          "color_light": "#b5541f"
+        },
+        "compuesto": {
+          "label": "Compuesto",
+          "plural": "Compuestos",
+          "definition": "Lista, objeto o JSON anidado.",
+          "quality_rules": [
+            "Declarar longitud máxima o esquema.",
+            "Registrar codificación (UTF-8) y formato."
+          ],
+          "color_dark": "#8fc46a",
+          "color_light": "#4f8a1f"
+        },
+        "archivo": {
+          "label": "Archivo",
+          "plural": "Archivos",
+          "definition": "Documento o binario adjunto.",
+          "quality_rules": [
+            "Declarar longitud máxima o esquema.",
+            "Registrar codificación (UTF-8) y formato."
+          ],
+          "color_dark": "#a3adbf",
+          "color_light": "#66728a"
+        }
+      },
+      "applies_to": [
+        "field",
+        "column"
+      ]
+    },
+    "element_kind": {
+      "label": "Tipo de elemento",
+      "applies_to": [
+        "element"
+      ],
+      "order": [
+        "field",
+        "column",
+        "entity",
+        "concept",
+        "claim",
+        "decision",
+        "task",
+        "event",
+        "question",
+        "figure",
+        "table"
+      ],
+      "values": {
+        "field": {
+          "label": "Campo",
+          "plural": "Campos",
+          "definition": "Campo o variable definida en un diccionario o formulario.",
+          "color_dark": "#e0b458",
+          "color_light": "#a97c1d"
+        },
+        "column": {
+          "label": "Columna",
+          "plural": "Columnas",
+          "definition": "Columna de una tabla con datos o de un esquema de base de datos.",
+          "color_dark": "#4fc8b4",
+          "color_light": "#157f6d"
+        },
+        "entity": {
+          "label": "Entidad",
+          "plural": "Entidades",
+          "definition": "Persona, organización, sistema o lugar.",
+          "color_dark": "#d0708f",
+          "color_light": "#a83c62"
+        },
+        "concept": {
+          "label": "Concepto",
+          "plural": "Conceptos",
+          "definition": "Concepto clínico o técnico.",
+          "color_dark": "#6fa8e8",
+          "color_light": "#2f6fb8"
+        },
+        "claim": {
+          "label": "Afirmación",
+          "plural": "Afirmaciones",
+          "definition": "Afirmación con evidencia.",
+          "color_dark": "#9d8ae6",
+          "color_light": "#5b4aa8"
+        },
+        "decision": {
+          "label": "Decisión",
+          "plural": "Decisiones",
+          "definition": "Decisión registrada en un documento.",
+          "color_dark": "#a3adbf",
+          "color_light": "#66728a"
+        },
+        "task": {
+          "label": "Tarea",
+          "plural": "Tareas",
+          "definition": "Compromiso o tarea pendiente.",
+          "color_dark": "#e8875a",
+          "color_light": "#b5541f"
+        },
+        "event": {
+          "label": "Evento",
+          "plural": "Eventos",
+          "definition": "Hito o evento con fecha.",
+          "color_dark": "#8fc46a",
+          "color_light": "#4f8a1f"
+        },
+        "question": {
+          "label": "Pregunta",
+          "plural": "Preguntas",
+          "definition": "Pregunta abierta.",
+          "color_dark": "#e0b458",
+          "color_light": "#a97c1d"
+        },
+        "figure": {
+          "label": "Figura",
+          "plural": "Figuras",
+          "definition": "Figura, diagrama o imagen.",
+          "color_dark": "#4fc8b4",
+          "color_light": "#157f6d"
+        },
+        "table": {
+          "label": "Tabla",
+          "plural": "Tablas",
+          "definition": "Tabla embebida en un documento.",
+          "color_dark": "#d0708f",
+          "color_light": "#a83c62"
+        }
+      }
+    },
+    "info_domain": {
+      "label": "Dominio de información",
+      "applies_to": [
+        "element",
+        "section"
+      ],
+      "order": [
+        "demografico",
+        "territorial",
+        "previsional_administrativo",
+        "diagnostico",
+        "tratamiento",
+        "evolucion_desenlace",
+        "biomarcadores_laboratorio",
+        "operacional_proceso",
+        "financiero",
+        "investigacion",
+        "documental"
+      ],
+      "values": {
+        "demografico": {
+          "label": "Demográfico",
+          "plural": "Demográficos",
+          "definition": "Identificación y características de la persona.",
+          "color_dark": "#e0b458",
+          "color_light": "#a97c1d"
+        },
+        "territorial": {
+          "label": "Territorial",
+          "plural": "Territoriales",
+          "definition": "Lugar de residencia o de atención.",
+          "color_dark": "#4fc8b4",
+          "color_light": "#157f6d"
+        },
+        "previsional_administrativo": {
+          "label": "Previsional y administrativo",
+          "plural": "Previsionales y administrativos",
+          "definition": "Previsión, convenios y regulación (GES).",
+          "color_dark": "#d0708f",
+          "color_light": "#a83c62"
+        },
+        "diagnostico": {
+          "label": "Diagnóstico",
+          "plural": "Diagnósticos",
+          "definition": "Identificación, codificación y extensión de la enfermedad.",
+          "color_dark": "#6fa8e8",
+          "color_light": "#2f6fb8"
+        },
+        "tratamiento": {
+          "label": "Tratamiento",
+          "plural": "Tratamientos",
+          "definition": "Comités, modalidades e intención terapéutica.",
+          "color_dark": "#9d8ae6",
+          "color_light": "#5b4aa8"
+        },
+        "evolucion_desenlace": {
+          "label": "Evolución y desenlace",
+          "plural": "Evolución y desenlace",
+          "definition": "Progresión, recurrencia, seguimiento y estado vital.",
+          "color_dark": "#a3adbf",
+          "color_light": "#66728a"
+        },
+        "biomarcadores_laboratorio": {
+          "label": "Biomarcadores y laboratorio",
+          "plural": "Biomarcadores y laboratorio",
+          "definition": "Marcadores, perfil molecular y resultados de laboratorio.",
+          "color_dark": "#e8875a",
+          "color_light": "#b5541f"
+        },
+        "operacional_proceso": {
+          "label": "Operacional y proceso",
+          "plural": "Operacionales y de proceso",
+          "definition": "Flujos, centros, fechas de proceso.",
+          "color_dark": "#8fc46a",
+          "color_light": "#4f8a1f"
+        },
+        "financiero": {
+          "label": "Financiero",
+          "plural": "Financieros",
+          "definition": "Costos, aranceles y facturación.",
+          "color_dark": "#e0b458",
+          "color_light": "#a97c1d"
+        },
+        "investigacion": {
+          "label": "Investigación",
+          "plural": "De investigación",
+          "definition": "Protocolos, ensayos y consentimientos.",
+          "color_dark": "#4fc8b4",
+          "color_light": "#157f6d"
+        },
+        "documental": {
+          "label": "Documental",
+          "plural": "Documentales",
+          "definition": "Informes, adjuntos y referencias documentales.",
+          "color_dark": "#d0708f",
+          "color_light": "#a83c62"
+        }
+      },
+      "note": "Inferido por léxico; validar con el equipo responsable."
+    },
+    "sensitivity": {
+      "label": "Sensibilidad",
+      "applies_to": [
+        "element",
+        "source"
+      ],
+      "order": [
+        "publica",
+        "interna",
+        "confidencial",
+        "dato_personal",
+        "dato_sensible_salud"
+      ],
+      "values": {
+        "publica": {
+          "label": "Pública",
+          "plural": "Públicos",
+          "definition": "Información de libre acceso.",
+          "color_dark": "#e0b458",
+          "color_light": "#a97c1d"
+        },
+        "interna": {
+          "label": "Interna",
+          "plural": "Internos",
+          "definition": "Uso interno de la institución.",
+          "color_dark": "#4fc8b4",
+          "color_light": "#157f6d"
+        },
+        "confidencial": {
+          "label": "Confidencial",
+          "plural": "Confidenciales",
+          "definition": "Acceso restringido por política institucional.",
+          "color_dark": "#d0708f",
+          "color_light": "#a83c62"
+        },
+        "dato_personal": {
+          "label": "Dato personal",
+          "plural": "Datos personales",
+          "definition": "Identifica o hace identificable a una persona (Ley 19.628 y Ley 21.719).",
+          "color_dark": "#6fa8e8",
+          "color_light": "#2f6fb8"
+        },
+        "dato_sensible_salud": {
+          "label": "Dato sensible de salud",
+          "plural": "Datos sensibles de salud",
+          "definition": "Dato de salud: categoría especial (Ley 21.719, Ley 20.584).",
+          "color_dark": "#9d8ae6",
+          "color_light": "#5b4aa8"
+        }
+      },
+      "note": "Clasificación provisional. La clasificación final requiere validación de la asesoría legal de FALP (decisión M2, nivel N3)."
+    },
+    "status": {
+      "label": "Estado de validación",
+      "applies_to": [
+        "all"
+      ],
+      "order": [
+        "proposed",
+        "validated",
+        "rejected"
+      ],
+      "values": {
+        "proposed": {
+          "label": "Propuesto",
+          "plural": "Propuestos",
+          "definition": "Pendiente de validación humana.",
+          "color_dark": "#e0b458",
+          "color_light": "#a97c1d"
+        },
+        "validated": {
+          "label": "Validado",
+          "plural": "Validados",
+          "definition": "Confirmado por una persona responsable.",
+          "color_dark": "#4fc8b4",
+          "color_light": "#157f6d"
+        },
+        "rejected": {
+          "label": "Rechazado",
+          "plural": "Rechazados",
+          "definition": "Descartado; se conserva en auditoría.",
+          "color_dark": "#d0708f",
+          "color_light": "#a83c62"
+        }
+      }
+    },
+    "origin": {
+      "label": "Origen",
+      "applies_to": [
+        "all"
+      ],
+      "order": [
+        "extracted",
+        "inferred",
+        "manual"
+      ],
+      "values": {
+        "extracted": {
+          "label": "Extraído",
+          "plural": "Extraídos",
+          "definition": "Tomado literalmente del documento.",
+          "color_dark": "#e0b458",
+          "color_light": "#a97c1d"
+        },
+        "inferred": {
+          "label": "Inferido",
+          "plural": "Inferidos",
+          "definition": "Propuesto por reglas o modelos; requiere validación.",
+          "color_dark": "#4fc8b4",
+          "color_light": "#157f6d"
+        },
+        "manual": {
+          "label": "Manual",
+          "plural": "Manuales",
+          "definition": "Ingresado por una persona.",
+          "color_dark": "#d0708f",
+          "color_light": "#a83c62"
+        }
+      }
+    },
+    "source_type": {
+      "label": "Tipo de fuente",
+      "applies_to": [
+        "source"
+      ],
+      "order": [
+        "diccionario",
+        "tabla",
+        "esquema_bd",
+        "narrativo",
+        "presentacion",
+        "imagen",
+        "correo",
+        "formulario",
+        "otro"
+      ],
+      "values": {
+        "diccionario": {
+          "label": "Diccionario de datos",
+          "plural": "Diccionarios",
+          "definition": "Diccionario de variables o formulario.",
+          "color_dark": "#e0b458",
+          "color_light": "#a97c1d"
+        },
+        "tabla": {
+          "label": "Tabla o dataset",
+          "plural": "Tablas",
+          "definition": "Planilla o exportación de datos.",
+          "color_dark": "#4fc8b4",
+          "color_light": "#157f6d"
+        },
+        "esquema_bd": {
+          "label": "Esquema de base de datos",
+          "plural": "Esquemas",
+          "definition": "DDL, JSON Schema o metadatos de conexión.",
+          "color_dark": "#d0708f",
+          "color_light": "#a83c62"
+        },
+        "narrativo": {
+          "label": "Documento narrativo",
+          "plural": "Narrativos",
+          "definition": "Informe, minuta o protocolo.",
+          "color_dark": "#6fa8e8",
+          "color_light": "#2f6fb8"
+        },
+        "presentacion": {
+          "label": "Presentación",
+          "plural": "Presentaciones",
+          "definition": "Diapositivas.",
+          "color_dark": "#9d8ae6",
+          "color_light": "#5b4aa8"
+        },
+        "imagen": {
+          "label": "Imagen o diagrama",
+          "plural": "Imágenes",
+          "definition": "Imagen con OCR o diagrama.",
+          "color_dark": "#a3adbf",
+          "color_light": "#66728a"
+        },
+        "correo": {
+          "label": "Correo",
+          "plural": "Correos",
+          "definition": "Hilo de correo.",
+          "color_dark": "#e8875a",
+          "color_light": "#b5541f"
+        },
+        "formulario": {
+          "label": "Formulario",
+          "plural": "Formularios",
+          "definition": "Formulario de captura.",
+          "color_dark": "#8fc46a",
+          "color_light": "#4f8a1f"
+        },
+        "otro": {
+          "label": "Otro",
+          "plural": "Otros",
+          "definition": "Formato no reconocido: solo metadatos.",
+          "color_dark": "#e0b458",
+          "color_light": "#a97c1d"
         }
       }
     }
@@ -208,6 +648,24 @@
       1.1
     ],
     "section_wrap_chars": 24,
-    "element_truncate_chars": 34
+    "element_truncate_chars": 34,
+    "source_wrap_chars": 24
+  },
+  "facet_order": [
+    "data_type",
+    "info_domain",
+    "sensitivity",
+    "element_kind",
+    "status",
+    "origin"
+  ],
+  "group_threshold": 2,
+  "max_colors_per_facet": 8,
+  "unclassified": {
+    "key": "sin_clasificar",
+    "label": "Sin clasificar",
+    "plural": "Sin clasificar",
+    "color_dark": "#5c6579",
+    "color_light": "#8b96ab"
   }
 }

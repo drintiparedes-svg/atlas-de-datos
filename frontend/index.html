@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Atlas de Datos</title>
+<meta name="description" content="Grafo de conocimiento navegable de la metadata de un proyecto: qué información existe, cómo se organiza y cómo se relaciona.">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Albert+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="./src/styles.css">
+</head>
+<body>
+
+<header>
+  <div class="wordmark" id="wordmark">Atlas de <em>Datos</em></div>
+  <div class="tagline" id="tagline">grafo de metadata · propuesta</div>
+  <div class="searchbox">
+    <input id="search" type="search" placeholder="Buscar un dato, sección, tipo o pregunta…" autocomplete="off" aria-label="Buscar en el grafo" aria-expanded="false" aria-controls="search-results">
+    <div id="search-results" class="search-results" hidden role="listbox"></div>
+  </div>
+  <div class="modeseg" role="group" aria-label="Público">
+    <button id="aud-explorar" data-aud="explorar" title="Lectura guiada: qué existe, dónde está y cómo se relaciona">Explorar</button>
+    <button id="aud-experto" data-aud="experto" title="Todos los controles: vistas, capas, facetas, fuentes y relaciones">Experto</button>
+  </div>
+  <div class="modeseg" role="group" aria-label="Nivel de detalle">
+    <button id="mode-simple" data-mode="simple">Simplificada</button>
+    <button id="mode-detalle" data-mode="detalle" class="on">Detallada</button>
+  </div>
+  <button class="icon-btn" id="btn-settings" aria-expanded="true" aria-controls="settings">Ajustes</button>
+  <button class="icon-btn" id="btn-panel" aria-controls="panel">Nota</button>
+</header>
+
+<canvas id="graph" aria-label="Grafo de metadata del proyecto"></canvas>
+
+<section class="settings" id="settings" aria-label="Ajustes del grafo">
+  <h4 id="scope-title">Ámbito</h4>
+  <div id="scope-box" class="scope-box"></div>
+
+  <h4>Vista <span id="view-lock" style="text-transform:none;letter-spacing:0"></span></h4>
+  <div class="seg" role="group" aria-label="Vista">
+    <button data-view="estructura" id="v-estructura">Estructura</button>
+    <button data-view="combinada" id="v-combinada" class="on">Combinada</button>
+    <button data-view="tipo" id="v-tipo">Por faceta</button>
+  </div>
+  <p class="view-hint" id="view-hint"></p>
+
+  <h4>Agrupar por</h4>
+  <select id="group-by" aria-label="Faceta de agrupación"></select>
+  <p class="view-hint" id="facet-note"></p>
+  <div id="type-filters"></div>
+
+  <h4>Capas</h4>
+  <div id="layer-filters"></div>
+  <label class="row"><input type="checkbox" id="labels-all"> Mostrar todas las etiquetas</label>
+  <p class="view-hint expert-only">Las etiquetas nunca se superponen: las que no caben se ocultan (o se acortan al número de sección) y aparecen al acercar el zoom o al pasar el cursor.</p>
+  <div id="simple-tools" hidden style="display:flex;gap:.35rem;margin-top:.4rem;flex-wrap:wrap">
+    <button class="icon-btn" id="btn-expand-all">Abrir todas</button>
+    <button class="icon-btn" id="btn-collapse-all">Cerrar todas</button>
+  </div>
+
+  <div class="expert-only">
+    <h4>Fuerzas</h4>
+    <div class="slider"><label for="f-rep">Separar</label><input type="range" id="f-rep" min="200" max="12000" step="100" value="1700"><output id="o-rep" class="n">1700</output></div>
+    <div class="slider"><label for="f-len">Distancia</label><input type="range" id="f-len" min="0.3" max="3" step="0.05" value="1"><output id="o-len" class="n">1,00×</output></div>
+  </div>
+
+  <h4>Forma = rol del nodo</h4>
+  <div class="shape-key" id="shape-key"></div>
+  <div style="margin-top:.8rem;display:flex;gap:.35rem;flex-wrap:wrap"><button class="icon-btn" id="btn-fit">Centrar grafo</button><button class="icon-btn" id="btn-theme" title="Alternar tema claro u oscuro">Tema</button></div>
+</section>
+
+<aside id="panel" aria-label="Panel de nota">
+  <nav id="tabs">
+    <button data-tab="nota" class="active">Nota</button>
+    <button data-tab="inventario">Inventario</button>
+    <button data-tab="secciones">Secciones</button>
+    <button data-tab="facetas">Facetas</button>
+    <button data-tab="relaciones">Relaciones</button>
+    <button data-tab="fuentes">Fuentes</button>
+    <button data-tab="traza">Trazabilidad</button>
+    <button class="close" id="btn-close" aria-label="Cerrar panel">×</button>
+  </nav>
+  <div class="panel-bar">
+    <button id="btn-back" disabled title="Volver a la vista anterior (Alt + ←)">← Atrás</button>
+    <button id="btn-home" title="Volver al inicio">Inicio</button>
+    <span class="crumb" id="crumb"></span>
+  </div>
+  <div id="panel-body"></div>
+</aside>
+
+<div class="status" id="status"></div>
+<div class="toast" id="toast" hidden></div>
+<script type="module" src="./src/main.ts"></script>
+</body>
+</html>

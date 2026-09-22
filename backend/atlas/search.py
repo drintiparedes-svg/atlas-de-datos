@@ -32,7 +32,7 @@ def search(agf: dict, query: str, index: dict | None = None, qvec: list[float] |
     return out[:k]
 
 
-EDGE_COST = {"contains": 3.0, "shares": 2.0}
+EDGE_COST = {"contains": 3.0, "shares": 2.0, "relates": 8.0}
 
 
 def shortest_path(agf: dict, a: str, b: str, max_cost: float = 40.0) -> list[dict] | None:

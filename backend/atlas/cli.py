@@ -151,6 +151,42 @@ def cmd_path(a):
     return 0
 
 
+def cmd_enrich(a):
+    """Completa facetas faltantes (info_domain, sensitivity, vocabulary) de un AGF existente; no toca las presentes."""
+    from .infer import infer_info_domain, infer_section_domain, infer_sensitivity, infer_vocabulary
+    g = _load(a.file)
+    nodes = {n["id"]: n for n in g["nodes"]}
+    changed = 0
+    for n in g["nodes"]:
+        if n["kind"] not in ("element", "section"):
+            continue
+        f = n.setdefault("facets", {}); fo = n.setdefault("facet_origin", {}); fc = n.setdefault("facet_confidence", {}); fw = n.setdefault("facet_rationale", {})
+        if n["kind"] == "section":
+            if not f.get("info_domain"):
+                d = infer_section_domain(n["name"])
+                if d.value:
+                    f["info_domain"] = d.value; fo["info_domain"] = "inferred"; fc["info_domain"] = d.confidence; fw["info_domain"] = d.rationale; changed += 1
+            continue
+        sec = nodes.get(n.get("section_id") or n.get("parent_id") or "")
+        parent = nodes.get(n.get("parent_id") or "")
+        if not f.get("info_domain"):
+            d = infer_info_domain(n["name"], (parent or sec or {}).get("name"), ((parent or {}).get("facets") or {}).get("info_domain") or ((sec or {}).get("facets") or {}).get("info_domain"))
+            if d.value:
+                f["info_domain"] = d.value; fo["info_domain"] = "inferred"; fc["info_domain"] = d.confidence; fw["info_domain"] = d.rationale; changed += 1
+        if not f.get("sensitivity"):
+            sv = infer_sensitivity(n["name"])
+            if sv.value:
+                f["sensitivity"] = sv.value; fo["sensitivity"] = "inferred"; fc["sensitivity"] = sv.confidence; fw["sensitivity"] = sv.rationale; changed += 1
+        if not f.get("vocabulary") and a.vocabulary:
+            v = infer_vocabulary(n["name"])
+            if v.value:
+                f["vocabulary"] = v.value; fo["vocabulary"] = "inferred"; fc["vocabulary"] = v.confidence; fw["vocabulary"] = v.rationale; changed += 1
+    A.validate(g)
+    _save(g, a.output or a.file)
+    print(f"{changed} facetas completadas (inferred, proposed)")
+    return 0
+
+
 def cmd_inventory(a):
     print(json.dumps(P.inventory(_load(a.file), _profile()), ensure_ascii=False, indent=1)); return 0
 
@@ -183,6 +219,7 @@ def main(argv=None):
     s.add_argument("--same-as-threshold", type=float, default=0.85); s.set_defaults(fn=cmd_relate)
     s = sp.add_parser("search"); s.add_argument("file"); s.add_argument("query"); s.add_argument("-k", type=int, default=10); s.add_argument("--provider", default=None); s.set_defaults(fn=cmd_search)
     s = sp.add_parser("path"); s.add_argument("file"); s.add_argument("a"); s.add_argument("b"); s.set_defaults(fn=cmd_path)
+    s = sp.add_parser("enrich"); s.add_argument("file"); s.add_argument("-o", "--output"); s.add_argument("--vocabulary", action="store_true"); s.set_defaults(fn=cmd_enrich)
     s = sp.add_parser("inventory"); s.add_argument("file"); s.set_defaults(fn=cmd_inventory)
     s = sp.add_parser("validate"); s.add_argument("file"); s.set_defaults(fn=cmd_validate)
     s = sp.add_parser("stats"); s.add_argument("file"); s.set_defaults(fn=cmd_stats)

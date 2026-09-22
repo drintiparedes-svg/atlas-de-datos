@@ -1,0 +1,1691 @@
+{
+ "agf_version": "1.0",
+ "project": {
+  "id": "prj_esquema-registro",
+  "name": "esquema_registro"
+ },
+ "profile": "default",
+ "sources": [
+  {
+   "id": "src_esquema-registro",
+   "name": "esquema_registro.sql",
+   "sha256": "265d476e9f340094132d85f5aebba481fe0627147092f258adafaa224e770843",
+   "facets": {
+    "source_type": "esquema_bd"
+   },
+   "adapter": "esquema-bd@1.0",
+   "ingested_at": "2026-09-22T15:59:17+00:00",
+   "status": "proposed",
+   "title": "esquema_registro",
+   "unparsed": [],
+   "unparsed_count": 0,
+   "personal_data_guard": {
+    "hits": {
+     "rut_chileno": 0,
+     "email": 0,
+     "telefono_cl": 0,
+     "fecha_con_nombre": 0
+    },
+    "confirmed_by_user": false
+   }
+  }
+ ],
+ "nodes": [
+  {
+   "id": "root",
+   "kind": "project_root",
+   "name": "esquema_registro",
+   "source_id": "src_esquema-registro",
+   "origin": "inferred",
+   "status": "proposed",
+   "confidence": 0.6,
+   "rationale": "Nombre de la raíz propuesto desde el título del documento; confirmar (decisión D6)."
+  },
+  {
+   "id": "sec:src_esquema-registro:paciente",
+   "kind": "section",
+   "source_id": "src_esquema-registro",
+   "name": "paciente",
+   "order": 1,
+   "origin": "extracted",
+   "status": "proposed",
+   "confidence": 1.0,
+   "provenance": {
+    "locator": {
+     "line": 2
+    },
+    "excerpt": "paciente"
+   },
+   "declared": {
+    "kind": "table"
+   }
+  },
+  {
+   "id": "el:id-paciente",
+   "kind": "element",
+   "source_id": "src_esquema-registro",
+   "parent_id": "sec:src_esquema-registro:paciente",
+   "section_id": "sec:src_esquema-registro:paciente",
+   "name": "id_paciente",
+   "facets": {
+    "element_kind": "column",
+    "data_type": "identificador",
+    "info_domain": "diagnostico",
+    "sensitivity": "dato_sensible_salud"
+   },
+   "facet_origin": {
+    "element_kind": "extracted",
+    "data_type": "extracted",
+    "info_domain": "inferred",
+    "sensitivity": "inferred"
+   },
+   "facet_confidence": {
+    "data_type": 1.0,
+    "info_domain": 0.75,
+    "sensitivity": 0.8
+   },
+   "facet_rationale": {
+    "data_type": "declarado por el documento",
+    "info_domain": "léxico del elemento: «cie»",
+    "sensitivity": "léxico «cie» (clasificación provisional, pendiente de revisión legal)"
+   },
+   "note": null,
+   "origin": "extracted",
+   "status": "proposed",
+   "confidence": 1.0,
+   "cardinality": "unknown",
+   "required": null,
+   "provenance": {
+    "locator": {
+     "table": "paciente",
+     "line": 2
+    },
+    "excerpt": "id_paciente INTEGER PRIMARY KEY"
+   },
+   "native_type": "INTEGER",
+   "nullable": true,
+   "key": "primary"
+  },
+  {
+   "id": "el:fecha-nacimiento",
+   "kind": "element",
+   "source_id": "src_esquema-registro",
+   "parent_id": "sec:src_esquema-registro:paciente",
+   "section_id": "sec:src_esquema-registro:paciente",
+   "name": "fecha_nacimiento",
+   "facets": {
+    "element_kind": "column",
+    "data_type": "fecha",
+    "info_domain": "demografico"
+   },
+   "facet_origin": {
+    "element_kind": "extracted",
+    "data_type": "extracted",
+    "info_domain": "inferred"
+   },
+   "facet_confidence": {
+    "data_type": 1.0,
+    "info_domain": 0.75
+   },
+   "facet_rationale": {
+    "data_type": "declarado por el documento",
+    "info_domain": "léxico del elemento: «nacimiento»"
+   },
+   "note": "fecha de nacimiento",
+   "origin": "extracted",
+   "status": "proposed",
+   "confidence": 1.0,
+   "cardinality": "unknown",
+   "required": null,
+   "provenance": {
+    "locator": {
+     "table": "paciente",
+     "line": 2
+    },
+    "excerpt": "fecha_nacimiento DATE NOT NULL"
+   },
+   "native_type": "DATE",
+   "nullable": false
+  },
+  {
+   "id": "el:sexo",
+   "kind": "element",
+   "source_id": "src_esquema-registro",
+   "parent_id": "sec:src_esquema-registro:paciente",
+   "section_id": "sec:src_esquema-registro:paciente",
+   "name": "sexo",
+   "facets": {
+    "element_kind": "column",
+    "data_type": "categorica",
+    "info_domain": "demografico",
+    "sensitivity": "dato_personal"
+   },
+   "facet_origin": {
+    "element_kind": "extracted",
+    "data_type": "extracted",
+    "info_domain": "inferred",
+    "sensitivity": "inferred"
+   },
+   "facet_confidence": {
+    "data_type": 1.0,
+    "info_domain": 0.75,
+    "sensitivity": 0.85
+   },
+   "facet_rationale": {
+    "data_type": "declarado por el documento",
+    "info_domain": "léxico del elemento: «sexo»",
+    "sensitivity": "léxico «sexo» (clasificación provisional, pendiente de revisión legal)"
+   },
+   "note": null,
+   "origin": "extracted",
+   "status": "proposed",
+   "confidence": 1.0,
+   "cardinality": "unknown",
+   "required": null,
+   "provenance": {
+    "locator": {
+     "table": "paciente",
+     "line": 2
+    },
+    "excerpt": "sexo VARCHAR(1) NOT NULL"
+   },
+   "native_type": "VARCHAR(1)",
+   "nullable": false
+  },
+  {
+   "id": "el:comuna-vivienda",
+   "kind": "element",
+   "source_id": "src_esquema-registro",
+   "parent_id": "sec:src_esquema-registro:paciente",
+   "section_id": "sec:src_esquema-registro:paciente",
+   "name": "comuna_vivienda",
+   "facets": {
+    "element_kind": "column",
+    "data_type": "categorica",
+    "vocabulary": "cut",
+    "info_domain": "territorial",
+    "sensitivity": "dato_personal"
+   },
+   "facet_origin": {
+    "element_kind": "extracted",
+    "data_type": "extracted",
+    "vocabulary": "inferred",
+    "info_domain": "inferred",
+    "sensitivity": "inferred"
+   },
+   "facet_confidence": {
+    "data_type": 1.0,
+    "vocabulary": 0.75,
+    "info_domain": 0.75,
+    "sensitivity": 0.85
+   },
+   "facet_rationale": {
+    "data_type": "declarado por el documento",
+    "vocabulary": "patrón «comuna» de CUT",
+    "info_domain": "léxico del elemento: «comuna»",
+    "sensitivity": "léxico «comuna» (clasificación provisional, pendiente de revisión legal)"
+   },
+   "note": null,
+   "origin": "extracted",
+   "status": "proposed",
+   "confidence": 1.0,
+   "cardinality": "unknown",
+   "required": null,
+   "provenance": {
+    "locator": {
+     "table": "paciente",
+     "line": 2
+    },
+    "excerpt": "comuna_vivienda VARCHAR(60)"
+   },
+   "native_type": "VARCHAR(60)",
+   "nullable": true
+  },
+  {
+   "id": "el:region-vivienda",
+   "kind": "element",
+   "source_id": "src_esquema-registro",
+   "parent_id": "sec:src_esquema-registro:paciente",
+   "section_id": "sec:src_esquema-registro:paciente",
+   "name": "region_vivienda",
+   "facets": {
+    "element_kind": "column",
+    "data_type": "categorica",
+    "vocabulary": "cut",
+    "info_domain": "territorial"
+   },
+   "facet_origin": {
+    "element_kind": "extracted",
+    "data_type": "extracted",
+    "vocabulary": "inferred",
+    "info_domain": "inferred"
+   },
+   "facet_confidence": {
+    "data_type": 1.0,
+    "vocabulary": 0.75,
+    "info_domain": 0.75
+   },
+   "facet_rationale": {
+    "data_type": "declarado por el documento",
+    "vocabulary": "patrón «region» de CUT",
+    "info_domain": "léxico del elemento: «region»"
+   },
+   "note": null,
+   "origin": "extracted",
+   "status": "proposed",
+   "confidence": 1.0,
+   "cardinality": "unknown",
+   "required": null,
+   "provenance": {
+    "locator": {
+     "table": "paciente",
+     "line": 2
+    },
+    "excerpt": "region_vivienda VARCHAR(60)"
+   },
+   "native_type": "VARCHAR(60)",
+   "nullable": true
+  },
+  {
+   "id": "sec:src_esquema-registro:registro-tumores",
+   "kind": "section",
+   "source_id": "src_esquema-registro",
+   "name": "registro_tumores",
+   "order": 2,
+   "origin": "extracted",
+   "status": "proposed",
+   "confidence": 1.0,
+   "provenance": {
+    "locator": {
+     "line": 10
+    },
+    "excerpt": "registro_tumores"
+   },
+   "declared": {
+    "kind": "table"
+   },
+   "facets": {
+    "info_domain": "diagnostico"
+   },
+   "facet_origin": {
+    "info_domain": "inferred"
+   },
+   "facet_confidence": {
+    "info_domain": 0.7
+   },
+   "facet_rationale": {
+    "info_domain": "léxico de la sección: «tumor»"
+   }
+  },
+  {
+   "id": "el:id-tumor",
+   "kind": "element",
+   "source_id": "src_esquema-registro",
+   "parent_id": "sec:src_esquema-registro:registro-tumores",
+   "section_id": "sec:src_esquema-registro:registro-tumores",
+   "name": "id_tumor",
+   "facets": {
+    "element_kind": "column",
+    "data_type": "identificador",
+    "info_domain": "diagnostico",
+    "sensitivity": "dato_sensible_salud"
+   },
+   "facet_origin": {
+    "element_kind": "extracted",
+    "data_type": "extracted",
+    "info_domain": "inferred",
+    "sensitivity": "inferred"
+   },
+   "facet_confidence": {
+    "data_type": 1.0,
+    "info_domain": 0.6,
+    "sensitivity": 0.8
+   },
+   "facet_rationale": {
+    "data_type": "declarado por el documento",
+    "info_domain": "heredado de la sección",
+    "sensitivity": "léxico «tumor» (clasificación provisional, pendiente de revisión legal)"
+   },
+   "note": null,
+   "origin": "extracted",
+   "status": "proposed",
+   "confidence": 1.0,
+   "cardinality": "unknown",
+   "required": null,
+   "provenance": {
+    "locator": {
+     "table": "registro_tumores",
+     "line": 10
+    },
+    "excerpt": "id_tumor INTEGER PRIMARY KEY"
+   },
+   "native_type": "INTEGER",
+   "nullable": true,
+   "key": "primary"
+  },
+  {
+   "id": "el:id-paciente~4f3235",
+   "kind": "element",
+   "source_id": "src_esquema-registro",
+   "parent_id": "sec:src_esquema-registro:registro-tumores",
+   "section_id": "sec:src_esquema-registro:registro-tumores",
+   "name": "id_paciente",
+   "facets": {
+    "element_kind": "column",
+    "data_type": "numerica",
+    "info_domain": "diagnostico",
+    "sensitivity": "dato_sensible_salud"
+   },
+   "facet_origin": {
+    "element_kind": "extracted",
+    "data_type": "extracted",
+    "info_domain": "inferred",
+    "sensitivity": "inferred"
+   },
+   "facet_confidence": {
+    "data_type": 1.0,
+    "info_domain": 0.75,
+    "sensitivity": 0.8
+   },
+   "facet_rationale": {
+    "data_type": "declarado por el documento",
+    "info_domain": "léxico del elemento: «cie»",
+    "sensitivity": "léxico «cie» (clasificación provisional, pendiente de revisión legal)"
+   },
+   "note": null,
+   "origin": "extracted",
+   "status": "proposed",
+   "confidence": 1.0,
+   "cardinality": "unknown",
+   "required": null,
+   "provenance": {
+    "locator": {
+     "table": "registro_tumores",
+     "line": 10
+    },
+    "excerpt": "id_paciente INTEGER NOT NULL REFERENCES paciente(id_paciente)"
+   },
+   "native_type": "INTEGER",
+   "nullable": false
+  },
+  {
+   "id": "el:fecha-emision-dx",
+   "kind": "element",
+   "source_id": "src_esquema-registro",
+   "parent_id": "sec:src_esquema-registro:registro-tumores",
+   "section_id": "sec:src_esquema-registro:registro-tumores",
+   "name": "fecha_emision_dx",
+   "facets": {
+    "element_kind": "column",
+    "data_type": "fecha",
+    "info_domain": "diagnostico"
+   },
+   "facet_origin": {
+    "element_kind": "extracted",
+    "data_type": "extracted",
+    "info_domain": "inferred"
+   },
+   "facet_confidence": {
+    "data_type": 1.0,
+    "info_domain": 0.6
+   },
+   "facet_rationale": {
+    "data_type": "declarado por el documento",
+    "info_domain": "heredado de la sección"
+   },
+   "note": "fecha de emisión del diagnóstico",
+   "origin": "extracted",
+   "status": "proposed",
+   "confidence": 1.0,
+   "cardinality": "unknown",
+   "required": null,
+   "provenance": {
+    "locator": {
+     "table": "registro_tumores",
+     "line": 10
+    },
+    "excerpt": "fecha_emision_dx DATE NOT NULL"
+   },
+   "native_type": "DATE",
+   "nullable": false
+  },
+  {
+   "id": "el:diagnostico-cie10",
+   "kind": "element",
+   "source_id": "src_esquema-registro",
+   "parent_id": "sec:src_esquema-registro:registro-tumores",
+   "section_id": "sec:src_esquema-registro:registro-tumores",
+   "name": "diagnostico_cie10",
+   "facets": {
+    "element_kind": "column",
+    "data_type": "categorica",
+    "info_domain": "diagnostico",
+    "sensitivity": "dato_sensible_salud"
+   },
+   "facet_origin": {
+    "element_kind": "extracted",
+    "data_type": "extracted",
+    "info_domain": "inferred",
+    "sensitivity": "inferred"
+   },
+   "facet_confidence": {
+    "data_type": 1.0,
+    "info_domain": 0.75,
+    "sensitivity": 0.8
+   },
+   "facet_rationale": {
+    "data_type": "declarado por el documento",
+    "info_domain": "léxico del elemento: «diagnostic»",
+    "sensitivity": "léxico «diagnost» (clasificación provisional, pendiente de revisión legal)"
+   },
+   "note": null,
+   "origin": "extracted",
+   "status": "proposed",
+   "confidence": 1.0,
+   "cardinality": "unknown",
+   "required": null,
+   "provenance": {
+    "locator": {
+     "table": "registro_tumores",
+     "line": 10
+    },
+    "excerpt": "diagnostico_cie10 VARCHAR(8)"
+   },
+   "native_type": "VARCHAR(8)",
+   "nullable": true
+  },
+  {
+   "id": "el:codigo-topografia-cieo",
+   "kind": "element",
+   "source_id": "src_esquema-registro",
+   "parent_id": "sec:src_esquema-registro:registro-tumores",
+   "section_id": "sec:src_esquema-registro:registro-tumores",
+   "name": "codigo_topografia_cieo",
+   "facets": {
+    "element_kind": "column",
+    "data_type": "categorica",
+    "vocabulary": "cieo",
+    "info_domain": "diagnostico",
+    "sensitivity": "dato_sensible_salud"
+   },
+   "facet_origin": {
+    "element_kind": "extracted",
+    "data_type": "extracted",
+    "vocabulary": "inferred",
+    "info_domain": "inferred",
+    "sensitivity": "inferred"
+   },
+   "facet_confidence": {
+    "data_type": 1.0,
+    "vocabulary": 0.75,
+    "info_domain": 0.75,
+    "sensitivity": 0.8
+   },
+   "facet_rationale": {
+    "data_type": "declarado por el documento",
+    "vocabulary": "patrón «topografia» de CIE-O-3",
+    "info_domain": "léxico del elemento: «topografia»",
+    "sensitivity": "léxico «cie» (clasificación provisional, pendiente de revisión legal)"
+   },
+   "note": null,
+   "origin": "extracted",
+   "status": "proposed",
+   "confidence": 1.0,
+   "cardinality": "unknown",
+   "required": null,
+   "provenance": {
+    "locator": {
+     "table": "registro_tumores",
+     "line": 10
+    },
+    "excerpt": "codigo_topografia_cieo VARCHAR(6)"
+   },
+   "native_type": "VARCHAR(6)",
+   "nullable": true
+  },
+  {
+   "id": "el:codigo-morfologia-cieo",
+   "kind": "element",
+   "source_id": "src_esquema-registro",
+   "parent_id": "sec:src_esquema-registro:registro-tumores",
+   "section_id": "sec:src_esquema-registro:registro-tumores",
+   "name": "codigo_morfologia_cieo",
+   "facets": {
+    "element_kind": "column",
+    "data_type": "categorica",
+    "vocabulary": "cieo",
+    "info_domain": "diagnostico",
+    "sensitivity": "dato_sensible_salud"
+   },
+   "facet_origin": {
+    "element_kind": "extracted",
+    "data_type": "extracted",
+    "vocabulary": "inferred",
+    "info_domain": "inferred",
+    "sensitivity": "inferred"
+   },
+   "facet_confidence": {
+    "data_type": 1.0,
+    "vocabulary": 0.75,
+    "info_domain": 0.75,
+    "sensitivity": 0.8
+   },
+   "facet_rationale": {
+    "data_type": "declarado por el documento",
+    "vocabulary": "patrón «morfologia» de CIE-O-3",
+    "info_domain": "léxico del elemento: «morfologia»",
+    "sensitivity": "léxico «cie» (clasificación provisional, pendiente de revisión legal)"
+   },
+   "note": null,
+   "origin": "extracted",
+   "status": "proposed",
+   "confidence": 1.0,
+   "cardinality": "unknown",
+   "required": null,
+   "provenance": {
+    "locator": {
+     "table": "registro_tumores",
+     "line": 10
+    },
+    "excerpt": "codigo_morfologia_cieo VARCHAR(7)"
+   },
+   "native_type": "VARCHAR(7)",
+   "nullable": true
+  },
+  {
+   "id": "el:ctnm",
+   "kind": "element",
+   "source_id": "src_esquema-registro",
+   "parent_id": "sec:src_esquema-registro:registro-tumores",
+   "section_id": "sec:src_esquema-registro:registro-tumores",
+   "name": "ctnm",
+   "facets": {
+    "element_kind": "column",
+    "data_type": "categorica",
+    "vocabulary": "tnm",
+    "info_domain": "diagnostico",
+    "sensitivity": "dato_sensible_salud"
+   },
+   "facet_origin": {
+    "element_kind": "extracted",
+    "data_type": "extracted",
+    "vocabulary": "inferred",
+    "info_domain": "inferred",
+    "sensitivity": "inferred"
+   },
+   "facet_confidence": {
+    "data_type": 1.0,
+    "vocabulary": 0.75,
+    "info_domain": 0.75,
+    "sensitivity": 0.8
+   },
+   "facet_rationale": {
+    "data_type": "declarado por el documento",
+    "vocabulary": "patrón «tnm» de TNM",
+    "info_domain": "léxico del elemento: «tnm»",
+    "sensitivity": "léxico «tnm» (clasificación provisional, pendiente de revisión legal)"
+   },
+   "note": null,
+   "origin": "extracted",
+   "status": "proposed",
+   "confidence": 1.0,
+   "cardinality": "unknown",
+   "required": null,
+   "provenance": {
+    "locator": {
+     "table": "registro_tumores",
+     "line": 10
+    },
+    "excerpt": "ctnm VARCHAR(12)"
+   },
+   "native_type": "VARCHAR(12)",
+   "nullable": true
+  },
+  {
+   "id": "el:estadio-dx",
+   "kind": "element",
+   "source_id": "src_esquema-registro",
+   "parent_id": "sec:src_esquema-registro:registro-tumores",
+   "section_id": "sec:src_esquema-registro:registro-tumores",
+   "name": "estadio_dx",
+   "facets": {
+    "element_kind": "column",
+    "data_type": "categorica",
+    "info_domain": "diagnostico",
+    "sensitivity": "dato_sensible_salud"
+   },
+   "facet_origin": {
+    "element_kind": "extracted",
+    "data_type": "extracted",
+    "info_domain": "inferred",
+    "sensitivity": "inferred"
+   },
+   "facet_confidence": {
+    "data_type": 1.0,
+    "info_domain": 0.75,
+    "sensitivity": 0.8
+   },
+   "facet_rationale": {
+    "data_type": "declarado por el documento",
+    "info_domain": "léxico del elemento: «estadio»",
+    "sensitivity": "léxico «estadio» (clasificación provisional, pendiente de revisión legal)"
+   },
+   "note": null,
+   "origin": "extracted",
+   "status": "proposed",
+   "confidence": 1.0,
+   "cardinality": "unknown",
+   "required": null,
+   "provenance": {
+    "locator": {
+     "table": "registro_tumores",
+     "line": 10
+    },
+    "excerpt": "estadio_dx VARCHAR(4)"
+   },
+   "native_type": "VARCHAR(4)",
+   "nullable": true
+  },
+  {
+   "id": "el:metastasis-dx",
+   "kind": "element",
+   "source_id": "src_esquema-registro",
+   "parent_id": "sec:src_esquema-registro:registro-tumores",
+   "section_id": "sec:src_esquema-registro:registro-tumores",
+   "name": "metastasis_dx",
+   "facets": {
+    "element_kind": "column",
+    "data_type": "binario",
+    "info_domain": "diagnostico",
+    "sensitivity": "dato_sensible_salud"
+   },
+   "facet_origin": {
+    "element_kind": "extracted",
+    "data_type": "extracted",
+    "info_domain": "inferred",
+    "sensitivity": "inferred"
+   },
+   "facet_confidence": {
+    "data_type": 1.0,
+    "info_domain": 0.75,
+    "sensitivity": 0.8
+   },
+   "facet_rationale": {
+    "data_type": "declarado por el documento",
+    "info_domain": "léxico del elemento: «metastasis»",
+    "sensitivity": "léxico «metastasis» (clasificación provisional, pendiente de revisión legal)"
+   },
+   "note": null,
+   "origin": "extracted",
+   "status": "proposed",
+   "confidence": 1.0,
+   "cardinality": "unknown",
+   "required": null,
+   "provenance": {
+    "locator": {
+     "table": "registro_tumores",
+     "line": 10
+    },
+    "excerpt": "metastasis_dx BOOLEAN"
+   },
+   "native_type": "BOOLEAN",
+   "nullable": true
+  },
+  {
+   "id": "el:ki67-pct",
+   "kind": "element",
+   "source_id": "src_esquema-registro",
+   "parent_id": "sec:src_esquema-registro:registro-tumores",
+   "section_id": "sec:src_esquema-registro:registro-tumores",
+   "name": "ki67_pct",
+   "facets": {
+    "element_kind": "column",
+    "data_type": "numerica",
+    "info_domain": "biomarcadores_laboratorio",
+    "sensitivity": "dato_sensible_salud"
+   },
+   "facet_origin": {
+    "element_kind": "extracted",
+    "data_type": "extracted",
+    "info_domain": "inferred",
+    "sensitivity": "inferred"
+   },
+   "facet_confidence": {
+    "data_type": 1.0,
+    "info_domain": 0.75,
+    "sensitivity": 0.8
+   },
+   "facet_rationale": {
+    "data_type": "declarado por el documento",
+    "info_domain": "léxico del elemento: «ki67»",
+    "sensitivity": "léxico «ki67» (clasificación provisional, pendiente de revisión legal)"
+   },
+   "note": null,
+   "origin": "extracted",
+   "status": "proposed",
+   "confidence": 1.0,
+   "cardinality": "unknown",
+   "required": null,
+   "provenance": {
+    "locator": {
+     "table": "registro_tumores",
+     "line": 10
+    },
+    "excerpt": "ki67_pct NUMERIC(5,2)"
+   },
+   "native_type": "NUMERIC(5,2)",
+   "nullable": true
+  },
+  {
+   "id": "el:observaciones",
+   "kind": "element",
+   "source_id": "src_esquema-registro",
+   "parent_id": "sec:src_esquema-registro:registro-tumores",
+   "section_id": "sec:src_esquema-registro:registro-tumores",
+   "name": "observaciones",
+   "facets": {
+    "element_kind": "column",
+    "data_type": "texto_libre",
+    "info_domain": "diagnostico"
+   },
+   "facet_origin": {
+    "element_kind": "extracted",
+    "data_type": "extracted",
+    "info_domain": "inferred"
+   },
+   "facet_confidence": {
+    "data_type": 1.0,
+    "info_domain": 0.6
+   },
+   "facet_rationale": {
+    "data_type": "declarado por el documento",
+    "info_domain": "heredado de la sección"
+   },
+   "note": null,
+   "origin": "extracted",
+   "status": "proposed",
+   "confidence": 1.0,
+   "cardinality": "unknown",
+   "required": null,
+   "provenance": {
+    "locator": {
+     "table": "registro_tumores",
+     "line": 10
+    },
+    "excerpt": "observaciones TEXT"
+   },
+   "native_type": "TEXT",
+   "nullable": true
+  },
+  {
+   "id": "sec:src_esquema-registro:comite",
+   "kind": "section",
+   "source_id": "src_esquema-registro",
+   "name": "comite",
+   "order": 3,
+   "origin": "extracted",
+   "status": "proposed",
+   "confidence": 1.0,
+   "provenance": {
+    "locator": {
+     "line": 24
+    },
+    "excerpt": "comite"
+   },
+   "declared": {
+    "kind": "table"
+   },
+   "facets": {
+    "info_domain": "tratamiento"
+   },
+   "facet_origin": {
+    "info_domain": "inferred"
+   },
+   "facet_confidence": {
+    "info_domain": 0.7
+   },
+   "facet_rationale": {
+    "info_domain": "léxico de la sección: «comite»"
+   }
+  },
+  {
+   "id": "el:id-comite",
+   "kind": "element",
+   "source_id": "src_esquema-registro",
+   "parent_id": "sec:src_esquema-registro:comite",
+   "section_id": "sec:src_esquema-registro:comite",
+   "name": "id_comite",
+   "facets": {
+    "element_kind": "column",
+    "data_type": "identificador",
+    "info_domain": "tratamiento",
+    "sensitivity": "dato_sensible_salud"
+   },
+   "facet_origin": {
+    "element_kind": "extracted",
+    "data_type": "extracted",
+    "info_domain": "inferred",
+    "sensitivity": "inferred"
+   },
+   "facet_confidence": {
+    "data_type": 1.0,
+    "info_domain": 0.75,
+    "sensitivity": 0.8
+   },
+   "facet_rationale": {
+    "data_type": "declarado por el documento",
+    "info_domain": "léxico del elemento: «comite»",
+    "sensitivity": "léxico «comite» (clasificación provisional, pendiente de revisión legal)"
+   },
+   "note": null,
+   "origin": "extracted",
+   "status": "proposed",
+   "confidence": 1.0,
+   "cardinality": "unknown",
+   "required": null,
+   "provenance": {
+    "locator": {
+     "table": "comite",
+     "line": 24
+    },
+    "excerpt": "id_comite INTEGER PRIMARY KEY"
+   },
+   "native_type": "INTEGER",
+   "nullable": true,
+   "key": "primary"
+  },
+  {
+   "id": "el:id-tumor~dfee6c",
+   "kind": "element",
+   "source_id": "src_esquema-registro",
+   "parent_id": "sec:src_esquema-registro:comite",
+   "section_id": "sec:src_esquema-registro:comite",
+   "name": "id_tumor",
+   "facets": {
+    "element_kind": "column",
+    "data_type": "numerica",
+    "info_domain": "tratamiento",
+    "sensitivity": "dato_sensible_salud"
+   },
+   "facet_origin": {
+    "element_kind": "extracted",
+    "data_type": "extracted",
+    "info_domain": "inferred",
+    "sensitivity": "inferred"
+   },
+   "facet_confidence": {
+    "data_type": 1.0,
+    "info_domain": 0.6,
+    "sensitivity": 0.8
+   },
+   "facet_rationale": {
+    "data_type": "declarado por el documento",
+    "info_domain": "heredado de la sección",
+    "sensitivity": "léxico «tumor» (clasificación provisional, pendiente de revisión legal)"
+   },
+   "note": null,
+   "origin": "extracted",
+   "status": "proposed",
+   "confidence": 1.0,
+   "cardinality": "unknown",
+   "required": null,
+   "provenance": {
+    "locator": {
+     "table": "comite",
+     "line": 24
+    },
+    "excerpt": "id_tumor INTEGER NOT NULL"
+   },
+   "native_type": "INTEGER",
+   "nullable": false
+  },
+  {
+   "id": "el:fecha-comite",
+   "kind": "element",
+   "source_id": "src_esquema-registro",
+   "parent_id": "sec:src_esquema-registro:comite",
+   "section_id": "sec:src_esquema-registro:comite",
+   "name": "fecha_comite",
+   "facets": {
+    "element_kind": "column",
+    "data_type": "fecha",
+    "info_domain": "tratamiento",
+    "sensitivity": "dato_sensible_salud"
+   },
+   "facet_origin": {
+    "element_kind": "extracted",
+    "data_type": "extracted",
+    "info_domain": "inferred",
+    "sensitivity": "inferred"
+   },
+   "facet_confidence": {
+    "data_type": 1.0,
+    "info_domain": 0.75,
+    "sensitivity": 0.8
+   },
+   "facet_rationale": {
+    "data_type": "declarado por el documento",
+    "info_domain": "léxico del elemento: «comite»",
+    "sensitivity": "léxico «comite» (clasificación provisional, pendiente de revisión legal)"
+   },
+   "note": null,
+   "origin": "extracted",
+   "status": "proposed",
+   "confidence": 1.0,
+   "cardinality": "unknown",
+   "required": null,
+   "provenance": {
+    "locator": {
+     "table": "comite",
+     "line": 24
+    },
+    "excerpt": "fecha_comite DATE NOT NULL"
+   },
+   "native_type": "DATE",
+   "nullable": false
+  },
+  {
+   "id": "el:tipo-comite",
+   "kind": "element",
+   "source_id": "src_esquema-registro",
+   "parent_id": "sec:src_esquema-registro:comite",
+   "section_id": "sec:src_esquema-registro:comite",
+   "name": "tipo_comite",
+   "facets": {
+    "element_kind": "column",
+    "data_type": "categorica",
+    "info_domain": "tratamiento",
+    "sensitivity": "dato_sensible_salud"
+   },
+   "facet_origin": {
+    "element_kind": "extracted",
+    "data_type": "extracted",
+    "info_domain": "inferred",
+    "sensitivity": "inferred"
+   },
+   "facet_confidence": {
+    "data_type": 1.0,
+    "info_domain": 0.75,
+    "sensitivity": 0.8
+   },
+   "facet_rationale": {
+    "data_type": "declarado por el documento",
+    "info_domain": "léxico del elemento: «comite»",
+    "sensitivity": "léxico «comite» (clasificación provisional, pendiente de revisión legal)"
+   },
+   "note": null,
+   "origin": "extracted",
+   "status": "proposed",
+   "confidence": 1.0,
+   "cardinality": "unknown",
+   "required": null,
+   "provenance": {
+    "locator": {
+     "table": "comite",
+     "line": 24
+    },
+    "excerpt": "tipo_comite VARCHAR(40)"
+   },
+   "native_type": "VARCHAR(40)",
+   "nullable": true
+  },
+  {
+   "id": "el:intencion-resolucion",
+   "kind": "element",
+   "source_id": "src_esquema-registro",
+   "parent_id": "sec:src_esquema-registro:comite",
+   "section_id": "sec:src_esquema-registro:comite",
+   "name": "intencion_resolucion",
+   "facets": {
+    "element_kind": "column",
+    "data_type": "categorica",
+    "info_domain": "tratamiento",
+    "sensitivity": "dato_sensible_salud"
+   },
+   "facet_origin": {
+    "element_kind": "extracted",
+    "data_type": "extracted",
+    "info_domain": "inferred",
+    "sensitivity": "inferred"
+   },
+   "facet_confidence": {
+    "data_type": 1.0,
+    "info_domain": 0.75,
+    "sensitivity": 0.8
+   },
+   "facet_rationale": {
+    "data_type": "declarado por el documento",
+    "info_domain": "léxico del elemento: «intencion»",
+    "sensitivity": "léxico «intencion» (clasificación provisional, pendiente de revisión legal)"
+   },
+   "note": null,
+   "origin": "extracted",
+   "status": "proposed",
+   "confidence": 1.0,
+   "cardinality": "unknown",
+   "required": null,
+   "provenance": {
+    "locator": {
+     "table": "comite",
+     "line": 24
+    },
+    "excerpt": "intencion_resolucion VARCHAR(20)"
+   },
+   "native_type": "VARCHAR(20)",
+   "nullable": true
+  },
+  {
+   "id": "sec:src_esquema-registro:tratamiento",
+   "kind": "section",
+   "source_id": "src_esquema-registro",
+   "name": "tratamiento",
+   "order": 4,
+   "origin": "extracted",
+   "status": "proposed",
+   "confidence": 1.0,
+   "provenance": {
+    "locator": {
+     "line": 33
+    },
+    "excerpt": "tratamiento"
+   },
+   "declared": {
+    "kind": "table"
+   },
+   "facets": {
+    "info_domain": "tratamiento"
+   },
+   "facet_origin": {
+    "info_domain": "inferred"
+   },
+   "facet_confidence": {
+    "info_domain": 0.7
+   },
+   "facet_rationale": {
+    "info_domain": "léxico de la sección: «tratamiento»"
+   }
+  },
+  {
+   "id": "el:id-tratamiento",
+   "kind": "element",
+   "source_id": "src_esquema-registro",
+   "parent_id": "sec:src_esquema-registro:tratamiento",
+   "section_id": "sec:src_esquema-registro:tratamiento",
+   "name": "id_tratamiento",
+   "facets": {
+    "element_kind": "column",
+    "data_type": "identificador",
+    "info_domain": "tratamiento",
+    "sensitivity": "dato_sensible_salud"
+   },
+   "facet_origin": {
+    "element_kind": "extracted",
+    "data_type": "extracted",
+    "info_domain": "inferred",
+    "sensitivity": "inferred"
+   },
+   "facet_confidence": {
+    "data_type": 1.0,
+    "info_domain": 0.75,
+    "sensitivity": 0.8
+   },
+   "facet_rationale": {
+    "data_type": "declarado por el documento",
+    "info_domain": "léxico del elemento: «tratamiento»",
+    "sensitivity": "léxico «tratamiento» (clasificación provisional, pendiente de revisión legal)"
+   },
+   "note": null,
+   "origin": "extracted",
+   "status": "proposed",
+   "confidence": 1.0,
+   "cardinality": "unknown",
+   "required": null,
+   "provenance": {
+    "locator": {
+     "table": "tratamiento",
+     "line": 33
+    },
+    "excerpt": "id_tratamiento INTEGER PRIMARY KEY"
+   },
+   "native_type": "INTEGER",
+   "nullable": true,
+   "key": "primary"
+  },
+  {
+   "id": "el:id-tumor~eeb737",
+   "kind": "element",
+   "source_id": "src_esquema-registro",
+   "parent_id": "sec:src_esquema-registro:tratamiento",
+   "section_id": "sec:src_esquema-registro:tratamiento",
+   "name": "id_tumor",
+   "facets": {
+    "element_kind": "column",
+    "data_type": "numerica",
+    "info_domain": "tratamiento",
+    "sensitivity": "dato_sensible_salud"
+   },
+   "facet_origin": {
+    "element_kind": "extracted",
+    "data_type": "extracted",
+    "info_domain": "inferred",
+    "sensitivity": "inferred"
+   },
+   "facet_confidence": {
+    "data_type": 1.0,
+    "info_domain": 0.6,
+    "sensitivity": 0.8
+   },
+   "facet_rationale": {
+    "data_type": "declarado por el documento",
+    "info_domain": "heredado de la sección",
+    "sensitivity": "léxico «tumor» (clasificación provisional, pendiente de revisión legal)"
+   },
+   "note": null,
+   "origin": "extracted",
+   "status": "proposed",
+   "confidence": 1.0,
+   "cardinality": "unknown",
+   "required": null,
+   "provenance": {
+    "locator": {
+     "table": "tratamiento",
+     "line": 33
+    },
+    "excerpt": "id_tumor INTEGER NOT NULL"
+   },
+   "native_type": "INTEGER",
+   "nullable": false
+  },
+  {
+   "id": "el:categoria-tratamiento",
+   "kind": "element",
+   "source_id": "src_esquema-registro",
+   "parent_id": "sec:src_esquema-registro:tratamiento",
+   "section_id": "sec:src_esquema-registro:tratamiento",
+   "name": "categoria_tratamiento",
+   "facets": {
+    "element_kind": "column",
+    "data_type": "categorica",
+    "info_domain": "tratamiento",
+    "sensitivity": "dato_sensible_salud"
+   },
+   "facet_origin": {
+    "element_kind": "extracted",
+    "data_type": "extracted",
+    "info_domain": "inferred",
+    "sensitivity": "inferred"
+   },
+   "facet_confidence": {
+    "data_type": 1.0,
+    "info_domain": 0.75,
+    "sensitivity": 0.8
+   },
+   "facet_rationale": {
+    "data_type": "declarado por el documento",
+    "info_domain": "léxico del elemento: «tratamiento»",
+    "sensitivity": "léxico «tratamiento» (clasificación provisional, pendiente de revisión legal)"
+   },
+   "note": null,
+   "origin": "extracted",
+   "status": "proposed",
+   "confidence": 1.0,
+   "cardinality": "unknown",
+   "required": null,
+   "provenance": {
+    "locator": {
+     "table": "tratamiento",
+     "line": 33
+    },
+    "excerpt": "categoria_tratamiento VARCHAR(40)"
+   },
+   "native_type": "VARCHAR(40)",
+   "nullable": true
+  },
+  {
+   "id": "el:fecha-inicio-tratamiento",
+   "kind": "element",
+   "source_id": "src_esquema-registro",
+   "parent_id": "sec:src_esquema-registro:tratamiento",
+   "section_id": "sec:src_esquema-registro:tratamiento",
+   "name": "fecha_inicio_tratamiento",
+   "facets": {
+    "element_kind": "column",
+    "data_type": "fecha",
+    "info_domain": "tratamiento",
+    "sensitivity": "dato_sensible_salud"
+   },
+   "facet_origin": {
+    "element_kind": "extracted",
+    "data_type": "extracted",
+    "info_domain": "inferred",
+    "sensitivity": "inferred"
+   },
+   "facet_confidence": {
+    "data_type": 1.0,
+    "info_domain": 0.75,
+    "sensitivity": 0.8
+   },
+   "facet_rationale": {
+    "data_type": "declarado por el documento",
+    "info_domain": "léxico del elemento: «tratamiento»",
+    "sensitivity": "léxico «tratamiento» (clasificación provisional, pendiente de revisión legal)"
+   },
+   "note": null,
+   "origin": "extracted",
+   "status": "proposed",
+   "confidence": 1.0,
+   "cardinality": "unknown",
+   "required": null,
+   "provenance": {
+    "locator": {
+     "table": "tratamiento",
+     "line": 33
+    },
+    "excerpt": "fecha_inicio_tratamiento DATE"
+   },
+   "native_type": "DATE",
+   "nullable": true
+  },
+  {
+   "id": "el:fecha-termino-tratamiento",
+   "kind": "element",
+   "source_id": "src_esquema-registro",
+   "parent_id": "sec:src_esquema-registro:tratamiento",
+   "section_id": "sec:src_esquema-registro:tratamiento",
+   "name": "fecha_termino_tratamiento",
+   "facets": {
+    "element_kind": "column",
+    "data_type": "fecha",
+    "info_domain": "tratamiento",
+    "sensitivity": "dato_sensible_salud"
+   },
+   "facet_origin": {
+    "element_kind": "extracted",
+    "data_type": "extracted",
+    "info_domain": "inferred",
+    "sensitivity": "inferred"
+   },
+   "facet_confidence": {
+    "data_type": 1.0,
+    "info_domain": 0.75,
+    "sensitivity": 0.8
+   },
+   "facet_rationale": {
+    "data_type": "declarado por el documento",
+    "info_domain": "léxico del elemento: «tratamiento»",
+    "sensitivity": "léxico «tratamiento» (clasificación provisional, pendiente de revisión legal)"
+   },
+   "note": null,
+   "origin": "extracted",
+   "status": "proposed",
+   "confidence": 1.0,
+   "cardinality": "unknown",
+   "required": null,
+   "provenance": {
+    "locator": {
+     "table": "tratamiento",
+     "line": 33
+    },
+    "excerpt": "fecha_termino_tratamiento DATE"
+   },
+   "native_type": "DATE",
+   "nullable": true
+  },
+  {
+   "id": "el:intencion-tratamiento",
+   "kind": "element",
+   "source_id": "src_esquema-registro",
+   "parent_id": "sec:src_esquema-registro:tratamiento",
+   "section_id": "sec:src_esquema-registro:tratamiento",
+   "name": "intencion_tratamiento",
+   "facets": {
+    "element_kind": "column",
+    "data_type": "categorica",
+    "info_domain": "tratamiento",
+    "sensitivity": "dato_sensible_salud"
+   },
+   "facet_origin": {
+    "element_kind": "extracted",
+    "data_type": "extracted",
+    "info_domain": "inferred",
+    "sensitivity": "inferred"
+   },
+   "facet_confidence": {
+    "data_type": 1.0,
+    "info_domain": 0.75,
+    "sensitivity": 0.8
+   },
+   "facet_rationale": {
+    "data_type": "declarado por el documento",
+    "info_domain": "léxico del elemento: «tratamiento»",
+    "sensitivity": "léxico «tratamiento» (clasificación provisional, pendiente de revisión legal)"
+   },
+   "note": null,
+   "origin": "extracted",
+   "status": "proposed",
+   "confidence": 1.0,
+   "cardinality": "unknown",
+   "required": null,
+   "provenance": {
+    "locator": {
+     "table": "tratamiento",
+     "line": 33
+    },
+    "excerpt": "intencion_tratamiento VARCHAR(20)"
+   },
+   "native_type": "VARCHAR(20)",
+   "nullable": true
+  },
+  {
+   "id": "voc:cut",
+   "kind": "vocabulary",
+   "name": "CUT",
+   "full_name": "Código Único Territorial (Chile)",
+   "origin": "inferred",
+   "status": "proposed"
+  },
+  {
+   "id": "voc:cieo",
+   "kind": "vocabulary",
+   "name": "CIE-O-3",
+   "full_name": "Clasificación Internacional de Enfermedades para Oncología, 3.ª edición (OMS)",
+   "origin": "inferred",
+   "status": "proposed"
+  },
+  {
+   "id": "voc:tnm",
+   "kind": "vocabulary",
+   "name": "TNM",
+   "full_name": "Sistema TNM de estadificación (AJCC / UICC)",
+   "origin": "inferred",
+   "status": "proposed"
+  }
+ ],
+ "edges": [
+  {
+   "id": "e1",
+   "kind": "contains",
+   "source": "root",
+   "target": "sec:src_esquema-registro:paciente"
+  },
+  {
+   "id": "e2",
+   "kind": "contains",
+   "source": "sec:src_esquema-registro:paciente",
+   "target": "el:id-paciente"
+  },
+  {
+   "id": "e3",
+   "kind": "contains",
+   "source": "sec:src_esquema-registro:paciente",
+   "target": "el:fecha-nacimiento"
+  },
+  {
+   "id": "e4",
+   "kind": "contains",
+   "source": "sec:src_esquema-registro:paciente",
+   "target": "el:sexo"
+  },
+  {
+   "id": "e5",
+   "kind": "contains",
+   "source": "sec:src_esquema-registro:paciente",
+   "target": "el:comuna-vivienda"
+  },
+  {
+   "id": "e6",
+   "kind": "contains",
+   "source": "sec:src_esquema-registro:paciente",
+   "target": "el:region-vivienda"
+  },
+  {
+   "id": "e7",
+   "kind": "contains",
+   "source": "root",
+   "target": "sec:src_esquema-registro:registro-tumores"
+  },
+  {
+   "id": "e8",
+   "kind": "contains",
+   "source": "sec:src_esquema-registro:registro-tumores",
+   "target": "el:id-tumor"
+  },
+  {
+   "id": "e9",
+   "kind": "contains",
+   "source": "sec:src_esquema-registro:registro-tumores",
+   "target": "el:id-paciente~4f3235"
+  },
+  {
+   "id": "e10",
+   "kind": "contains",
+   "source": "sec:src_esquema-registro:registro-tumores",
+   "target": "el:fecha-emision-dx"
+  },
+  {
+   "id": "e11",
+   "kind": "contains",
+   "source": "sec:src_esquema-registro:registro-tumores",
+   "target": "el:diagnostico-cie10"
+  },
+  {
+   "id": "e12",
+   "kind": "contains",
+   "source": "sec:src_esquema-registro:registro-tumores",
+   "target": "el:codigo-topografia-cieo"
+  },
+  {
+   "id": "e13",
+   "kind": "contains",
+   "source": "sec:src_esquema-registro:registro-tumores",
+   "target": "el:codigo-morfologia-cieo"
+  },
+  {
+   "id": "e14",
+   "kind": "contains",
+   "source": "sec:src_esquema-registro:registro-tumores",
+   "target": "el:ctnm"
+  },
+  {
+   "id": "e15",
+   "kind": "contains",
+   "source": "sec:src_esquema-registro:registro-tumores",
+   "target": "el:estadio-dx"
+  },
+  {
+   "id": "e16",
+   "kind": "contains",
+   "source": "sec:src_esquema-registro:registro-tumores",
+   "target": "el:metastasis-dx"
+  },
+  {
+   "id": "e17",
+   "kind": "contains",
+   "source": "sec:src_esquema-registro:registro-tumores",
+   "target": "el:ki67-pct"
+  },
+  {
+   "id": "e18",
+   "kind": "contains",
+   "source": "sec:src_esquema-registro:registro-tumores",
+   "target": "el:observaciones"
+  },
+  {
+   "id": "e19",
+   "kind": "contains",
+   "source": "root",
+   "target": "sec:src_esquema-registro:comite"
+  },
+  {
+   "id": "e20",
+   "kind": "contains",
+   "source": "sec:src_esquema-registro:comite",
+   "target": "el:id-comite"
+  },
+  {
+   "id": "e21",
+   "kind": "contains",
+   "source": "sec:src_esquema-registro:comite",
+   "target": "el:id-tumor~dfee6c"
+  },
+  {
+   "id": "e22",
+   "kind": "contains",
+   "source": "sec:src_esquema-registro:comite",
+   "target": "el:fecha-comite"
+  },
+  {
+   "id": "e23",
+   "kind": "contains",
+   "source": "sec:src_esquema-registro:comite",
+   "target": "el:tipo-comite"
+  },
+  {
+   "id": "e24",
+   "kind": "contains",
+   "source": "sec:src_esquema-registro:comite",
+   "target": "el:intencion-resolucion"
+  },
+  {
+   "id": "e25",
+   "kind": "contains",
+   "source": "root",
+   "target": "sec:src_esquema-registro:tratamiento"
+  },
+  {
+   "id": "e26",
+   "kind": "contains",
+   "source": "sec:src_esquema-registro:tratamiento",
+   "target": "el:id-tratamiento"
+  },
+  {
+   "id": "e27",
+   "kind": "contains",
+   "source": "sec:src_esquema-registro:tratamiento",
+   "target": "el:id-tumor~eeb737"
+  },
+  {
+   "id": "e28",
+   "kind": "contains",
+   "source": "sec:src_esquema-registro:tratamiento",
+   "target": "el:categoria-tratamiento"
+  },
+  {
+   "id": "e29",
+   "kind": "contains",
+   "source": "sec:src_esquema-registro:tratamiento",
+   "target": "el:fecha-inicio-tratamiento"
+  },
+  {
+   "id": "e30",
+   "kind": "contains",
+   "source": "sec:src_esquema-registro:tratamiento",
+   "target": "el:fecha-termino-tratamiento"
+  },
+  {
+   "id": "e31",
+   "kind": "contains",
+   "source": "sec:src_esquema-registro:tratamiento",
+   "target": "el:intencion-tratamiento"
+  },
+  {
+   "id": "e32",
+   "kind": "coded_with",
+   "source": "el:comuna-vivienda",
+   "target": "voc:cut",
+   "layer": "std",
+   "origin": "inferred",
+   "status": "proposed"
+  },
+  {
+   "id": "e33",
+   "kind": "coded_with",
+   "source": "el:region-vivienda",
+   "target": "voc:cut",
+   "layer": "std",
+   "origin": "inferred",
+   "status": "proposed"
+  },
+  {
+   "id": "e34",
+   "kind": "coded_with",
+   "source": "el:codigo-topografia-cieo",
+   "target": "voc:cieo",
+   "layer": "std",
+   "origin": "inferred",
+   "status": "proposed"
+  },
+  {
+   "id": "e35",
+   "kind": "coded_with",
+   "source": "el:codigo-morfologia-cieo",
+   "target": "voc:cieo",
+   "layer": "std",
+   "origin": "inferred",
+   "status": "proposed"
+  },
+  {
+   "id": "e36",
+   "kind": "coded_with",
+   "source": "el:ctnm",
+   "target": "voc:tnm",
+   "layer": "std",
+   "origin": "inferred",
+   "status": "proposed"
+  },
+  {
+   "id": "e37",
+   "kind": "references",
+   "source": "el:id-paciente~4f3235",
+   "target": "el:id-paciente",
+   "origin": "extracted",
+   "status": "validated",
+   "layer": "ref"
+  },
+  {
+   "id": "e38",
+   "kind": "references",
+   "source": "el:id-tumor~dfee6c",
+   "target": "el:id-tumor",
+   "origin": "extracted",
+   "status": "validated",
+   "layer": "ref"
+  },
+  {
+   "id": "e39",
+   "kind": "references",
+   "source": "el:id-tumor~eeb737",
+   "target": "el:id-tumor",
+   "origin": "extracted",
+   "status": "validated",
+   "layer": "ref"
+  }
+ ],
+ "findings": [
+  {
+   "id": "f1",
+   "priority": "importante",
+   "title": "Posible solapamiento: «id_tumor» y «id_tumor»",
+   "detail": "Nombres de alta similitud (100% de palabras compartidas) en secciones distintas.",
+   "action": "Definir el alcance de cada uno (cuándo se usa cada variable) o fusionarlos.",
+   "node_ids": [
+    "el:id-tumor~dfee6c",
+    "el:id-tumor~eeb737"
+   ],
+   "status": "open",
+   "origin": "inferred",
+   "rule": "possible_overlap"
+  },
+  {
+   "id": "f2",
+   "priority": "bloqueante",
+   "title": "Dominios de valores ausentes",
+   "detail": "13 variables categóricas o binarias no declaran su lista de valores, unidad ni obligatoriedad. Los tipos de dato de este grafo son inferidos.",
+   "action": "Completar para cada variable: lista de valores permitidos, unidad (si es numérica) y si es obligatoria.",
+   "node_ids": [],
+   "status": "open",
+   "origin": "inferred",
+   "rule": "missing_value_domains"
+  }
+ ]
+}

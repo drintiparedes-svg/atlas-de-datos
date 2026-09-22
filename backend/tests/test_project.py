@@ -68,7 +68,10 @@ def test_search_and_path(csv_agf, sql_agf, md_agf, sample_agf):
     nn = top_k(prov.embed_one("comité"), idx, k=3)
     assert nn and nn[0][1] > 0.3
     path = S.shortest_path(g, "el:fecha-de-nacimiento", "el:fecha-de-defuncion")
-    assert path and all(step["edge"]["kind"] != "contains" for step in path[:3]), "el camino prefiere relaciones semánticas"
+    assert path and path[0]["edge"]["kind"] != "contains" and path[-1]["edge"]["kind"] != "contains", "el camino prefiere relaciones con significado"
+    assert sum(1 for s in path if s["edge"]["kind"] == "contains") < len(path)
+    only = S.shortest_path({"nodes": g["nodes"], "edges": [e for e in g["edges"] if e["kind"] in ("precedes", "contains")]}, "el:fecha-de-nacimiento", "el:fecha-de-defuncion")
+    assert only and all(s["edge"]["kind"] == "precedes" for s in only), "con solo cronología y contención, gana la cadena cronológica"
     assert S.shortest_path(g, "el:fecha-de-nacimiento", "no-existe") is None
 
 

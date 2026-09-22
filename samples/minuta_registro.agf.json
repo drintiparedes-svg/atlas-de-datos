@@ -1,0 +1,636 @@
+{
+ "agf_version": "1.0",
+ "project": {
+  "id": "prj_minuta-acuerdos-del-equipo-de-registro-d",
+  "name": "Minuta: acuerdos del equipo de registro (documento ficticio)"
+ },
+ "profile": "default",
+ "sources": [
+  {
+   "id": "src_minuta-acuerdos-del-equipo-de-registro-d",
+   "name": "minuta_registro.md",
+   "sha256": "462aee46bdf6160ec3c063ccad95bb4a75fe75047ca1443120c2557a4abe3721",
+   "facets": {
+    "source_type": "diccionario"
+   },
+   "adapter": "markdown@1.0",
+   "ingested_at": "2026-09-22T15:59:18+00:00",
+   "status": "proposed",
+   "title": "Minuta: acuerdos del equipo de registro (documento ficticio)",
+   "unparsed": [],
+   "unparsed_count": 0,
+   "personal_data_guard": {
+    "hits": {
+     "rut_chileno": 0,
+     "email": 0,
+     "telefono_cl": 0,
+     "fecha_con_nombre": 0
+    },
+    "confirmed_by_user": false
+   }
+  }
+ ],
+ "nodes": [
+  {
+   "id": "root",
+   "kind": "project_root",
+   "name": "Minuta: acuerdos del equipo de registro (documento ficticio)",
+   "source_id": "src_minuta-acuerdos-del-equipo-de-registro-d",
+   "origin": "inferred",
+   "status": "proposed",
+   "confidence": 0.6,
+   "rationale": "Nombre de la raíz propuesto desde el título del documento; confirmar (decisión D6)."
+  },
+  {
+   "id": "sec:src_minuta-acuerdos-del-equipo-de-registro-d:1",
+   "kind": "section",
+   "source_id": "src_minuta-acuerdos-del-equipo-de-registro-d",
+   "name": "Decisiones sobre variables",
+   "order": 1,
+   "origin": "extracted",
+   "status": "proposed",
+   "confidence": 1.0,
+   "provenance": {
+    "locator": {
+     "line": 5
+    },
+    "excerpt": "Decisiones sobre variables"
+   },
+   "number": 1
+  },
+  {
+   "id": "el:fecha-de-emision-diagnostico",
+   "kind": "element",
+   "source_id": "src_minuta-acuerdos-del-equipo-de-registro-d",
+   "parent_id": "sec:src_minuta-acuerdos-del-equipo-de-registro-d:1",
+   "section_id": "sec:src_minuta-acuerdos-del-equipo-de-registro-d:1",
+   "name": "Fecha de emisión diagnóstico",
+   "facets": {
+    "element_kind": "decision",
+    "data_type": "fecha",
+    "info_domain": "diagnostico",
+    "sensitivity": "dato_sensible_salud"
+   },
+   "facet_origin": {
+    "element_kind": "extracted",
+    "data_type": "inferred",
+    "info_domain": "inferred",
+    "sensitivity": "inferred"
+   },
+   "facet_confidence": {
+    "data_type": 0.8,
+    "info_domain": 0.75,
+    "sensitivity": 0.8
+   },
+   "facet_rationale": {
+    "data_type": "regla fecha_prefix: empieza con «fecha»",
+    "info_domain": "léxico del elemento: «diagnostic»",
+    "sensitivity": "léxico «diagnost» (clasificación provisional, pendiente de revisión legal)"
+   },
+   "note": "se toma como fecha índice del caso; debe coincidir con `fecha_emision_dx` en la base [[Fecha de nacimiento]].",
+   "origin": "extracted",
+   "status": "proposed",
+   "confidence": 1.0,
+   "cardinality": "unknown",
+   "required": null,
+   "provenance": {
+    "locator": {
+     "line": 7
+    },
+    "excerpt": "Fecha de emisión diagnóstico: se toma como fecha índice del caso; debe coincidir con `fecha_emision_dx` en la base [[Fecha de nacimiento]]."
+   }
+  },
+  {
+   "id": "el:estado-vital",
+   "kind": "element",
+   "source_id": "src_minuta-acuerdos-del-equipo-de-registro-d",
+   "parent_id": "sec:src_minuta-acuerdos-del-equipo-de-registro-d:1",
+   "section_id": "sec:src_minuta-acuerdos-del-equipo-de-registro-d:1",
+   "name": "Estado Vital",
+   "facets": {
+    "element_kind": "decision",
+    "data_type": "binario",
+    "info_domain": "evolucion_desenlace",
+    "sensitivity": "dato_sensible_salud"
+   },
+   "facet_origin": {
+    "element_kind": "extracted",
+    "data_type": "inferred",
+    "info_domain": "inferred",
+    "sensitivity": "inferred"
+   },
+   "facet_confidence": {
+    "data_type": 0.8,
+    "info_domain": 0.75,
+    "sensitivity": 0.8
+   },
+   "facet_rationale": {
+    "data_type": "regla binario_lexico: contiene «estado vital»",
+    "info_domain": "léxico del elemento: «estado vital»",
+    "sensitivity": "léxico «estado vital» (clasificación provisional, pendiente de revisión legal)"
+   },
+   "note": "se registrará como Vivo / Fallecido / Desconocido.",
+   "origin": "extracted",
+   "status": "proposed",
+   "confidence": 1.0,
+   "cardinality": "unknown",
+   "required": null,
+   "provenance": {
+    "locator": {
+     "line": 8
+    },
+    "excerpt": "Estado Vital: se registrará como Vivo / Fallecido / Desconocido."
+   }
+  },
+  {
+   "id": "el:causa-de-defuncion",
+   "kind": "element",
+   "source_id": "src_minuta-acuerdos-del-equipo-de-registro-d",
+   "parent_id": "sec:src_minuta-acuerdos-del-equipo-de-registro-d:1",
+   "section_id": "sec:src_minuta-acuerdos-del-equipo-de-registro-d:1",
+   "name": "Causa de defunción",
+   "facets": {
+    "element_kind": "decision",
+    "data_type": "categorica",
+    "vocabulary": "cie10",
+    "info_domain": "evolucion_desenlace",
+    "sensitivity": "dato_sensible_salud"
+   },
+   "facet_origin": {
+    "element_kind": "extracted",
+    "data_type": "inferred",
+    "vocabulary": "inferred",
+    "info_domain": "inferred",
+    "sensitivity": "inferred"
+   },
+   "facet_confidence": {
+    "data_type": 0.5,
+    "vocabulary": 0.75,
+    "info_domain": 0.75,
+    "sensitivity": 0.8
+   },
+   "facet_rationale": {
+    "data_type": "sin patrón reconocido: valor por defecto",
+    "vocabulary": "patrón «causa de defuncion» de CIE-10",
+    "info_domain": "léxico del elemento: «defuncion»",
+    "sensitivity": "léxico «defuncion» (clasificación provisional, pendiente de revisión legal)"
+   },
+   "note": "codificada con CIE-10, edición vigente.",
+   "origin": "extracted",
+   "status": "proposed",
+   "confidence": 1.0,
+   "cardinality": "unknown",
+   "required": null,
+   "provenance": {
+    "locator": {
+     "line": 9
+    },
+    "excerpt": "Causa de defunción: codificada con CIE-10, edición vigente."
+   }
+  },
+  {
+   "id": "el:ki-67",
+   "kind": "element",
+   "source_id": "src_minuta-acuerdos-del-equipo-de-registro-d",
+   "parent_id": "sec:src_minuta-acuerdos-del-equipo-de-registro-d:1",
+   "section_id": "sec:src_minuta-acuerdos-del-equipo-de-registro-d:1",
+   "name": "Ki-67",
+   "facets": {
+    "element_kind": "decision",
+    "data_type": "numerica",
+    "info_domain": "biomarcadores_laboratorio",
+    "sensitivity": "dato_sensible_salud"
+   },
+   "facet_origin": {
+    "element_kind": "extracted",
+    "data_type": "inferred",
+    "info_domain": "inferred",
+    "sensitivity": "inferred"
+   },
+   "facet_confidence": {
+    "data_type": 0.8,
+    "info_domain": 0.75,
+    "sensitivity": 0.8
+   },
+   "facet_rationale": {
+    "data_type": "regla numerica: contiene «ki-67»",
+    "info_domain": "léxico del elemento: «ki-67»",
+    "sensitivity": "léxico «ki-67» (clasificación provisional, pendiente de revisión legal)"
+   },
+   "note": "porcentaje de células positivas, entero de 0 a 100.",
+   "origin": "extracted",
+   "status": "proposed",
+   "confidence": 1.0,
+   "cardinality": "unknown",
+   "required": null,
+   "provenance": {
+    "locator": {
+     "line": 10
+    },
+    "excerpt": "Ki-67: porcentaje de células positivas, entero de 0 a 100."
+   }
+  },
+  {
+   "id": "sec:src_minuta-acuerdos-del-equipo-de-registro-d:2",
+   "kind": "section",
+   "source_id": "src_minuta-acuerdos-del-equipo-de-registro-d",
+   "name": "Tareas",
+   "order": 2,
+   "origin": "extracted",
+   "status": "proposed",
+   "confidence": 1.0,
+   "provenance": {
+    "locator": {
+     "line": 12
+    },
+    "excerpt": "Tareas"
+   },
+   "number": 2
+  },
+  {
+   "id": "el:definir-cardinalidad-de-comites-y-tratamientos",
+   "kind": "element",
+   "source_id": "src_minuta-acuerdos-del-equipo-de-registro-d",
+   "parent_id": "sec:src_minuta-acuerdos-del-equipo-de-registro-d:2",
+   "section_id": "sec:src_minuta-acuerdos-del-equipo-de-registro-d:2",
+   "name": "Definir cardinalidad de comités y tratamientos",
+   "facets": {
+    "element_kind": "task",
+    "data_type": "categorica",
+    "info_domain": "tratamiento",
+    "sensitivity": "dato_sensible_salud"
+   },
+   "facet_origin": {
+    "element_kind": "extracted",
+    "data_type": "inferred",
+    "info_domain": "inferred",
+    "sensitivity": "inferred"
+   },
+   "facet_confidence": {
+    "data_type": 0.5,
+    "info_domain": 0.75,
+    "sensitivity": 0.8
+   },
+   "facet_rationale": {
+    "data_type": "sin patrón reconocido: valor por defecto",
+    "info_domain": "léxico del elemento: «tratamiento»",
+    "sensitivity": "léxico «tratamiento» (clasificación provisional, pendiente de revisión legal)"
+   },
+   "note": "pendiente, responsable equipo de registro.",
+   "origin": "extracted",
+   "status": "proposed",
+   "confidence": 1.0,
+   "cardinality": "unknown",
+   "required": null,
+   "provenance": {
+    "locator": {
+     "line": 14
+    },
+    "excerpt": "Definir cardinalidad de comités y tratamientos: pendiente, responsable equipo de registro."
+   }
+  },
+  {
+   "id": "el:completar-dominios-de-valores-de-las-variables-categoricas",
+   "kind": "element",
+   "source_id": "src_minuta-acuerdos-del-equipo-de-registro-d",
+   "parent_id": "sec:src_minuta-acuerdos-del-equipo-de-registro-d:2",
+   "section_id": "sec:src_minuta-acuerdos-del-equipo-de-registro-d:2",
+   "name": "Completar dominios de valores de las variables categóricas.",
+   "facets": {
+    "element_kind": "task",
+    "data_type": "categorica",
+    "info_domain": "financiero"
+   },
+   "facet_origin": {
+    "element_kind": "extracted",
+    "data_type": "inferred",
+    "info_domain": "inferred"
+   },
+   "facet_confidence": {
+    "data_type": 0.5,
+    "info_domain": 0.75
+   },
+   "facet_rationale": {
+    "data_type": "sin patrón reconocido: valor por defecto",
+    "info_domain": "léxico del elemento: «valor»"
+   },
+   "note": null,
+   "origin": "extracted",
+   "status": "proposed",
+   "confidence": 1.0,
+   "cardinality": "unknown",
+   "required": null,
+   "provenance": {
+    "locator": {
+     "line": 15
+    },
+    "excerpt": "Completar dominios de valores de las variables categóricas."
+   }
+  },
+  {
+   "id": "sec:src_minuta-acuerdos-del-equipo-de-registro-d:3",
+   "kind": "section",
+   "source_id": "src_minuta-acuerdos-del-equipo-de-registro-d",
+   "name": "Diccionario complementario",
+   "order": 3,
+   "origin": "extracted",
+   "status": "proposed",
+   "confidence": 1.0,
+   "provenance": {
+    "locator": {
+     "line": 17
+    },
+    "excerpt": "Diccionario complementario"
+   },
+   "number": 3
+  },
+  {
+   "id": "el:tipo-de-comite",
+   "kind": "element",
+   "source_id": "src_minuta-acuerdos-del-equipo-de-registro-d",
+   "parent_id": "sec:src_minuta-acuerdos-del-equipo-de-registro-d:3",
+   "section_id": "sec:src_minuta-acuerdos-del-equipo-de-registro-d:3",
+   "name": "Tipo de Comité",
+   "facets": {
+    "element_kind": "field",
+    "data_type": "categorica",
+    "info_domain": "tratamiento",
+    "sensitivity": "dato_sensible_salud"
+   },
+   "facet_origin": {
+    "element_kind": "extracted",
+    "data_type": "extracted",
+    "info_domain": "inferred",
+    "sensitivity": "inferred"
+   },
+   "facet_confidence": {
+    "data_type": 1.0,
+    "info_domain": 0.75,
+    "sensitivity": 0.8
+   },
+   "facet_rationale": {
+    "data_type": "declarado por el documento",
+    "info_domain": "léxico del elemento: «comite»",
+    "sensitivity": "léxico «comite» (clasificación provisional, pendiente de revisión legal)"
+   },
+   "note": "Comité oncológico donde se presenta el caso",
+   "origin": "extracted",
+   "status": "proposed",
+   "confidence": 1.0,
+   "cardinality": "unknown",
+   "required": null,
+   "provenance": {
+    "locator": {
+     "line": 21
+    },
+    "excerpt": "| Tipo de Comité | categorica | Digestivo; Mama; Tórax; Urología | Comité oncológico donde se presenta el caso |"
+   },
+   "value_domain": [
+    "Digestivo",
+    "Mama",
+    "Tórax",
+    "Urología"
+   ]
+  },
+  {
+   "id": "el:intencion-de-la-resolucion",
+   "kind": "element",
+   "source_id": "src_minuta-acuerdos-del-equipo-de-registro-d",
+   "parent_id": "sec:src_minuta-acuerdos-del-equipo-de-registro-d:3",
+   "section_id": "sec:src_minuta-acuerdos-del-equipo-de-registro-d:3",
+   "name": "Intención de la resolución",
+   "facets": {
+    "element_kind": "field",
+    "data_type": "categorica",
+    "info_domain": "tratamiento",
+    "sensitivity": "dato_sensible_salud"
+   },
+   "facet_origin": {
+    "element_kind": "extracted",
+    "data_type": "extracted",
+    "info_domain": "inferred",
+    "sensitivity": "inferred"
+   },
+   "facet_confidence": {
+    "data_type": 1.0,
+    "info_domain": 0.75,
+    "sensitivity": 0.8
+   },
+   "facet_rationale": {
+    "data_type": "declarado por el documento",
+    "info_domain": "léxico del elemento: «intencion»",
+    "sensitivity": "léxico «intencion» (clasificación provisional, pendiente de revisión legal)"
+   },
+   "note": "Intención acordada en comité",
+   "origin": "extracted",
+   "status": "proposed",
+   "confidence": 1.0,
+   "cardinality": "unknown",
+   "required": null,
+   "provenance": {
+    "locator": {
+     "line": 22
+    },
+    "excerpt": "| Intención de la resolución | categorica | Curativa; Paliativa | Intención acordada en comité |"
+   },
+   "value_domain": [
+    "Curativa",
+    "Paliativa"
+   ]
+  },
+  {
+   "id": "el:fecha-de-comite",
+   "kind": "element",
+   "source_id": "src_minuta-acuerdos-del-equipo-de-registro-d",
+   "parent_id": "sec:src_minuta-acuerdos-del-equipo-de-registro-d:3",
+   "section_id": "sec:src_minuta-acuerdos-del-equipo-de-registro-d:3",
+   "name": "Fecha de comité",
+   "facets": {
+    "element_kind": "field",
+    "data_type": "fecha",
+    "info_domain": "tratamiento",
+    "sensitivity": "dato_sensible_salud"
+   },
+   "facet_origin": {
+    "element_kind": "extracted",
+    "data_type": "extracted",
+    "info_domain": "inferred",
+    "sensitivity": "inferred"
+   },
+   "facet_confidence": {
+    "data_type": 1.0,
+    "info_domain": 0.75,
+    "sensitivity": 0.8
+   },
+   "facet_rationale": {
+    "data_type": "declarado por el documento",
+    "info_domain": "léxico del elemento: «comite»",
+    "sensitivity": "léxico «comite» (clasificación provisional, pendiente de revisión legal)"
+   },
+   "note": "Fecha de la sesión",
+   "origin": "extracted",
+   "status": "proposed",
+   "confidence": 1.0,
+   "cardinality": "unknown",
+   "required": null,
+   "provenance": {
+    "locator": {
+     "line": 23
+    },
+    "excerpt": "| Fecha de comité | fecha | | Fecha de la sesión |"
+   }
+  },
+  {
+   "id": "el:numero-de-informe-diagnostico",
+   "kind": "element",
+   "source_id": "src_minuta-acuerdos-del-equipo-de-registro-d",
+   "parent_id": "sec:src_minuta-acuerdos-del-equipo-de-registro-d:3",
+   "section_id": "sec:src_minuta-acuerdos-del-equipo-de-registro-d:3",
+   "name": "Número de Informe diagnóstico",
+   "facets": {
+    "element_kind": "field",
+    "data_type": "identificador",
+    "info_domain": "documental",
+    "sensitivity": "dato_sensible_salud"
+   },
+   "facet_origin": {
+    "element_kind": "extracted",
+    "data_type": "extracted",
+    "info_domain": "inferred",
+    "sensitivity": "inferred"
+   },
+   "facet_confidence": {
+    "data_type": 1.0,
+    "info_domain": 0.75,
+    "sensitivity": 0.8
+   },
+   "facet_rationale": {
+    "data_type": "declarado por el documento",
+    "info_domain": "léxico del elemento: «numero de informe»",
+    "sensitivity": "léxico «diagnost» (clasificación provisional, pendiente de revisión legal)"
+   },
+   "note": "Folio del informe anatomopatológico",
+   "origin": "extracted",
+   "status": "proposed",
+   "confidence": 1.0,
+   "cardinality": "unknown",
+   "required": null,
+   "provenance": {
+    "locator": {
+     "line": 24
+    },
+    "excerpt": "| Número de Informe diagnóstico | identificador | | Folio del informe anatomopatológico |"
+   }
+  },
+  {
+   "id": "voc:cie10",
+   "kind": "vocabulary",
+   "name": "CIE-10",
+   "full_name": "Clasificación Internacional de Enfermedades, 10.ª revisión (OMS)",
+   "origin": "inferred",
+   "status": "proposed"
+  }
+ ],
+ "edges": [
+  {
+   "id": "e1",
+   "kind": "contains",
+   "source": "root",
+   "target": "sec:src_minuta-acuerdos-del-equipo-de-registro-d:1"
+  },
+  {
+   "id": "e2",
+   "kind": "contains",
+   "source": "sec:src_minuta-acuerdos-del-equipo-de-registro-d:1",
+   "target": "el:fecha-de-emision-diagnostico"
+  },
+  {
+   "id": "e3",
+   "kind": "contains",
+   "source": "sec:src_minuta-acuerdos-del-equipo-de-registro-d:1",
+   "target": "el:estado-vital"
+  },
+  {
+   "id": "e4",
+   "kind": "contains",
+   "source": "sec:src_minuta-acuerdos-del-equipo-de-registro-d:1",
+   "target": "el:causa-de-defuncion"
+  },
+  {
+   "id": "e5",
+   "kind": "contains",
+   "source": "sec:src_minuta-acuerdos-del-equipo-de-registro-d:1",
+   "target": "el:ki-67"
+  },
+  {
+   "id": "e6",
+   "kind": "contains",
+   "source": "root",
+   "target": "sec:src_minuta-acuerdos-del-equipo-de-registro-d:2"
+  },
+  {
+   "id": "e7",
+   "kind": "contains",
+   "source": "sec:src_minuta-acuerdos-del-equipo-de-registro-d:2",
+   "target": "el:definir-cardinalidad-de-comites-y-tratamientos"
+  },
+  {
+   "id": "e8",
+   "kind": "contains",
+   "source": "sec:src_minuta-acuerdos-del-equipo-de-registro-d:2",
+   "target": "el:completar-dominios-de-valores-de-las-variables-categoricas"
+  },
+  {
+   "id": "e9",
+   "kind": "contains",
+   "source": "root",
+   "target": "sec:src_minuta-acuerdos-del-equipo-de-registro-d:3"
+  },
+  {
+   "id": "e10",
+   "kind": "contains",
+   "source": "sec:src_minuta-acuerdos-del-equipo-de-registro-d:3",
+   "target": "el:tipo-de-comite"
+  },
+  {
+   "id": "e11",
+   "kind": "contains",
+   "source": "sec:src_minuta-acuerdos-del-equipo-de-registro-d:3",
+   "target": "el:intencion-de-la-resolucion"
+  },
+  {
+   "id": "e12",
+   "kind": "contains",
+   "source": "sec:src_minuta-acuerdos-del-equipo-de-registro-d:3",
+   "target": "el:fecha-de-comite"
+  },
+  {
+   "id": "e13",
+   "kind": "contains",
+   "source": "sec:src_minuta-acuerdos-del-equipo-de-registro-d:3",
+   "target": "el:numero-de-informe-diagnostico"
+  },
+  {
+   "id": "e14",
+   "kind": "coded_with",
+   "source": "el:causa-de-defuncion",
+   "target": "voc:cie10",
+   "layer": "std",
+   "origin": "inferred",
+   "status": "proposed"
+  }
+ ],
+ "findings": [
+  {
+   "id": "f1",
+   "priority": "bloqueante",
+   "title": "Dominios de valores ausentes",
+   "detail": "4 variables categóricas o binarias no declaran su lista de valores, unidad ni obligatoriedad. Los tipos de dato de este grafo son inferidos.",
+   "action": "Completar para cada variable: lista de valores permitidos, unidad (si es numérica) y si es obligatoria.",
+   "node_ids": [],
+   "status": "open",
+   "origin": "inferred",
+   "rule": "missing_value_domains"
+  }
+ ]
+}
