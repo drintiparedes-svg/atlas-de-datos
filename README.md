@@ -53,4 +53,6 @@ En el visor, la pestaña **Fuentes** hace lo mismo sin línea de comandos y sin 
 - `AI_ENABLED=false` por defecto: cero llamadas de red. Los modelos abiertos (`multilingual-e5-small`, Ollama) son opcionales y locales (`docs/MODELOS-ABIERTOS.md`).
 - Las etiquetas del grafo nunca se superponen; el caso dorado (16 / 6 / 87 / 18 grupos / 176 aristas) se verifica en cada ejecución de pruebas.
 
+Versión pública del visor (solo muestras; carga de documentos desactivada según M7): https://atlas-de-datos.vercel.app · proyecto de 4 fuentes: https://atlas-de-datos.vercel.app/?agf=./data/proyecto_registro.agf.json
+
 Reglas del proyecto: `CLAUDE.md`. Decisiones: `docs/DECISIONS.md`. Cambios: `CHANGELOG.md`.
