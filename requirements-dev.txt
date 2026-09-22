@@ -1,3 +1,1 @@
--e backend
-pytest>=8
-playwright>=1.45
+-e backend[server,dev]

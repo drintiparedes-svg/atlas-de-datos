@@ -149,7 +149,7 @@ def test_explore_mode_hides_expert_controls(browser, server):
     assert page.locator("#f-rep").is_hidden()
     body = page.inner_text("#panel-body")
     assert "¿Cómo se relacionan dos datos?" in body and "Buscar un dato" in body
-    page.click("button.qbtn[data-go=inventario]")
+    page.click("button.qbtn[data-go=proyectos]")
     assert "Qué información existe" in page.inner_text("#panel-body")
     assert not errors, errors
     page.close()
@@ -159,7 +159,7 @@ def test_project_sample_inventory_relations_and_path(browser, server):
     page, errors = open_page(browser, server, "?aud=experto&mode=detalle&agf=./data/proyecto_registro.agf.json")
     s = stats(page)
     assert s["scope"]["level"] == "project" and s["elements"] > 20
-    page.click("#tabs button[data-tab=inventario]")
+    page.click("#tabs button[data-tab=proyectos]")
     body = page.inner_text("#panel-body")
     assert "Fuentes por tipo" in body and "Matriz fuente × dominio" in body and "Datos puente" in body
     page.click("#tabs button[data-tab=relaciones]")
@@ -235,3 +235,61 @@ def test_hash_parity_with_python(browser, server):
         assert first8 == case["first8"], case["text"]
         assert page.evaluate("t => window.__atlas.fnv1a(t)", case["text"]) == case["fnv1a"]
     page.close()
+
+
+def test_projects_tab_end_to_end_with_backend(browser, server, tmp_path):
+    """Pestaña Proyectos contra el backend real (uvicorn en un hilo, SQLite): conectar, crear, subir, publicar, ver grafo."""
+    uvicorn = pytest.importorskip("uvicorn")
+    import threading, time, socket
+    os.environ["DATABASE_URL"] = f"sqlite:///{tmp_path / 'e2e.db'}"
+    os.environ["ATLAS_UPLOAD_DIR"] = str(tmp_path / "up")
+    os.environ["ATLAS_API_TOKEN"] = "e2e-token"
+    os.environ["ATLAS_CORS_ORIGINS"] = server
+    from atlas import db
+    db.get_engine(os.environ["DATABASE_URL"])
+    import importlib
+    from atlas.api import app as app_mod
+    importlib.reload(app_mod)
+    with socket.socket() as s:
+        s.bind(("127.0.0.1", 0)); port = s.getsockname()[1]
+    config = uvicorn.Config(app_mod.app, host="127.0.0.1", port=port, log_level="warning")
+    srv = uvicorn.Server(config)
+    t = threading.Thread(target=srv.run, daemon=True); t.start()
+    for _ in range(50):
+        if srv.started:
+            break
+        time.sleep(0.1)
+    try:
+        page, errors = open_page(browser, server, "?aud=experto&mode=detalle")
+        page.click("#tabs button[data-tab=proyectos]")
+        page.fill("#api-url", f"http://127.0.0.1:{port}")
+        page.fill("#api-token", "e2e-token")
+        page.fill("#api-actor", "Inti")
+        page.click("#api-save")
+        page.wait_for_selector("#np-name", timeout=10000)
+        page.fill("#np-name", "Proyecto E2E")
+        page.click("#np-create")
+        page.wait_for_selector("#p-file-input", state="attached", timeout=10000)
+        page.set_input_files("#p-file-input", [str(FIX / "registro_sintetico.csv"), str(FIX / "esquema_registro.sql"), str(FIX / "minuta_registro.md")])
+        page.wait_for_function("() => document.querySelectorAll('#panel-body .src-row .st').length >= 3 && [...document.querySelectorAll('#panel-body .src-row .st')].filter(e => e.textContent.includes('publicado')).length >= 3", timeout=20000)
+        page.click("#p-build")
+        page.wait_for_function("() => (window.__atlas.app.agf.sources || []).length === 3", timeout=20000)
+        s = stats(page)
+        assert s["scope"]["level"] == "project"
+        assert page.evaluate("window.__atlas.app.agf.project.name") == "Proyecto E2E"
+        assert page.evaluate("window.__atlas.app.agf.edges.filter(e => e.kind === 'same_as').length") >= 10
+        assert "Qué información existe" in page.inner_text("#panel-body")
+        # la revisión desde Relaciones se persiste en el backend
+        page.click("#tabs button[data-tab=relaciones]")
+        page.locator("button[data-review=validated]").first.click()
+        page.wait_for_timeout(600)
+        import httpx
+        r = httpx.get(f"http://127.0.0.1:{port}/api/projects/" + page.evaluate("window.__atlas.app.agf.project.id") + "/audit", headers={"X-Atlas-Token": "e2e-token"})
+        assert "edge.review" in [a["action"] for a in r.json()]
+        assert not errors, errors
+        page.close()
+    finally:
+        srv.should_exit = True
+        t.join(timeout=5)
+        for k in ("ATLAS_CORS_ORIGINS", "ATLAS_API_TOKEN"):
+            os.environ.pop(k, None)

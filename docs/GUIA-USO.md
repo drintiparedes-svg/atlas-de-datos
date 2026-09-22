@@ -5,7 +5,7 @@ El Atlas responde tres preguntas sobre la información de un proyecto: **qué ex
 | Público | Modo | Qué ve |
 |---|---|---|
 | Personas que solo quieren saber qué datos existen o cómo se relacionan dos datos concretos | **Explorar** | Portada con preguntas guiadas, grafo simplificado, buscador con explicación, inventario, camino entre dos datos, hallazgos con «qué hacer». |
-| Personas expertas en datos (informática médica, ciencia de datos, ingeniería) | **Experto** | Todo lo anterior más vistas Estructura / Combinada / Por faceta, capas transversales, «Agrupar por» cualquier faceta, fuerzas, carga de documentos, revisión de equivalencias y descarga del AGF. |
+| Personas expertas en datos (informática médica, ciencia de datos, ingeniería) | **Experto** | Todo lo anterior más vistas Estructura / Combinada / Por tipo, capas transversales, «Agrupar por» cualquier faceta, fuerzas, carga de documentos, revisión de equivalencias y descarga del AGF. |
 
 El selector **Explorar · Experto** está en la barra superior. La elección se recuerda en el navegador.
 
@@ -15,7 +15,7 @@ El selector **Explorar · Experto** está en la barra superior. La elección se 
 # Backend (Python 3.11+)
 python -m venv .venv && source .venv/bin/activate
 pip install -e backend            # instala el comando `atlas`
-pytest -q backend/tests           # 28 pruebas del backend
+pytest -q backend/tests           # pruebas del backend y de la API
 
 # Visor (Node 20+)
 cd frontend && npm install
@@ -38,7 +38,7 @@ Muestras incluidas (`samples/`):
 La portada ofrece cinco preguntas:
 
 1. **Buscar un dato.** Escribe un nombre o una idea en la barra superior («fecha de diagnóstico», «biomarcadores», «comuna»). Los resultados se agrupan por tipo y explican por qué aparecen: nombre exacto, contiene la consulta, comparte palabras o parecido semántico. Enter abre el primero.
-2. **¿Qué tipos de información hay?** Pestaña **Inventario**: datos por tipo de dato, dominio de información y sensibilidad; matriz fuente × dominio; datos puente entre fuentes; porcentaje sin clasificar; hallazgos por prioridad; cobertura de validación. Cada barra o celda lleva a la lista de datos correspondiente.
+2. **¿Qué tipos de información hay?** Pestaña **Proyectos** (inventario): datos por tipo de dato, dominio de información y sensibilidad; matriz fuente × dominio; datos puente entre fuentes; porcentaje sin clasificar; hallazgos por prioridad; cobertura de validación. Cada barra o celda lleva a la lista de datos correspondiente.
 3. **¿Cómo se relacionan dos datos?** Pestaña **Relaciones**: elige dos datos y el Atlas muestra el camino que los une, paso a paso, indicando el tipo de relación (cronología, equivalencia, referencia, parecido o pertenencia), su estado (validado o propuesto) y su confianza.
 4. **¿Cómo se organiza el documento?** Pestaña **Secciones**: lista con la composición de cada sección.
 5. **¿Qué falta o hay que corregir?** Pestaña **Trazabilidad**: hallazgos con prioridad Bloqueante / Importante / Menor y «qué hacer».
@@ -50,7 +50,7 @@ Todo lo marcado como **# inferido** fue propuesto por reglas o por modelos y aú
 ## 3. Modo Experto
 
 - **Nivel de detalle:** Simplificada (secciones con anillo de composición) o Detallada (red completa).
-- **Vista:** Estructura (fiel al documento), Combinada (grupos de metadata por faceta dentro de cada sección) o Por faceta (catálogo).
+- **Vista:** Estructura (fiel al documento), Combinada (grupos de metadata por faceta dentro de cada sección) o Por tipo (catálogo).
 - **Agrupar por:** tipo de dato, dominio de información, sensibilidad, tipo de elemento, estado de validación u origen. Los grupos se recalculan al instante: no se guardan en el AGF (regla 1 del contrato).
 - **Capas:** terminologías, cronología esperada, equivalencias entre fuentes, referencias y llaves foráneas, parecidos semánticos, fuentes que comparten datos. Solo aparecen las capas con aristas en el ámbito actual.
 - **Ámbito** (proyectos con varias fuentes): Proyecto (mapa e interconexión) o una fuente (su grafo completo).
@@ -76,6 +76,23 @@ atlas export-memory proyecto.agf.json -o memoria/   # memory.jsonl + fichas mark
 
 `atlas ingest` se detiene con código 2 si la guardia detecta datos personales; `--allow-personal-data` solo debe usarse tras confirmar que el documento no contiene datos de pacientes.
 
-## 5. Modelos abiertos
+## 5. Backend de proyectos (pestaña Proyectos)
+
+La pestaña **Proyectos** permite crear proyectos, subir documentos con distintas extensiones y publicar versiones con trazabilidad completa. Requiere el backend:
+
+```bash
+pip install -e "backend[server]"
+cp backend/.env.example backend/.env       # DATABASE_URL de Neon, ATLAS_API_TOKEN, ATLAS_CORS_ORIGINS
+export $(grep -v '^#' backend/.env | xargs)
+uvicorn atlas.api.app:app --host 127.0.0.1 --port 8000   # documentación interactiva en /api/docs
+```
+
+En el visor: Proyectos › Conexión con el backend › URL (`http://127.0.0.1:8000`), token y tu nombre (queda en la auditoría). Flujo: crear proyecto → subir fuentes (docx, csv, tsv, xlsx, sql, md, txt, json) → confirmar las que la guardia detenga → «Publicar versión» → ver grafo, inventario y relaciones. Las decisiones de revisión (aceptar o rechazar equivalencias) se guardan en el backend y se conservan al publicar versiones nuevas.
+
+Persistencia: PostgreSQL en Neon (`DATABASE_URL`), con SQLite local como respaldo para desarrollo y pruebas. Se guardan metadatos, AGF y auditoría; nunca filas de datos. Los archivos subidos quedan en `ATLAS_UPLOAD_DIR` referenciados por sha256.
+
+Seguridad: token obligatorio fuera de localhost, CORS restringido, extensiones y tamaño limitados, guardia de datos personales con confirmación nominal, auditoría de cada acción, IA apagada por defecto. El backend con carga de documentos se despliega en infraestructura institucional o con autenticación, no en la URL pública del visor (decisión M7).
+
+## 6. Modelos abiertos
 
 Ver `docs/MODELOS-ABIERTOS.md`. En resumen: el proveedor `hash` funciona sin red y se replica en el navegador; `st` usa `intfloat/multilingual-e5-small` (sentence-transformers) y `ollama` usa modelos servidos localmente. Ambos requieren `AI_ENABLED=true`.

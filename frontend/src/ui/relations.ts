@@ -4,6 +4,7 @@ import { esc, fmtNum, norm } from "../lib/text";
 import { LAYER_LABEL } from "../model";
 import { shortestPath } from "../search/search";
 import type { AgfEdge } from "../types";
+import { apiClient, projectsState } from "./projects";
 
 export const relState = { a: "", b: "", filter: "proposed" as "proposed" | "all" };
 
@@ -88,6 +89,12 @@ export function applyReview(app: App, edgeId: string, decision: "validated" | "r
   app.reviewed.set(edgeId, decision); e.status = decision;
   (e as AgfEdge & { reviewed_at?: string }).reviewed_at = new Date().toISOString();
   app.rebuildModel(false); app.renderTab();
+  const api = apiClient(), cur = projectsState.current;
+  if (api && cur && cur.id === app.agf.project.id) {
+    api.reviewEdge(cur.id, edgeId, decision).then(() => app.toast(decision === "validated" ? "Equivalencia aceptada y guardada en el backend (auditoría)." : "Propuesta rechazada y registrada en el backend."))
+      .catch((err) => app.toast("No se pudo guardar en el backend: " + (err as Error).message));
+    return;
+  }
   app.toast(decision === "validated" ? "Equivalencia aceptada (solo en esta sesión hasta descargar el AGF)." : "Propuesta rechazada; se conserva en auditoría.");
 }
 

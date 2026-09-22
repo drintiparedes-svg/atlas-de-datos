@@ -54,7 +54,7 @@ Niveles del responsable: N2 = recomendación con aprobación; N3 = requiere revi
 | D5 | Umbral de grupo | 2 | `profiles/default.json` (`group_threshold`) |
 | D6 | Nombre de la raíz | Propuesto desde el título del documento con `origin: inferred` y aviso en la nota | `atlas ingest --root-name` |
 | D8 | Cronología por dominio | Solo oncología; se aplica cuando el documento reconoce ≥ 2 pares | `config/timelines/oncologia.yaml` |
-| D11 | Base de grafos | Archivos AGF JSON; sin SQLite todavía (F3) | — |
+| D11 (aplicada) | Base de datos | PostgreSQL en Neon (`DATABASE_URL`) para proyectos, fuentes, versiones (AGF en JSON) y auditoría; SQLite local como respaldo. Solicitado por Inti el 2026-09-22 | `backend/atlas/db.py`, `backend/.env.example` |
 | M1 | Facetas de dominio y sensibilidad | Adoptadas; inferidas por léxico, marcadas `inferred` | `config/inference.json`, `profiles/default.json` |
 | M2 | Sensibilidad según marco legal | Clasificación provisional con nota visible; pendiente de asesoría legal | `profiles/default.json` (`facets.sensitivity.note`) |
 | M3 | Navegador primero | Sí: adaptadores docx, csv, xlsx, sql, md, json en el cliente | `frontend/src/adapters` |
@@ -64,6 +64,7 @@ Niveles del responsable: N2 = recomendación con aprobación; N3 = requiere revi
 | Nueva | Perfil ampliado | Se agregaron facetas `element_kind`, `info_domain`, `sensitivity`, `status`, `origin`, `source_type` y tipos de dato `texto_libre`, `compuesto`, `archivo` sin modificar los parámetros visuales existentes | `profiles/default.json` |
 | Nueva | Reglas compartidas | `config/inference.json` es la fuente de verdad de inferencia para backend y visor; los YAML de estándares y cronología se convierten a JSON al sincronizar | `frontend/scripts/sync-data.mjs` |
 | M7 (aplicación) | Publicación en Vercel solicitada por Inti (2026-09-22) | Se publica solo el visor con las muestras; la carga de documentos queda desactivada en la compilación pública (`VITE_PUBLIC_DEPLOY=true`) y se habilita solo en instalación local o institucional | `frontend/src/ui/sources.ts`, `frontend/vercel.json` |
+| T10 | Backend del módulo Proyectos (FastAPI) con token, CORS, límites de carga, guardia con confirmación nominal y auditoría; el visor lo usa desde la pestaña Proyectos y sigue funcionando sin él | `backend/atlas/api/` |
 | Nueva | Fixture interno | `info_para_presentacion.docx` no se versiona (repositorio público); las pruebas que lo usan se omiten si falta | `.gitignore`, `tests/conftest.py` |
 
 ## Observaciones del documento fuente pendientes (equipo de registro)

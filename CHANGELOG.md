@@ -26,6 +26,12 @@ Primera versión construida a partir del paquete de traspaso. Fases F0, F1 y F2 
 - Capas genéricas por tipo de arista; tema claro u oscuro; API `window.__atlas` para pruebas.
 - 10 pruebas Playwright: caso dorado, reagrupación, etiquetas y capturas claro/oscuro, búsqueda y notas, modo Explorar, proyecto, carga en navegador (csv, sql, md, docx), guardia, paridad hash.
 
+### Backend de proyectos (2026-09-22, segunda entrega)
+- API FastAPI (`atlas.api.app`): proyectos, carga de fuentes con distintas extensiones, guardia de datos personales con confirmación nominal, publicación de versiones (consolidación, relaciones propuestas, índice de vectores), revisión de aristas y nodos, búsqueda, camino, inventario y auditoría.
+- Persistencia con SQLAlchemy: PostgreSQL en Neon (`DATABASE_URL`) o SQLite local; archivos por sha256 en `ATLAS_UPLOAD_DIR`.
+- Seguridad: `X-Atlas-Token`, CORS restringido, extensiones y tamaño limitados, sin filas de datos, IA apagada por defecto.
+- Visor: pestaña **Proyectos** (antes Inventario) con gestión de proyectos contra el backend e inventario; vista «Por tipo» (antes «Por faceta»); revisión de equivalencias persistida cuando hay backend. 3 pruebas de API y 1 prueba de integración visor + backend.
+
 ### Publicación
 - Compilación pública (`VITE_PUBLIC_DEPLOY=true`) que desactiva la carga de documentos según M7; `frontend/vercel.json`; enlaces a las muestras en la portada.
 

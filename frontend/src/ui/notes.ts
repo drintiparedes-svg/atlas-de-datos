@@ -42,7 +42,7 @@ function intro(app: App): string {
     <h2>¿Qué información existe y cómo se relaciona?</h2>
     <p>Cada punto del grafo es un dato descrito en los documentos del proyecto. El color indica ${esc(app.pv.facetLabel(state.groupBy).toLowerCase())}; los círculos grandes son ${what}. Empieza por una de estas preguntas:</p>
     <button class="qbtn" data-go="search"><b>Buscar un dato</b><span>Escribe un nombre o una idea («fecha de diagnóstico», «biomarcadores», «comuna»). También encuentra parecidos.</span></button>
-    <button class="qbtn" data-go="inventario"><b>¿Qué tipos de información hay?</b><span>Inventario: cuántos datos existen por tipo, dominio y sensibilidad, y qué falta por clasificar.</span></button>
+    <button class="qbtn" data-go="proyectos"><b>¿Qué tipos de información hay?</b><span>Inventario: cuántos datos existen por tipo, dominio y sensibilidad, y qué falta por clasificar.</span></button>
     <button class="qbtn" data-go="relaciones"><b>¿Cómo se relacionan dos datos?</b><span>Elige dos datos y el Atlas muestra el camino que los une y explica cada paso.</span></button>
     <button class="qbtn" data-go="secciones"><b>¿Cómo se organiza el documento?</b><span>Lista de ${what} con su composición.</span></button>
     <button class="qbtn" data-go="traza"><b>¿Qué falta o hay que corregir?</b><span>${s.findings} hallazgos de calidad con prioridad y «qué hacer».</span></button>
@@ -85,7 +85,7 @@ function introExpert(app: App): string {
     <ul class="rules">
       <li>Pasa el cursor por un nodo para aislar su vecindario; haz clic para abrir su nota.</li>
       <li>Arriba eliges el nivel de detalle: <b>Simplificada</b> (${m.isProject ? "fuentes" : "secciones"}, se abren con un clic) o <b>Detallada</b> (red completa).</li>
-      <li>En la versión detallada, cambia de vista en Ajustes: Estructura (fiel al documento), Combinada o Por faceta.</li>
+      <li>En la versión detallada, cambia de vista en Ajustes: Estructura (fiel al documento), Combinada o Por tipo.</li>
       <li><b>← Atrás</b> (o Alt + ←) vuelve al paso anterior; <b>Inicio</b> regresa a esta portada.</li>
       <li>Activa las capas (terminologías, cronología, equivalencias, referencias, parecidos) para ver relaciones transversales.</li>
       <li>Los anillos alrededor de un nodo indican hallazgos de calidad: rojo = bloqueante, dorado = importante, punteado = menor. El detalle está en Trazabilidad.</li>

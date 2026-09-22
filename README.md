@@ -43,7 +43,7 @@ atlas path proyecto.agf.json el:fecha-de-nacimiento el:fecha-de-defuncion       
 atlas export-memory proyecto.agf.json -o memoria/                                       # memory.jsonl + fichas markdown (solo validado)
 ```
 
-En el visor, la pestaña **Fuentes** hace lo mismo sin línea de comandos y sin que los documentos salgan del equipo.
+En el visor, la pestaña **Fuentes** hace lo mismo sin línea de comandos y sin que los documentos salgan del equipo. Con el backend (`uvicorn atlas.api.app:app`, PostgreSQL en Neon), la pestaña **Proyectos** crea proyectos, recibe documentos, publica versiones y guarda la revisión con auditoría (`docs/GUIA-USO.md`, §5).
 
 ## Principios no negociables
 

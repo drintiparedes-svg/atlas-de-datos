@@ -4,7 +4,7 @@ import { state, type Audience } from "./state";
 import { loadInferenceConfig } from "./infer";
 import { fnv1a, hashOne } from "./search/hash";
 import type { Agf, Profile, VectorIndex } from "./types";
-import { renderInventario } from "./ui/inventory";
+import { afterProyectos, projectsState, refreshProjects, renderProyectos } from "./ui/projects";
 import { renderFacetas, renderNota, renderSecciones, renderTraza } from "./ui/notes";
 import { afterRelaciones, renderRelaciones } from "./ui/relations";
 import { initSearch } from "./ui/searchbox";
@@ -30,8 +30,8 @@ async function boot() {
 
   try { const t = localStorage.getItem("atlas.theme"); if (t === "light" || t === "dark") document.documentElement.setAttribute("data-theme", t); } catch { /* sin almacenamiento */ }
   const app = new App();
-  app.renderers = { nota: renderNota, inventario: renderInventario, secciones: renderSecciones, facetas: renderFacetas, relaciones: renderRelaciones, fuentes: renderFuentes, traza: renderTraza };
-  app.afterRender = { relaciones: afterRelaciones, fuentes: afterFuentes };
+  app.renderers = { nota: renderNota, proyectos: renderProyectos, secciones: renderSecciones, facetas: renderFacetas, relaciones: renderRelaciones, fuentes: renderFuentes, traza: renderTraza };
+  app.afterRender = { relaciones: afterRelaciones, fuentes: afterFuentes, proyectos: afterProyectos };
   initSettings(app); initSearch(app); initPanelActions(app);
   document.querySelectorAll<HTMLButtonElement>("#tabs button[data-tab]").forEach((b) => b.addEventListener("click", () => app.setTab(b.dataset.tab as never)));
   document.getElementById("btn-back")!.addEventListener("click", () => app.goBack());
@@ -82,6 +82,7 @@ async function boot() {
     settle: () => { app.graph.prewarm(); app.graph.fit(); },
     hash: (t: string) => hashOne(t), fnv1a: (t: string) => fnv1a(t),
   };
+  if (projectsState.cfg) void refreshProjects(app);
   document.body.dataset.ready = "1";
 }
 

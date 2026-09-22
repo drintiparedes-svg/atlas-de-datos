@@ -7,7 +7,7 @@ import { SearchIndex } from "./search/search";
 import { emit, state, type Audience } from "./state";
 import type { Agf, AgfNode, Profile, VectorIndex } from "./types";
 
-export type Tab = "nota" | "inventario" | "secciones" | "facetas" | "relaciones" | "fuentes" | "traza";
+export type Tab = "nota" | "proyectos" | "secciones" | "facetas" | "relaciones" | "fuentes" | "traza";
 export type TabRenderer = (app: App) => string;
 
 interface Snapshot { sel: string | null; tab: Tab; view: View; mode: Mode; expanded: string[]; groupBy: string; scope: Scope; audience: Audience }
@@ -97,7 +97,7 @@ export class App {
     (document.getElementById("btn-back") as HTMLButtonElement).disabled = this.history.length === 0;
     const c = document.getElementById("crumb")!;
     const s = this.selected;
-    const tabName: Record<Tab, string> = { nota: "Inicio", inventario: "Inventario", secciones: "Secciones", facetas: "Facetas", relaciones: "Relaciones", fuentes: "Fuentes", traza: "Trazabilidad" };
+    const tabName: Record<Tab, string> = { nota: "Inicio", proyectos: "Proyectos", secciones: "Secciones", facetas: "Facetas", relaciones: "Relaciones", fuentes: "Fuentes", traza: "Trazabilidad" };
     const scope = this.agf.sources.length > 1 && state.scope.level === "source" ? (this.model.root.name + " › ") : "";
     c.textContent = scope + (s ? (s.kind === "section" && s.n !== undefined ? pad(s.n) + " · " + s.name : s.name) : tabName[this.tab]);
   }

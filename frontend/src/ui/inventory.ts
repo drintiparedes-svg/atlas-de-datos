@@ -65,6 +65,6 @@ export function renderInventario(app: App): string {
 
 /** Lista de elementos para un valor de faceta o celda de matriz (navegación desde el inventario). */
 export function listElements(app: App, title: string, els: AgfNode[]): string {
-  return `<div class="eyebrow">Inventario</div><h2>${esc(title)} · ${els.length}</h2><button class="btn" data-go="inventario">← Volver al inventario</button>
+  return `<div class="eyebrow">Inventario</div><h2>${esc(title)} · ${els.length}</h2><button class="btn" data-go="proyectos">← Volver al inventario</button>
     <div class="chips" style="margin-top:.8rem">${els.map((e) => app.chipAgf(e)).join("") || "<p>Sin elementos.</p>"}</div>`;
 }
