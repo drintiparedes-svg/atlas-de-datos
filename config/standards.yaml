@@ -1,0 +1,9 @@
+# Vocabularios y reglas de asociación inferida (docs/SPEC.md §6.6). Todas las asociaciones quedan origin: inferred.
+cie10: {label: CIE-10, full: "Clasificación Internacional de Enfermedades, 10.ª revisión (OMS)", patterns: ["cie 10", "causa de defuncion"]}
+cieo:  {label: CIE-O-3, full: "Clasificación Internacional de Enfermedades para Oncología, 3.ª edición (OMS)", patterns: ["(cieo)", "morfologia", "topografia", "comportamiento", "grado de diferenciacion"]}
+tnm:   {label: TNM, full: "Sistema TNM de estadificación (AJCC / UICC)", patterns: ["tnm", "estadio de diagnostico"]}
+figo:  {label: FIGO, full: "Estadificación de tumores ginecológicos (FIGO)", patterns: ["figo"]}
+oms:   {label: Clasificación OMS, full: "Clasificación OMS de tumores", patterns: ["grado de la oms"]}
+isup:  {label: Gleason / ISUP, full: "Puntuación de Gleason y grupos de grado ISUP", patterns: ["gleason"]}
+ges:   {label: GES, full: "Garantías Explícitas en Salud (MINSAL, Chile)", patterns: ["clasificacion ges"]}
+cut:   {label: CUT, full: "Código Único Territorial (Chile)", patterns: ["region", "comuna"]}

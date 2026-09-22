@@ -1,0 +1,1291 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Atlas de Datos Oncológicos</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Albert+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+  /* ── tokens: dark-first, heredados de Segundo Cerebro ─────────────── */
+  :root {
+    --bg: #0b0e14; --bg-veil: #0b0e14d9; --surface: #141926; --surface-2: #1b2233;
+    --line: #252d40; --ink: #e8eaf2; --ink-dim: #9aa3b8; --ink-faint: #5c6579;
+    --accent: #e0b458; --accent-ink: #14100a; --edge: #2c3550; --glow: #e0b45833;
+    --hub: #e8eaf2;
+    --t-fecha: #e0b458; --t-categorica: #4fc8b4; --t-binario: #d0708f;
+    --t-numerica: #6fa8e8; --t-codigo: #9d8ae6; --t-identificador: #a3adbf;
+    --warn: #e46a6a;
+  }
+  @media (prefers-color-scheme: light) {
+    :root:not([data-theme="dark"]) {
+      --bg: #f2f4f7; --bg-veil: #f2f4f7e0; --surface: #ffffff; --surface-2: #e9edf3;
+      --line: #d7dde8; --ink: #1a2233; --ink-dim: #4d5a72; --ink-faint: #8b96ab;
+      --accent: #a97c1d; --accent-ink: #fffaf0; --edge: #c4cddc; --glow: #a97c1d22;
+      --hub: #1a2233;
+      --t-fecha: #a97c1d; --t-categorica: #157f6d; --t-binario: #a83c62;
+      --t-numerica: #2f6fb8; --t-codigo: #5b4aa8; --t-identificador: #66728a;
+      --warn: #c2434f;
+    }
+  }
+  :root[data-theme="light"] {
+    --bg: #f2f4f7; --bg-veil: #f2f4f7e0; --surface: #ffffff; --surface-2: #e9edf3;
+    --line: #d7dde8; --ink: #1a2233; --ink-dim: #4d5a72; --ink-faint: #8b96ab;
+    --accent: #a97c1d; --accent-ink: #fffaf0; --edge: #c4cddc; --glow: #a97c1d22;
+    --hub: #1a2233;
+    --t-fecha: #a97c1d; --t-categorica: #157f6d; --t-binario: #a83c62;
+    --t-numerica: #2f6fb8; --t-codigo: #5b4aa8; --t-identificador: #66728a;
+    --warn: #c2434f;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font: 15px/1.55 "Albert Sans", system-ui, -apple-system, sans-serif; overflow: hidden;
+  }
+  button, input { font: inherit; }
+
+  /* ── barra superior ───────────────────────────────────────────────── */
+  header {
+    position: fixed; inset: 0 0 auto 0; z-index: 30;
+    display: flex; align-items: center; gap: 1rem;
+    padding: calc(.7rem + env(safe-area-inset-top, 0px)) 1.2rem .7rem;
+    background: var(--bg-veil); backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line);
+  }
+  .wordmark { font-family: "Fraunces", Georgia, serif; font-size: 1.2rem; font-weight: 600; white-space: nowrap; }
+  .wordmark em { font-style: normal; color: var(--accent); }
+  .tagline {
+    font-family: "JetBrains Mono", monospace; font-size: .66rem; letter-spacing: .14em;
+    text-transform: uppercase; color: var(--ink-faint); white-space: nowrap;
+  }
+  #search {
+    flex: 1; min-width: 0; max-width: 26rem; margin-left: auto;
+    background: var(--surface); color: var(--ink); border: 1px solid var(--line);
+    border-radius: 999px; padding: .45rem 1rem; font-size: .86rem; outline: none;
+  }
+  #search:focus { border-color: var(--accent); }
+  .modeseg { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; overflow: hidden; flex: none; }
+  .modeseg button { background: var(--surface); color: var(--ink-dim); border: 0; padding: .38rem .8rem; font-size: .76rem; cursor: pointer; }
+  .modeseg button + button { border-left: 1px solid var(--line); }
+  .modeseg button.on { background: var(--accent); color: var(--accent-ink); font-weight: 600; }
+  .seg button:disabled { opacity: .45; cursor: not-allowed; }
+  .panel-bar { display: flex; align-items: center; gap: .4rem; padding: .5rem 1.3rem; border-bottom: 1px solid var(--line); min-height: 2.5rem; }
+  .panel-bar button { background: var(--surface-2); border: 1px solid var(--line); border-radius: .45rem; color: var(--ink); font-size: .76rem; padding: .22rem .6rem; cursor: pointer; }
+  .panel-bar button:hover:not(:disabled) { border-color: var(--accent); }
+  .panel-bar button:disabled { opacity: .4; cursor: default; }
+  .crumb { margin-left: auto; font-family: "JetBrains Mono", monospace; font-size: .64rem; color: var(--ink-faint); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 55%; }
+  .btn-inline { background: var(--accent); color: var(--accent-ink); border: 0; border-radius: .45rem; padding: .35rem .8rem; font-size: .78rem; font-weight: 600; cursor: pointer; margin: .2rem 0 .6rem; }
+  #search::placeholder { color: var(--ink-faint); }
+  .icon-btn {
+    background: var(--surface); color: var(--ink-dim); border: 1px solid var(--line);
+    border-radius: 999px; padding: .38rem .8rem; font-size: .76rem; cursor: pointer; white-space: nowrap;
+  }
+  .icon-btn:hover { color: var(--ink); border-color: var(--accent); }
+  .icon-btn:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  #graph { position: fixed; inset: 0; cursor: grab; touch-action: none; }
+  #graph.dragging { cursor: grabbing; }
+
+  /* ── panel de ajustes (estilo Obsidian) ──────────────────────────── */
+  .settings {
+    position: fixed; top: 4.2rem; left: 1rem; z-index: 22;
+    width: min(17.5rem, calc(100vw - 2rem));
+    max-height: calc(100% - 5.4rem); overflow-y: auto;
+    background: var(--bg-veil); backdrop-filter: blur(8px);
+    border: 1px solid var(--line); border-radius: .7rem; padding: .8rem .9rem;
+  }
+  .settings[hidden] { display: none; }
+  .settings h4 {
+    margin: .9rem 0 .45rem; font-family: "JetBrains Mono", monospace; font-weight: 500;
+    font-size: .64rem; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-faint);
+  }
+  .settings h4:first-child { margin-top: 0; }
+  .seg { display: grid; grid-template-columns: repeat(3, 1fr); gap: .25rem; }
+  .seg button {
+    background: var(--surface-2); color: var(--ink-dim); border: 1px solid var(--line);
+    border-radius: .45rem; padding: .35rem .2rem; font-size: .74rem; cursor: pointer;
+  }
+  .seg button.on { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); font-weight: 600; }
+  .view-hint { font-size: .74rem; color: var(--ink-dim); margin: .45rem 0 0; line-height: 1.45; }
+  .row { display: flex; align-items: center; gap: .55rem; font-size: .8rem; color: var(--ink-dim); padding: .18rem 0; cursor: pointer; }
+  .row input { accent-color: var(--accent); margin: 0; }
+  .row .dot { width: .6rem; height: .6rem; border-radius: 50%; flex: none; }
+  .row .n { margin-left: auto; font-family: "JetBrains Mono", monospace; font-size: .68rem; color: var(--ink-faint); font-variant-numeric: tabular-nums; }
+  .slider { display: grid; grid-template-columns: 5.2rem 1fr 2.4rem; align-items: center; gap: .5rem; font-size: .76rem; color: var(--ink-dim); padding: .15rem 0; }
+  .slider input { width: 100%; accent-color: var(--accent); }
+  .slider output { font-family: "JetBrains Mono", monospace; font-size: .68rem; color: var(--ink-faint); text-align: right; font-variant-numeric: tabular-nums; }
+  .shape-key { display: grid; gap: .3rem; font-size: .76rem; color: var(--ink-dim); }
+  .shape-key span { display: flex; align-items: center; gap: .55rem; }
+  .shape-key svg { flex: none; }
+
+  /* ── panel derecho: nota ─────────────────────────────────────────── */
+  aside {
+    position: fixed; top: 3.55rem; right: 0; bottom: 0; z-index: 25;
+    width: min(27rem, 94vw); display: flex; flex-direction: column;
+    background: var(--surface); border-left: 1px solid var(--line);
+    transform: translateX(100%); transition: transform .26s cubic-bezier(.4,0,.2,1);
+  }
+  aside.open { transform: none; }
+  @media (prefers-reduced-motion: reduce) { aside { transition: none; } }
+  nav { display: flex; border-bottom: 1px solid var(--line); }
+  nav button {
+    flex: 1; padding: .7rem .1rem; background: none; border: 0; border-bottom: 2px solid transparent;
+    color: var(--ink-dim); font-size: .76rem; cursor: pointer;
+  }
+  nav button:hover { color: var(--ink); }
+  nav button.active { color: var(--ink); border-bottom-color: var(--accent); }
+  nav .close { flex: 0 0 2.6rem; font-size: 1rem; }
+  #panel-body { flex: 1; overflow-y: auto; padding: 1.1rem 1.3rem 2rem; }
+
+  .eyebrow { font-family: "JetBrains Mono", monospace; font-size: .64rem; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-faint); }
+  h2 { font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: 1.2rem; line-height: 1.25; margin: .25rem 0 .7rem; text-wrap: balance; }
+  h3 { font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: .96rem; margin: 1.2rem 0 .45rem; text-wrap: balance; }
+  p { font-size: .86rem; color: var(--ink-dim); margin: .3rem 0 .6rem; }
+  .yaml {
+    font-family: "JetBrains Mono", monospace; font-size: .74rem; line-height: 1.7;
+    background: var(--surface-2); border: 1px solid var(--line); border-radius: .55rem;
+    padding: .65rem .8rem; overflow-x: auto; white-space: pre; color: var(--ink-dim);
+  }
+  .yaml .k { color: var(--ink-faint); }
+  .yaml .v { color: var(--ink); }
+  .yaml .inf { color: var(--warn); }
+  .wl { color: var(--accent); cursor: pointer; border-bottom: 1px dotted var(--accent); }
+  .wl:hover { border-bottom-style: solid; }
+  .chips { display: flex; flex-wrap: wrap; gap: .35rem; }
+  .chip {
+    display: inline-flex; align-items: center; gap: .35rem;
+    padding: .12rem .55rem; border-radius: 999px; border: 1px solid var(--line);
+    font-size: .76rem; color: var(--ink-dim); background: transparent; cursor: pointer;
+  }
+  .chip:hover { color: var(--ink); border-color: var(--accent); }
+  .chip i { width: .5rem; height: .5rem; border-radius: 50%; display: inline-block; }
+  .comp { display: flex; height: 6px; border-radius: 3px; overflow: hidden; background: var(--line); margin: .35rem 0 .2rem; }
+  .comp i { display: block; height: 100%; }
+  .cat-row {
+    display: grid; grid-template-columns: 1.7rem 1fr auto; gap: .1rem .5rem; align-items: baseline;
+    padding: .55rem 0; border-bottom: 1px solid var(--line); cursor: pointer;
+  }
+  .cat-row:hover .nm { color: var(--accent); }
+  .cat-row .num { font-family: "JetBrains Mono", monospace; font-size: .72rem; color: var(--accent); font-variant-numeric: tabular-nums; }
+  .cat-row .nm { font-size: .86rem; }
+  .cat-row .ct { font-family: "JetBrains Mono", monospace; font-size: .7rem; color: var(--ink-faint); font-variant-numeric: tabular-nums; }
+  .cat-row .comp { grid-column: 2 / 4; margin: .2rem 0 0; }
+  .type-card { padding: .75rem 0; border-bottom: 1px solid var(--line); }
+  .type-card .hd { display: flex; align-items: baseline; gap: .55rem; cursor: pointer; }
+  .type-card .hd b { font-weight: 600; font-size: .92rem; }
+  .type-card .hd .ct { margin-left: auto; font-family: "JetBrains Mono", monospace; font-size: .72rem; color: var(--ink-faint); }
+  ul.rules { margin: .3rem 0 0; padding-left: 1.05rem; font-size: .8rem; color: var(--ink-dim); }
+  ul.rules li { margin: .12rem 0; }
+  .obs { padding: .6rem 0; border-bottom: 1px solid var(--line); font-size: .83rem; }
+  .tag {
+    font-family: "JetBrains Mono", monospace; font-size: .6rem; letter-spacing: .1em; text-transform: uppercase;
+    padding: .05rem .45rem; border-radius: 999px; border: 1px solid currentColor; margin-right: .4rem;
+  }
+  .tag.bloqueante { color: var(--warn); }
+  .tag.importante { color: var(--accent); }
+  .tag.menor { color: var(--ink-dim); }
+  .obs .act { font-size: .8rem; color: var(--ink); margin: .3rem 0 0; }
+  .obs .act b { font-weight: 600; }
+  .prio-legend { display: grid; gap: .45rem; margin: .5rem 0 .4rem; padding: .7rem .8rem; background: var(--surface-2); border: 1px solid var(--line); border-radius: .55rem; font-size: .8rem; color: var(--ink-dim); }
+  .prio-legend div { display: grid; grid-template-columns: 6.4rem 1fr; gap: .5rem; align-items: baseline; }
+  .prio-count { font-family: "JetBrains Mono", monospace; font-size: .7rem; color: var(--ink-faint); margin-left: .3rem; }
+  .obs p { margin: .25rem 0 0; }
+  .grouplist { margin: .2rem 0 .6rem; }
+  .grouplist .gh { display: flex; align-items: center; gap: .45rem; font-size: .76rem; color: var(--ink-faint); margin: .6rem 0 .3rem; font-family: "JetBrains Mono", monospace; letter-spacing: .06em; text-transform: uppercase; }
+  .kv { display: grid; grid-template-columns: 7.5rem 1fr; gap: .3rem .8rem; font-size: .82rem; margin: .4rem 0; }
+  .kv dt { color: var(--ink-faint); }
+  .kv dd { margin: 0; color: var(--ink); }
+
+  .status {
+    position: fixed; left: 50%; transform: translateX(-50%); z-index: 20;
+    bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
+    font-family: "JetBrains Mono", monospace; font-size: .64rem; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--ink-faint); background: var(--bg-veil); border: 1px solid var(--line);
+    border-radius: 999px; padding: .3rem .9rem; white-space: nowrap; font-variant-numeric: tabular-nums;
+  }
+  @media (max-width: 760px) {
+    .tagline { display: none; }
+    header { gap: .5rem; padding-left: 1rem; padding-right: 1rem; }
+    .wordmark { font-size: 1.02rem; }
+    .modeseg button { padding: .38rem .55rem; font-size: .7rem; }
+    #search { display: none; }
+    .status { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wordmark">Atlas de <em>Datos Oncológicos</em></div>
+  <div class="tagline">grafo de variables · propuesta</div>
+  <input id="search" type="search" placeholder="Buscar variable, categoría o tipo…" autocomplete="off" aria-label="Buscar en el grafo">
+  <div class="modeseg" role="group" aria-label="Nivel de detalle">
+    <button id="mode-simple" data-mode="simple">Simplificada</button>
+    <button id="mode-detalle" data-mode="detalle" class="on">Detallada</button>
+  </div>
+  <button class="icon-btn" id="btn-settings" aria-expanded="true" aria-controls="settings">Ajustes</button>
+  <button class="icon-btn" id="btn-panel" aria-controls="panel">Nota</button>
+</header>
+
+<canvas id="graph" aria-label="Grafo de variables del registro oncológico"></canvas>
+
+<section class="settings" id="settings" aria-label="Ajustes del grafo">
+  <h4>Vista <span id="view-lock" style="text-transform:none;letter-spacing:0"></span></h4>
+  <div class="seg" role="group" aria-label="Vista">
+    <button data-view="estructura" id="v-estructura">Estructura</button>
+    <button data-view="combinada" id="v-combinada" class="on">Combinada</button>
+    <button data-view="tipo" id="v-tipo">Por tipo</button>
+  </div>
+  <p class="view-hint" id="view-hint"></p>
+
+  <h4>Grupos · tipo de dato</h4>
+  <div id="type-filters"></div>
+
+  <h4>Capas</h4>
+  <label class="row"><input type="checkbox" id="layer-std"> Terminologías y estándares <span class="n" id="n-std"></span></label>
+  <label class="row"><input type="checkbox" id="layer-time"> Cronología esperada del caso <span class="n" id="n-time"></span></label>
+  <label class="row"><input type="checkbox" id="labels-all"> Mostrar todas las etiquetas</label>
+  <p class="view-hint">Las etiquetas nunca se superponen: las que no caben se ocultan (o se acortan al número de categoría) y aparecen al acercar el zoom o al pasar el cursor.</p>
+  <div id="simple-tools" hidden style="display:flex;gap:.35rem;margin-top:.4rem;flex-wrap:wrap">
+    <button class="icon-btn" id="btn-expand-all">Abrir todas</button>
+    <button class="icon-btn" id="btn-collapse-all">Cerrar todas</button>
+  </div>
+
+  <h4>Fuerzas</h4>
+  <div class="slider"><label for="f-rep">Separar</label><input type="range" id="f-rep" min="200" max="12000" step="100" value="1700"><output id="o-rep" class="n">1700</output></div>
+  <div class="slider"><label for="f-len">Distancia</label><input type="range" id="f-len" min="0.3" max="3" step="0.05" value="1"><output id="o-len" class="n">1,00×</output></div>
+
+  <h4>Forma = rol del nodo</h4>
+  <div class="shape-key">
+    <span><svg width="14" height="14" aria-hidden="true"><circle cx="7" cy="7" r="6" fill="var(--hub)"/></svg>Categoría / subcategoría</span>
+    <span><svg width="14" height="14" aria-hidden="true"><circle cx="7" cy="7" r="5" fill="none" stroke="var(--t-categorica)" stroke-width="2"/></svg>Grupo de metadata (tipo × categoría)</span>
+    <span><svg width="14" height="14" aria-hidden="true"><circle cx="7" cy="7" r="4" fill="var(--t-fecha)"/></svg>Variable (color = tipo)</span>
+    <span><svg width="14" height="14" aria-hidden="true"><rect x="3" y="3" width="8" height="8" transform="rotate(45 7 7)" fill="var(--accent)"/></svg>Terminología / estándar</span>
+  </div>
+  <div style="margin-top:.8rem"><button class="icon-btn" id="btn-fit">Centrar grafo</button></div>
+</section>
+
+<aside id="panel" aria-label="Panel de nota">
+  <nav>
+    <button data-tab="nota" class="active">Nota</button>
+    <button data-tab="categorias">Categorías</button>
+    <button data-tab="tipos">Tipos</button>
+    <button data-tab="traza">Trazabilidad</button>
+    <button class="close" id="btn-close" aria-label="Cerrar panel">×</button>
+  </nav>
+  <div class="panel-bar">
+    <button id="btn-back" disabled title="Volver a la vista anterior (Alt + ←)">← Atrás</button>
+    <button id="btn-home" title="Volver al inicio">Inicio</button>
+    <span class="crumb" id="crumb"></span>
+  </div>
+  <div id="panel-body"></div>
+</aside>
+
+<div class="status" id="status"></div>
+
+<script>
+"use strict";
+
+/* ═══ 1. DATOS · transcripción literal de «Info para presentacion.docx» ═══
+   Cada variable: [nombre literal, tipo de dato (inferido), estándar (inferido | null), nota]
+   Tipos: fecha · categorica · binario · numerica · codigo · identificador              */
+const SOURCE = { file: "Info para presentacion.docx", origin: "Slack FALP", date: "2026-09-21" };
+
+const TYPES = {
+  fecha:        { label: "Fecha", plural: "Fechas", def: "Marca temporal de un hito del caso.",
+                  rules: ["Formato ISO 8601 (AAAA-MM-DD).", "Coherencia cronológica con los demás hitos del caso.", "Nunca posterior a la fecha de defunción ni a la fecha de registro."] },
+  categorica:   { label: "Categórica", plural: "Categóricas", def: "Valor tomado de un catálogo cerrado de opciones, nominal u ordinal.",
+                  rules: ["Dominio de valores explícito y versionado.", "«Desconocido / no consignado» distinto de campo vacío.", "Mapeo a terminología de referencia cuando exista (catálogos MINSAL, SNOMED CT)."] },
+  binario:   { label: "Binario", plural: "Binarios", def: "Presencia o ausencia de una condición: Sí / No / Desconocido.",
+                  rules: ["Tres estados explícitos: Sí, No, Desconocido.", "Si el valor es «Sí», exigir sus variables dependientes (fecha, topografía, tipo).", "Registrar la fuente documental de la afirmación."] },
+  numerica:     { label: "Numérica", plural: "Numéricas", def: "Medición o valor derivado, siempre con unidad.",
+                  rules: ["Unidad declarada (años, mm, %, ng/mL, mitosis/mm²).", "Rangos plausibles por variable.", "Distinguir valor medido de valor derivado (p. ej., edad al diagnóstico)."] },
+  codigo:       { label: "Código estandarizado", plural: "Códigos", def: "Valor codificado según una clasificación o terminología internacional.",
+                  rules: ["Validación contra la edición vigente del catálogo.", "Registrar versión o edición utilizada (CIE-O-3.x, edición AJCC/UICC).", "Coherencia cruzada topografía · morfología · comportamiento."] },
+  identificador:{ label: "Identificador", plural: "Identificadores", def: "Referencia documental que asegura la trazabilidad a la fuente.",
+                  rules: ["Unicidad por documento.", "Formato institucional definido.", "Enlace verificable al documento de origen."] },
+};
+const TYPE_ORDER = ["fecha", "categorica", "binario", "numerica", "codigo", "identificador"];
+
+const STDS = {
+  cie10: { label: "CIE-10", full: "Clasificación Internacional de Enfermedades, 10.ª revisión (OMS)" },
+  cieo:  { label: "CIE-O-3", full: "Clasificación Internacional de Enfermedades para Oncología, 3.ª edición (OMS)" },
+  tnm:   { label: "TNM", full: "Sistema TNM de estadificación (AJCC / UICC)" },
+  figo:  { label: "FIGO", full: "Estadificación de tumores ginecológicos (Federación Internacional de Ginecología y Obstetricia)" },
+  oms:   { label: "Clasificación OMS", full: "Clasificación OMS de tumores (WHO Classification of Tumours)" },
+  isup:  { label: "Gleason / ISUP", full: "Puntuación de Gleason y grupos de grado ISUP (próstata)" },
+  ges:   { label: "GES", full: "Garantías Explícitas en Salud (MINSAL, Chile)" },
+  cut:   { label: "CUT", full: "Código Único Territorial: división político-administrativa de Chile" },
+};
+
+const CATS = [
+  { n: 1, name: "Datos Demográficos Básicos", desc: "Información básica de identificación demográfica del paciente.", vars: [
+    ["Fecha de nacimiento", "fecha"], ["Edad al diagnóstico", "numerica", null, "Variable derivable de fecha de nacimiento y fecha de diagnóstico."],
+    ["Sexo", "categorica"], ["Nacionalidad", "categorica"], ["Pueblo originario", "categorica"] ] },
+  { n: 2, name: "Datos Geográficos / Territoriales", desc: "Información territorial asociada al lugar de residencia habitual del paciente.", vars: [
+    ["Región de vivienda habitual", "categorica", "cut"], ["Comuna de vivienda habitual", "categorica", "cut"] ] },
+  { n: 3, name: "Datos Socioeconómicos y Educacionales", desc: "Información territorial asociada al lugar de residencia habitual del paciente.", descFlag: true, vars: [
+    ["Nivel educacional", "categorica"], ["Actividad ocupacional", "categorica"] ] },
+  { n: 4, name: "Datos Clínico-Administrativos y de Previsión", desc: "Información relacionada con la previsión de salud y las condiciones administrativas asociadas a la atención oncológica.", vars: [
+    ["Previsión primera consulta", "categorica"], ["Previsión al diagnóstico", "categorica"], ["Convenio oncológico", "categorica"] ] },
+  { n: 5, name: "Información Administrativa y Regulación (GES)", desc: "Información administrativa, de categorización y trazabilidad institucional relacionada con el proceso GES.", vars: [
+    ["Categoría", "categorica"], ["Subcategoría", "categorica"], ["Clasificación GES", "categorica", "ges"],
+    ["Fecha de ingreso al GES", "fecha"], ["Clasificación del caso (Diagnóstico/Tratamiento)", "categorica"], ["Centro Responsable del Diagnóstico", "categorica"] ] },
+  { n: 6, name: "Cronología y Proceso Diagnóstico", desc: "Registra los hitos temporales y los respaldos documentales desde la sospecha hasta la confirmación.", vars: [
+    ["Fecha primera consulta", "fecha"], ["Base Diagnóstica", "categorica"], ["Fecha de toma del informe diagnóstico", "fecha"],
+    ["Fecha de emisión diagnóstico", "fecha"], ["Número de Informe diagnóstico", "identificador"] ] },
+  { n: 7, name: "Identificación y Codificación del Tumor", desc: "Información utilizada para identificar y clasificar la neoplasia mediante sistemas de codificación estandarizados.", vars: [
+    ["Tipo de Neoplasia", "categorica"], ["Diagnóstico CIE 10", "codigo", "cie10"], ["Código de Topografía (CIEO)", "codigo", "cieo"],
+    ["Código de Morfología (CIEO)", "codigo", "cieo"], ["Comportamiento", "codigo", "cieo", "En CIE-O corresponde al 5.º dígito de morfología (/0 a /3)."] ] },
+  { n: 8, name: "Características del Tumor Primario e Histopatología", desc: "Características anatómicas, histológicas y de extensión local del tumor primario.", vars: [
+    ["Grado de Diferenciación", "categorica", "cieo"], ["Focalidad Tumoral", "categorica"], ["Márgenes Quirúrgicos", "categorica"],
+    ["Invasión Linfovascular", "binario"], ["Lateralidad", "categorica"] ] },
+  { n: 9, name: "Estadificación y Extensión de la Enfermedad", desc: "Variables que describen la extensión de la enfermedad y su clasificación según sistemas de estadificación oncológica.", vars: [
+    ["cTNM (Estadiaje Clínico)", "codigo", "tnm"], ["pTNM (Estadiaje Patológico)", "codigo", "tnm"], ["ypTNM (Estadiaje Post-tratamiento)", "codigo", "tnm"],
+    ["Estadio de Diagnóstico", "categorica", "tnm"], ["Extensión al diagnóstico", "categorica"], ["Metástasis al diagnóstico", "binario"],
+    ["Fecha metástasis", "fecha"], ["Topografía Metástasis", "codigo", "cieo"] ] },
+  { n: 10, name: "Sistemas de Estadificación Específicos", desc: "Sistemas o variables de estadificación aplicables a determinados tipos de cáncer y sitios anatómicos.", vars: [
+    ["Topografía Específica (Piel)", "categorica"], ["FIGO", "codigo", "figo"],
+    ["Estadio/FIGO diagnóstico disponible en historia clínica", "binario", "figo", "Indicador de disponibilidad del dato: metadato de calidad más que variable clínica."] ] },
+  { n: 11, name: "Características Biológicas, Histopatológicas y Biomarcadores del Tumor",
+    desc: "Variables que caracterizan las propiedades histopatológicas, biológicas, moleculares y de biomarcadores del tumor, incluidos factores pronósticos y resultados de estudios para clasificar determinadas neoplasias.",
+    subs: [
+      { name: "Características histopatológicas y factores pronósticos", vars: [
+        ["S", "categorica", "tnm", "Sin definición en la fuente. Podría corresponder a la categoría S (marcadores séricos) de tumores de células germinales; requiere confirmación."],
+        ["Grado de la OMS", "categorica", "oms"], ["Tasa Mitótica", "numerica"], ["Breslow", "numerica", null, "Espesor en mm (melanoma)."],
+        ["Ulceración", "binario"], ["Gleason", "categorica", "isup"] ] },
+      { name: "Marcadores de inmunohistoquímica", vars: [
+        ["P16", "binario"], ["Her2 Estómago", "categorica"], ["Her2 Mama", "categorica"],
+        ["Receptor de Estrógeno", "categorica"], ["Receptor de Progesterona", "categorica"], ["Ki-67", "numerica", null, "Porcentaje de células positivas."] ] },
+      { name: "Alteraciones genéticas y perfil molecular", vars: [
+        ["KRAS", "categorica"], ["EGFR", "categorica"], ["FISH (Hibridación fluorescente in situ)", "categorica"], ["Subtipo Molecular", "categorica"] ] },
+      { name: "Infecciones oncogénicas y biomarcadores", vars: [
+        ["HPV", "binario"], ["PSA al diagnóstico", "numerica", null, "ng/mL."] ] },
+    ] },
+  { n: 12, name: "Gestión del Comité Oncológico", desc: "Información relacionada con la presentación, discusión y resolución del caso en comité oncológico.", vars: [
+    ["¿Presentado a Comité Oncológico?", "binario"], ["Tipo de Comité", "categorica"], ["Fecha de comité", "fecha"],
+    ["Clase de Caso", "categorica"], ["Intención de la resolución", "categorica"] ] },
+  { n: 13, name: "Historial de Tratamientos", desc: "Información sobre los tratamientos oncológicos recibidos, incluyendo modalidad, intención, institución responsable y fechas.", vars: [
+    ["Tipo de Centro responsable del tratamiento", "categorica"], ["Categoría de tratamiento", "categorica"], ["Subcategoría de tratamiento", "categorica"],
+    ["Intención del tratamiento", "categorica"], ["Fecha de inicio tratamiento (externos o en Fundación)", "fecha"], ["Fecha de término de tratamiento (externos o en Fundación)", "fecha"] ] },
+  { n: 14, name: "Evolución de la Enfermedad: Progresión y Recurrencia", desc: "Información relacionada con la aparición de progresión o recurrencia de la enfermedad durante la evolución del caso.",
+    subs: [
+      { name: "Progresión", vars: [
+        ["¿Presenta evidencia de progresión?", "binario"], ["Fecha de progresión", "fecha"],
+        ["Código de Topografía (CIEO) de progresión", "codigo", "cieo"], ["Tipo de progresión (extensión)", "categorica"] ] },
+      { name: "Recurrencia", vars: [
+        ["¿Presenta evidencia de recurrencia?", "binario"], ["Fecha de recurrencia", "fecha"],
+        ["Código de Topografía (CIEO) de recurrencia", "codigo", "cieo"], ["Tipo de recurrencia (extensión)", "categorica"] ] },
+    ] },
+  { n: 15, name: "Seguimiento Clínico", desc: "Información relacionada con el último contacto registrado y la situación clínica conocida durante el seguimiento.", vars: [
+    ["Fecha de último contacto con Fundación", "fecha"], ["Fecha de último contacto con médico tratante", "fecha"], ["Condición del caso al último contacto", "categorica"] ] },
+  { n: 16, name: "Desenlace y Estatus Vital", desc: "Información relacionada con el estado vital del paciente y, cuando corresponde, con su fallecimiento y causa de muerte.", vars: [
+    ["Estado Vital", "binario", null, "Vivo / fallecido."], ["Fecha de defunción", "fecha"], ["Causa de defunción", "codigo", "cie10"] ] },
+];
+
+/* Cronología esperada: aristas dirigidas entre variables de fecha (supuesto clínico, a validar) */
+const TIMELINE = [
+  ["Fecha de nacimiento", "Fecha primera consulta"],
+  ["Fecha primera consulta", "Fecha de toma del informe diagnóstico"],
+  ["Fecha de toma del informe diagnóstico", "Fecha de emisión diagnóstico"],
+  ["Fecha de emisión diagnóstico", "Fecha de ingreso al GES"],
+  ["Fecha de emisión diagnóstico", "Fecha de comité"],
+  ["Fecha de comité", "Fecha de inicio tratamiento (externos o en Fundación)"],
+  ["Fecha de inicio tratamiento (externos o en Fundación)", "Fecha de término de tratamiento (externos o en Fundación)"],
+  ["Fecha de término de tratamiento (externos o en Fundación)", "Fecha de progresión"],
+  ["Fecha de término de tratamiento (externos o en Fundación)", "Fecha de recurrencia"],
+  ["Fecha de progresión", "Fecha de último contacto con Fundación"],
+  ["Fecha de recurrencia", "Fecha de último contacto con Fundación"],
+  ["Fecha de último contacto con Fundación", "Fecha de defunción"],
+  ["Fecha de último contacto con médico tratante", "Fecha de defunción"],
+];
+
+/* Observaciones sobre el documento fuente */
+const PRIORITY = {
+  bloqueante: { label: "Bloqueante", def: "Impide construir la base de datos o validar el diccionario. Resolver primero." },
+  importante: { label: "Importante", def: "Genera ambigüedad al registrar o analizar. Resolver antes de publicar la versión oficial." },
+  menor:      { label: "Menor", def: "Mejora de calidad. Puede resolverse en una revisión posterior." },
+};
+const OBS = [
+  { sev: "bloqueante", t: "Cardinalidad no especificada", ref: [12, 13, 14],
+    d: "Comités (12), tratamientos (13) y progresión o recurrencia (14) pueden ocurrir varias veces por caso, pero el documento los describe como un único juego de campos.",
+    a: "Definir con el equipo de registro si cada caso admite uno o varios eventos de cada tipo (1:1 o 1:N). Condiciona el diseño de las tablas." },
+  { sev: "bloqueante", t: "Dominios de valores ausentes", ref: [],
+    d: "Ninguna variable declara su lista de valores, unidad ni obligatoriedad. Los tipos de dato de este grafo son inferidos.",
+    a: "Completar para cada variable: lista de valores permitidos, unidad (si es numérica) y si es obligatoria." },
+  { sev: "importante", t: "Descripción duplicada en la categoría 03", ref: [3],
+    d: "La descripción repite la de la categoría 02 («información territorial…»).",
+    a: "Reemplazar por: «Nivel educacional y actividad ocupacional del paciente»." },
+  { sev: "importante", t: "Variable «S» sin definición", ref: [11], vars: ["S"],
+    d: "Aparece sola en la subcategoría de factores pronósticos. Podría ser la categoría S de marcadores séricos (tumores germinales).",
+    a: "Confirmar su significado con el equipo de registro y renombrarla con un nombre explícito." },
+  { sev: "importante", t: "Posible solapamiento de grado", ref: [8, 11], vars: ["Grado de Diferenciación", "Grado de la OMS"],
+    d: "«Grado de diferenciación» (08) y «Grado de la OMS» (11) pueden capturar el mismo concepto según el tumor.",
+    a: "Definir el alcance de cada una (qué tumores la usan) o fusionarlas." },
+  { sev: "menor", t: "Metadato de calidad mezclado con variables clínicas", ref: [10], vars: ["Estadio/FIGO diagnóstico disponible en historia clínica"],
+    d: "Describe si el dato está disponible, no una característica del tumor.",
+    a: "Moverla a una sección de metadatos de completitud del registro." },
+  { sev: "menor", t: "Variable derivada", ref: [1], vars: ["Edad al diagnóstico"],
+    d: "Se calcula desde la fecha de nacimiento y la fecha de diagnóstico.",
+    a: "Marcarla como calculada y validar su coherencia de forma automática." },
+];
+const obsFor = n => OBS.filter(o => (n.kind === "cat" && o.ref.includes(n.n)) || (n.kind === "var" && (o.vars || []).includes(n.name)));
+const SEV_RANK = { bloqueante: 0, importante: 1, menor: 2 };
+const worstSev = list => list.slice().sort((a, b) => SEV_RANK[a.sev] - SEV_RANK[b.sev])[0]?.sev;
+
+
+/* ═══ 2. MODELO DEL GRAFO ═══════════════════════════════════════════════ */
+const slug = s => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+const pad = n => String(n).padStart(2, "0");
+
+const N = {};            // id → nodo
+const ALL_LINKS = [];    // aristas de todas las vistas; cada una con `views`
+const VARS = [];
+const byName = {};
+
+function addNode(n) { N[n.id] = n; return n; }
+function link(a, b, kind, views, extra = {}) { ALL_LINKS.push({ a, b, kind, views, ...extra }); }
+
+addNode({ id: "root", kind: "root", name: "Caso oncológico" });
+TYPE_ORDER.forEach(t => addNode({ id: "t:" + t, kind: "type", type: t, name: TYPES[t].label }));
+Object.entries(STDS).forEach(([k, s]) => addNode({ id: "s:" + k, kind: "std", std: k, name: s.label }));
+
+CATS.forEach(c => {
+  const cat = addNode({ id: "c:" + c.n, kind: "cat", n: c.n, name: c.name, desc: c.desc, descFlag: !!c.descFlag });
+  cat.vars = [];
+  link("root", cat.id, "struct", ["estructura", "combinada"]);
+  const parents = c.subs
+    ? c.subs.map((s, i) => {
+        const sub = addNode({ id: `c:${c.n}.${i + 1}`, kind: "sub", n: c.n, name: s.name, parent: cat.id, vars: [] });
+        link(cat.id, sub.id, "struct", ["estructura", "combinada"]);
+        return { node: sub, vars: s.vars };
+      })
+    : [{ node: cat, vars: c.vars }];
+
+  parents.forEach(({ node, vars }) => {
+    const groups = {};
+    vars.forEach(([name, type, std, note]) => {
+      const v = addNode({ id: "v:" + slug(name), kind: "var", name, type, std: std || null, note: note || null,
+                          cat: cat.id, parent: node.id });
+      VARS.push(v); byName[name] = v; cat.vars.push(v); if (node !== cat) node.vars.push(v);
+      (groups[type] = groups[type] || []).push(v);
+      link(node.id, v.id, "struct", ["estructura"]);
+      link("t:" + type, v.id, "type", ["tipo"]);
+      if (std) link(v.id, "s:" + std, "std", ["estructura", "combinada", "tipo"], { layer: "std" });
+    });
+    // vista combinada: categoría → grupo de metadata por tipo → variable
+    Object.entries(groups).forEach(([type, list]) => {
+      if (list.length >= 2) {
+        const g = addNode({ id: `g:${node.id}:${type}`, kind: "group", type, name: `${TYPES[type].plural} · ${list.length}`,
+                            parent: node.id, cat: cat.id, vars: list });
+        link(node.id, g.id, "struct", ["combinada"]);
+        list.forEach(v => link(g.id, v.id, "struct", ["combinada"], { short: true }));
+        link(g.id, "t:" + type, "typefaint", ["combinada"]);
+      } else {
+        link(node.id, list[0].id, "struct", ["combinada"]);
+        link(list[0].id, "t:" + type, "typefaint", ["combinada"]);
+      }
+    });
+  });
+});
+TYPE_ORDER.forEach(t => link("root", "t:" + t, "struct", ["tipo"]));
+TIMELINE.forEach(([a, b]) => {
+  if (byName[a] && byName[b]) link(byName[a].id, byName[b].id, "time", ["estructura", "combinada", "tipo"], { layer: "time" });
+});
+
+Object.values(N).forEach(n => { if (n.kind === "cat" || n.kind === "var") n.obsSev = worstSev(obsFor(n)) || null; });
+const typeCount = t => VARS.filter(v => v.type === t).length;
+const stdCount = s => VARS.filter(v => v.std === s).length;
+
+/* ═══ 3. ESTADO ═════════════════════════════════════════════════════════ */
+const state = {
+  view: "combinada",
+  types: new Set(TYPE_ORDER),
+  layerStd: false, layerTime: false, labelsAll: false,
+  rep: 1700, len: 1,
+  query: "",
+  mode: "detalle",          // simple | detalle
+  expanded: new Set(),      // categorías abiertas en modo simple
+};
+let tab = "nota", selected = null, hovered = null;
+
+const VIEW_HINT = {
+  estructura: "Fiel al documento: caso → 16 categorías → subcategorías → variables. El color de cada variable indica su tipo de dato.",
+  combinada: "Mantiene las 16 categorías y agrupa dentro de cada una la metadata por tipo de dato. Los nodos de tipo globales enlazan todos los grupos.",
+  tipo: "Catálogo de metadata: cada variable cuelga de su tipo de dato. Útil para definir reglas de validación por tipo.",
+};
+
+/* ═══ 4. SIMULACIÓN ═════════════════════════════════════════════════════ */
+const canvas = document.getElementById("graph");
+const ctx = canvas.getContext("2d");
+let W = 0, H = 0, DPR = 1;
+const view = { x: 0, y: 0, k: 1 };
+let visNodes = [], visLinks = [];
+let alpha = 1;
+
+function resize() {
+  DPR = window.devicePixelRatio || 1; W = window.innerWidth; H = window.innerHeight;
+  canvas.width = W * DPR; canvas.height = H * DPR;
+  canvas.style.width = W + "px"; canvas.style.height = H + "px";
+}
+window.addEventListener("resize", resize); resize();
+
+function radius(n) {
+  switch (n.kind) {
+    case "root": return 15;
+    case "cat": return state.mode === "simple" ? 11 + Math.sqrt(n.vars.length) * 2.8 : 7 + Math.sqrt(n.vars.length) * 1.9;
+    case "sub": return 6 + Math.sqrt(n.vars.length) * 1.2;
+    case "group": return 4.5 + Math.sqrt(n.vars.length) * 1.3;
+    case "type": return 11 + Math.sqrt(typeCount(n.type)) * 1.4;
+    case "std": return 7;
+    default: return 4.6;
+  }
+}
+Object.values(N).forEach(n => { n.r = radius(n); n.vx = 0; n.vy = 0; });
+
+// posiciones iniciales: categorías en orden horario (1 → 16), variables cerca de su categoría
+function seed() {
+  const R = 360;
+  CATS.forEach((c, i) => {
+    const a = -Math.PI / 2 + (i / CATS.length) * Math.PI * 2;
+    const cat = N["c:" + c.n];
+    cat.ax = Math.cos(a) * R; cat.ay = Math.sin(a) * R; cat.angle = a;
+    cat.x = cat.ax; cat.y = cat.ay;
+  });
+  Object.values(N).forEach(n => {
+    if (n.kind === "root") { n.x = 0; n.y = 0; }
+    else if (n.kind === "type") {
+      const i = TYPE_ORDER.indexOf(n.type), a = -Math.PI / 2 + (i / TYPE_ORDER.length) * Math.PI * 2;
+      n.tax = Math.cos(a) * 230; n.tay = Math.sin(a) * 230; n.x = n.tax * 0.4; n.y = n.tay * 0.4;
+    } else if (n.kind === "std") {
+      const keys = Object.keys(STDS), i = keys.indexOf(n.std), a = (i / keys.length) * Math.PI * 2;
+      n.x = Math.cos(a) * 520; n.y = Math.sin(a) * 520;
+    } else if (n.cat) {
+      const c = N[n.cat]; n.x = c.x + (Math.random() - .5) * 90; n.y = c.y + (Math.random() - .5) * 90;
+    } else if (n.kind === "sub") {
+      const c = N[n.parent]; n.x = c.x + (Math.random() - .5) * 60; n.y = c.y + (Math.random() - .5) * 60;
+    }
+  });
+}
+seed();
+
+function nodeVisible(n) {
+  if (state.mode === "simple") {
+    if (n.kind === "root" || n.kind === "cat") return true;
+    if (n.kind === "type" || n.kind === "std" && !state.layerStd) return false;
+    if (n.kind === "std") return VARS.some(v => v.std === n.std && state.expanded.has(v.cat) && state.types.has(v.type));
+    const cat = n.kind === "sub" ? n.parent : n.cat;
+    if (!state.expanded.has(cat)) return false;
+    return n.kind === "sub" ? true : state.types.has(n.type);
+  }
+  if (n.kind === "var") return state.types.has(n.type);
+  if (n.kind === "group") return state.types.has(n.type);
+  if (n.kind === "type") return state.view !== "estructura" && state.types.has(n.type);
+  if (n.kind === "std") return state.layerStd && VARS.some(v => v.std === n.std && state.types.has(v.type));
+  if (n.kind === "cat" || n.kind === "sub") return state.view !== "tipo";
+  return true;
+}
+
+function rebuild() {
+  const vis = new Set();
+  visNodes = Object.values(N).filter(n => { const ok = nodeVisible(n); if (ok) vis.add(n.id); return ok; });
+  visLinks = ALL_LINKS.filter(l => {
+    const lv = state.mode === "simple" ? "combinada" : state.view;
+    if (!l.views.includes(lv)) return false;
+    if (l.layer === "std" && !state.layerStd) return false;
+    if (l.layer === "time" && !state.layerTime) return false;
+    return vis.has(l.a) && vis.has(l.b);
+  }).map(l => ({ ...l, A: N[l.a], B: N[l.b] }));
+  visNodes.forEach(n => { n.r = radius(n); });
+  alpha = Math.max(alpha, 0.9);
+  updateStatus();
+}
+
+function spring(l) {
+  const L = state.len;
+  switch (l.kind) {
+    case "struct":
+      if (l.A.kind === "root") return state.view === "tipo" ? [170 * L, .05] : [260 * L, .02];
+      if (l.short) return [26 * L, .12];
+      if (l.B.kind === "group" || l.B.kind === "sub") return [48 * L, .09];
+      return [40 * L, .1];
+    case "type": return [70 * L, .07];
+    case "typefaint": return [260 * L, .0025];
+    case "std": return [150 * L, .006];
+    case "time": return [90 * L, .006];
+  }
+  return [60, .05];
+}
+
+function tick() {
+  if (alpha < 0.004) return;
+  const rep = state.rep, cut2 = Math.max(160000, rep * 95);
+  for (let i = 0; i < visNodes.length; i++) {
+    const a = visNodes[i];
+    for (let j = i + 1; j < visNodes.length; j++) {
+      const b = visNodes[j];
+      let dx = b.x - a.x, dy = b.y - a.y, d2 = dx * dx + dy * dy || 1;
+      if (d2 > cut2) continue;
+      const hub = (a.kind !== "var" ? 1.6 : 1) * (b.kind !== "var" ? 1.6 : 1);
+      const f = rep * hub / d2 * alpha, d = Math.sqrt(d2);
+      dx /= d; dy /= d;
+      a.vx -= dx * f; a.vy -= dy * f; b.vx += dx * f; b.vy += dy * f;
+    }
+  }
+  for (const l of visLinks) {
+    const [dist, k] = spring(l);
+    let dx = l.B.x - l.A.x, dy = l.B.y - l.A.y; const d = Math.sqrt(dx * dx + dy * dy) || 1;
+    const f = (d - dist) * k * alpha; dx /= d; dy /= d;
+    l.A.vx += dx * f; l.A.vy += dy * f; l.B.vx -= dx * f; l.B.vy -= dy * f;
+  }
+  for (const n of visNodes) {
+    // anclas suaves: preservan el orden 1 → 16 de las categorías y la ronda de tipos
+    if (n.kind === "cat" && state.view !== "tipo") { n.vx += (n.ax - n.x) * .03; n.vy += (n.ay - n.y) * .03; }
+    if (n.kind === "type") {
+      const s = state.view === "tipo" ? 1.1 : 0.6;
+      n.vx += (n.tax * s - n.x) * .03; n.vy += (n.tay * s - n.y) * .03;
+    }
+    if (n.kind === "root") { n.vx += -n.x * .05; n.vy += -n.y * .05; }
+    n.vx += -n.x * .0015 * alpha; n.vy += -n.y * .0015 * alpha;
+    if (n !== dragNode) { n.x += n.vx; n.y += n.vy; }
+    n.vx *= .82; n.vy *= .82;
+  }
+  alpha *= .992;
+}
+
+/* ═══ 5. DIBUJO ═════════════════════════════════════════════════════════ */
+const css = name => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+let P = {};
+function readPalette() {
+  P = { edge: css("--edge"), ink: css("--ink"), dim: css("--ink-dim"), faint: css("--ink-faint"), bg: css("--bg"),
+        accent: css("--accent"), glow: css("--glow"), hub: css("--hub"), warn: css("--warn") };
+  TYPE_ORDER.forEach(t => P[t] = css("--t-" + t));
+}
+readPalette();
+const mq = window.matchMedia("(prefers-color-scheme: dark)");
+mq.addEventListener?.("change", readPalette);
+new MutationObserver(readPalette).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+
+function matches(n) {
+  if (!state.query) return false;
+  const q = slug(state.query);
+  return slug(n.name).includes(q) || (n.kind === "var" && slug(TYPES[n.type].label).includes(q));
+}
+
+function neighborhoodOf(focus) {
+  const s = new Set([focus.id]);
+  for (const l of visLinks) { if (l.a === focus.id) s.add(l.b); if (l.b === focus.id) s.add(l.a); }
+  return s;
+}
+
+function draw() {
+  tick();
+  ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  ctx.clearRect(0, 0, W, H);
+  ctx.translate(view.x, view.y); ctx.scale(view.k, view.k);
+
+  const focus = hovered || selected;
+  const hood = focus ? neighborhoodOf(focus) : null;
+  const searching = !!state.query;
+  const hits = searching ? new Set(visNodes.filter(matches).map(n => n.id)) : null;
+  const lit = id => hood ? hood.has(id) : hits ? hits.has(id) : true;
+
+  // aristas
+  for (const l of visLinks) {
+    const on = focus && (l.a === focus.id || l.b === focus.id);
+    let color = P.edge, width = 1, a = .6, dash = null;
+    if (l.kind === "typefaint") { color = P[l.B.type] || P.edge; a = .1; }
+    if (l.kind === "type") { color = P[l.A.type]; a = .35; }
+    if (l.kind === "std") { color = P.accent; a = .3; dash = [2, 3]; }
+    if (l.kind === "time") { color = P.fecha; a = .75; width = 1.4; dash = [5, 4]; }
+    if (focus) { a = on ? .95 : .05; if (on) width += .5; }
+    else if (hits) a *= (hits.has(l.a) || hits.has(l.b)) ? 1 : .25;
+    ctx.globalAlpha = a; ctx.strokeStyle = on && l.kind === "struct" ? P.accent : color; ctx.lineWidth = width;
+    ctx.setLineDash(dash || []);
+    ctx.beginPath(); ctx.moveTo(l.A.x, l.A.y); ctx.lineTo(l.B.x, l.B.y); ctx.stroke();
+    if (l.kind === "time") {   // punta de flecha: dirección temporal
+      const ang = Math.atan2(l.B.y - l.A.y, l.B.x - l.A.x), tx = l.B.x - Math.cos(ang) * (l.B.r + 3), ty = l.B.y - Math.sin(ang) * (l.B.r + 3);
+      ctx.setLineDash([]); ctx.fillStyle = color; ctx.beginPath();
+      ctx.moveTo(tx, ty); ctx.lineTo(tx - Math.cos(ang - .45) * 7, ty - Math.sin(ang - .45) * 7);
+      ctx.lineTo(tx - Math.cos(ang + .45) * 7, ty - Math.sin(ang + .45) * 7); ctx.closePath(); ctx.fill();
+    }
+  }
+  ctx.setLineDash([]);
+
+  // nodos
+  for (const n of visNodes) {
+    const on = lit(n.id);
+    ctx.globalAlpha = on ? 1 : (state.mode === "simple" && n.kind === "cat") ? .55 : .14;
+    if (focus && n.id === focus.id) {
+      ctx.beginPath(); ctx.arc(n.x, n.y, n.r + 9, 0, Math.PI * 2); ctx.fillStyle = P.glow; ctx.fill();
+    }
+    ctx.beginPath();
+    if (n.kind === "std") {
+      const r = n.r; ctx.moveTo(n.x, n.y - r); ctx.lineTo(n.x + r, n.y); ctx.lineTo(n.x, n.y + r); ctx.lineTo(n.x - r, n.y); ctx.closePath();
+      ctx.fillStyle = P.accent; ctx.fill();
+    } else if (n.kind === "group" || n.kind === "type") {
+      ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
+      ctx.fillStyle = P.bg; ctx.fill();
+      ctx.lineWidth = n.kind === "type" ? 3 : 2; ctx.strokeStyle = P[n.type]; ctx.stroke();
+      if (n.kind === "type") { ctx.beginPath(); ctx.arc(n.x, n.y, n.r * .45, 0, Math.PI * 2); ctx.fillStyle = P[n.type]; ctx.fill(); }
+    } else {
+      ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
+      ctx.fillStyle = n.kind === "var" ? P[n.type] : n.kind === "root" ? P.accent : P.hub;
+      ctx.fill(); ctx.lineWidth = 1.5; ctx.strokeStyle = P.bg; ctx.stroke();
+      const ws = n.obsSev;                     // anillo de observación: color según prioridad de corrección
+      if (ws) {
+        ctx.beginPath(); ctx.arc(n.x, n.y, n.r + 3.5, 0, Math.PI * 2); ctx.lineWidth = ws === "bloqueante" ? 2 : 1.3;
+        ctx.strokeStyle = ws === "bloqueante" ? P.warn : ws === "importante" ? P.accent : P.dim;
+        ctx.setLineDash(ws === "menor" ? [2, 2] : []); ctx.stroke(); ctx.setLineDash([]);
+      }
+    }
+    if (n.kind === "cat" && state.mode === "simple") {   // anillo de composición por tipo de dato
+      let a0 = -Math.PI / 2; const tot = n.vars.length;
+      for (const t of TYPE_ORDER) {
+        const k = n.vars.filter(v => v.type === t).length; if (!k) continue;
+        const a1 = a0 + (k / tot) * Math.PI * 2;
+        ctx.beginPath(); ctx.arc(n.x, n.y, n.r + 5, a0 + .03, a1 - .03); ctx.lineWidth = 4; ctx.strokeStyle = P[t]; ctx.stroke();
+        a0 = a1;
+      }
+    }
+    if (n.kind === "cat") {   // número de categoría dentro del nodo
+      ctx.fillStyle = P.bg; ctx.font = `600 ${state.mode === "simple" ? 11 : 9.5}px 'JetBrains Mono', monospace`; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+      ctx.fillText(n.n, n.x, n.y + .5); ctx.textBaseline = "alphabetic";
+    }
+  }
+  drawLabels(focus, hood, hits, lit);
+  ctx.globalAlpha = 1;
+  requestAnimationFrame(draw);
+}
+
+
+/* ── etiquetas sin solapamiento ───────────────────────────────────────────
+   Colocación voraz por prioridad, recalculada en cada cuadro:
+   1) foco y su vecindario, coincidencias de búsqueda; 2) raíz, categorías, tipos;
+   3) subcategorías, grupos, terminologías; 4) variables.
+   Cada etiqueta prueba 4 posiciones (abajo, arriba, derecha, izquierda), empezando
+   por la del cuadro anterior para evitar parpadeo. Si ninguna cabe: las categorías
+   se acortan a su número; el resto se oculta hasta acercar el zoom.
+   El tamaño de letra en pantalla se mantiene legible con cualquier zoom.        */
+const measureCache = new Map();
+function measure(text, font) {
+  const key = font + "|" + text;
+  let w = measureCache.get(key);
+  if (w === undefined) { ctx.font = font; w = ctx.measureText(text).width; measureCache.set(key, w); if (measureCache.size > 4000) measureCache.clear(); }
+  return w;
+}
+function wrapLabel(text, max) {
+  if (text.length <= max) return [text];
+  const words = text.split(" "), lines = [""];
+  for (const w of words) {
+    const cur = lines[lines.length - 1];
+    if ((cur + " " + w).trim().length > max && cur) lines.push(w); else lines[lines.length - 1] = (cur + " " + w).trim();
+  }
+  if (lines.length > 2) { lines.length = 2; lines[1] = lines[1].slice(0, max - 1) + "…"; }
+  return lines;
+}
+const LABEL_PRI = { root: 1, cat: 2, type: 3, sub: 4, group: 5, std: 5, var: 7 };
+function drawLabels(focus, hood, hits, lit) {
+  const k = view.k;
+  const scr = base => base * Math.min(1.1, Math.max(.85, k));        // tamaño en pantalla (px)
+  const cands = [];
+  for (const n of visNodes) {
+    const inHood = hood && hood.has(n.id), hit = hits && hits.has(n.id), isFocus = focus && focus.id === n.id;
+    const show = state.labelsAll || n.kind !== "var" || k > 1.25 || inHood || hit;
+    if (!show) continue;
+    let pri = LABEL_PRI[n.kind] || 6;
+    if (inHood || hit) pri -= 10;
+    if (isFocus) pri = -99;
+    cands.push({ n, pri, isFocus, on: lit(n.id), was: n.lblShown ? 0 : 1 });
+  }
+  cands.sort((x, y) => x.pri - y.pri || x.was - y.was);
+  const placed = [];
+  const hubs = visNodes.filter(n => n.kind !== "var");
+  const overlaps = (b, list) => list.some(o => b.x0 < o.x1 && b.x1 > o.x0 && b.y0 < o.y1 && b.y1 > o.y0);
+  const nodeHit = (b, n, list) => list.some(m => m !== n && b.x0 < m.x + m.r && b.x1 > m.x - m.r && b.y0 < m.y + m.r && b.y1 > m.y - m.r);
+  visNodes.forEach(n => { n.lblShown = false; });
+  for (const c of cands) {
+    const n = c.n;
+    const baseSize = n.kind === "root" ? 13 : n.kind === "cat" || n.kind === "type" ? 11.5 : n.kind === "var" ? 10.5 : 10;
+    const size = scr(baseSize) / k;                                     // en unidades del mundo
+    const weight = (n.kind === "cat" || n.kind === "type" || n.kind === "root" || c.isFocus) ? "600 " : "";
+    const font = `${weight}${size}px 'Albert Sans', sans-serif`;
+    let text = n.kind === "cat" ? `${pad(n.n)} · ${n.name}` : n.name;
+    if (n.kind === "var" && !c.isFocus && text.length > 34) text = text.slice(0, 32) + "…";
+    let lines = n.kind === "cat" || n.kind === "sub" ? wrapLabel(text, c.isFocus ? 34 : 24) : [text];
+    const sub2 = n.kind === "cat" && state.mode === "simple" ? `${n.vars.length} variables · ${state.expanded.has(n.id) ? "abierta" : "clic para abrir"}` : null;
+    const subSize = scr(9.5) / k, subFont = `${subSize}px 'JetBrains Mono', monospace`;
+    const lh = size * 1.22;
+    const tryPlace = (lns, withSub) => {
+      const w = Math.max(...lns.map(l => measure(l, font)), withSub ? measure(sub2, subFont) : 0) + 4 / k;
+      const h = lns.length * lh + (withSub ? subSize * 1.3 : 0);
+      const gap = (n.kind === "cat" && state.mode === "simple" ? 9 : 4) / k;
+      const ring = n.r + gap;
+      const opts = {
+        below: { x0: n.x - w / 2, y0: n.y + ring, x1: n.x + w / 2, y1: n.y + ring + h },
+        above: { x0: n.x - w / 2, y0: n.y - ring - h, x1: n.x + w / 2, y1: n.y - ring },
+        right: { x0: n.x + ring, y0: n.y - h / 2, x1: n.x + ring + w, y1: n.y + h / 2 },
+        left:  { x0: n.x - ring - w, y0: n.y - h / 2, x1: n.x - ring, y1: n.y + h / 2 },
+      };
+      const order = [n.lblPos, "below", "above", "right", "left"].filter((v, i, arr) => v && arr.indexOf(v) === i);
+      for (const pos of order) {
+        const b = opts[pos];
+        if (!overlaps(b, placed) && !nodeHit(b, n, n.kind === "var" ? visNodes : hubs)) return { b, pos, lns, withSub };
+      }
+      return c.isFocus ? { b: opts[order[0]], pos: order[0], lns, withSub } : null;   // el foco siempre se muestra
+    };
+    let fit = tryPlace(lines, !!sub2);
+    if (!fit && sub2) fit = tryPlace(lines, false);
+    if (!fit && n.kind === "cat") fit = tryPlace([pad(n.n)], false);   // categoría: se acorta a su número
+    if (!fit) continue;
+    placed.push(fit.b); n.lblPos = fit.pos; n.lblShown = true;
+    // dibujo
+    ctx.globalAlpha = c.on ? 1 : (state.mode === "simple" && n.kind === "cat") ? .55 : .35;
+    ctx.font = font; ctx.lineWidth = 3 / k; ctx.strokeStyle = P.bg; ctx.lineJoin = "round";
+    ctx.fillStyle = n.kind === "group" ? P[n.type] : c.on ? P.ink : P.dim;
+    const cx = (fit.b.x0 + fit.b.x1) / 2;
+    ctx.textAlign = fit.pos === "right" ? "left" : fit.pos === "left" ? "right" : "center";
+    const tx = fit.pos === "right" ? fit.b.x0 + 2 / k : fit.pos === "left" ? fit.b.x1 - 2 / k : cx;
+    ctx.textBaseline = "top";
+    fit.lns.forEach((l, i) => { const y = fit.b.y0 + i * lh; ctx.strokeText(l, tx, y); ctx.fillText(l, tx, y); });
+    if (fit.withSub) {
+      ctx.font = subFont; ctx.fillStyle = P.faint;
+      const y = fit.b.y0 + fit.lns.length * lh + subSize * .15;
+      ctx.strokeText(sub2, tx, y); ctx.fillText(sub2, tx, y);
+    }
+    ctx.textBaseline = "alphabetic";
+  }
+  ctx.globalAlpha = 1;
+}
+
+/* ═══ 6. INTERACCIÓN ════════════════════════════════════════════════════ */
+let dragNode = null, panning = false, last = null, downAt = null;
+const pointers = new Map(); let pinch = null;
+const toWorld = (px, py) => ({ x: (px - view.x) / view.k, y: (py - view.y) / view.k });
+function nodeAt(px, py) {
+  const p = toWorld(px, py);
+  for (let i = visNodes.length - 1; i >= 0; i--) {
+    const n = visNodes[i], dx = p.x - n.x, dy = p.y - n.y, r = n.r + 5;
+    if (dx * dx + dy * dy < r * r) return n;
+  }
+  return null;
+}
+canvas.addEventListener("pointerdown", e => {
+  pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+  canvas.setPointerCapture(e.pointerId);
+  if (pointers.size === 2) {
+    const [p1, p2] = [...pointers.values()];
+    pinch = { d: Math.hypot(p1.x - p2.x, p1.y - p2.y), k: view.k, cx: (p1.x + p2.x) / 2, cy: (p1.y + p2.y) / 2 };
+    dragNode = null; panning = false; return;
+  }
+  const n = nodeAt(e.clientX, e.clientY);
+  if (n) { dragNode = n; alpha = Math.max(alpha, .25); } else { panning = true; canvas.classList.add("dragging"); }
+  last = downAt = { x: e.clientX, y: e.clientY };
+});
+canvas.addEventListener("pointermove", e => {
+  if (pointers.has(e.pointerId)) pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+  if (pinch && pointers.size === 2) {
+    const [p1, p2] = [...pointers.values()];
+    zoomAt(pinch.cx, pinch.cy, pinch.k * Math.hypot(p1.x - p2.x, p1.y - p2.y) / pinch.d); return;
+  }
+  if (dragNode) { const p = toWorld(e.clientX, e.clientY); dragNode.x = p.x; dragNode.y = p.y; dragNode.vx = dragNode.vy = 0; alpha = Math.max(alpha, .2); }
+  else if (panning && last) { view.x += e.clientX - last.x; view.y += e.clientY - last.y; last = { x: e.clientX, y: e.clientY }; }
+  else if (e.pointerType === "mouse") { hovered = nodeAt(e.clientX, e.clientY); canvas.style.cursor = hovered ? "pointer" : "grab"; }
+});
+function endPointer(e) {
+  pointers.delete(e.pointerId);
+  if (pointers.size < 2) pinch = null;
+  const moved = downAt ? Math.hypot(e.clientX - downAt.x, e.clientY - downAt.y) : 99;
+  if (moved < 5) {
+    const n = nodeAt(e.clientX, e.clientY);
+    if (n) {
+      if (state.mode === "simple" && n.kind === "cat" && !state.expanded.has(n.id)) {
+        remember(); state.expanded.add(n.id); rebuild();          // un solo paso de historial
+        selected = n; tab = "nota"; openPanel(true); renderTab();
+      } else selectNode(n);
+    } else if (!dragNode && selected) { remember(); selected = null; if (tab === "nota") renderTab(); syncBack(); }
+  }
+  dragNode = null; panning = false; last = null; downAt = null; canvas.classList.remove("dragging");
+}
+canvas.addEventListener("pointerup", endPointer);
+canvas.addEventListener("pointercancel", endPointer);
+canvas.addEventListener("pointerleave", () => { hovered = null; });
+function zoomAt(px, py, k) {
+  k = Math.min(3.5, Math.max(.25, k)); const p = toWorld(px, py);
+  view.x = px - p.x * k; view.y = py - p.y * k; view.k = k;
+}
+canvas.addEventListener("wheel", e => { e.preventDefault(); zoomAt(e.clientX, e.clientY, view.k * (e.deltaY < 0 ? 1.1 : .9)); }, { passive: false });
+
+function graphArea() {
+  const panelOpen = document.getElementById("panel").classList.contains("open") && W > 900;
+  const settingsOpen = !document.getElementById("settings").hidden && W > 900;
+  const left = settingsOpen ? 300 : 0, right = panelOpen ? Math.min(27 * 16, W * .94) : 0;
+  return { x0: left, x1: W - right, y0: 60, y1: H - 20 };
+}
+function fit() {
+  if (!visNodes.length) return;
+  let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+  visNodes.forEach(n => { minX = Math.min(minX, n.x); maxX = Math.max(maxX, n.x); minY = Math.min(minY, n.y); maxY = Math.max(maxY, n.y); });
+  const A = graphArea(), pad = 70, padX = 150;                  // margen lateral extra para etiquetas
+  const k = Math.min(1.4, Math.max(.25, Math.min((A.x1 - A.x0 - padX * 2) / (maxX - minX || 1), (A.y1 - A.y0 - pad * 2) / (maxY - minY || 1))));
+  view.k = k; view.x = (A.x0 + A.x1) / 2 - ((minX + maxX) / 2) * k; view.y = (A.y0 + A.y1) / 2 - ((minY + maxY) / 2) * k;
+}
+function centerOn(n) {
+  const A = graphArea(); view.x = (A.x0 + A.x1) / 2 - n.x * view.k; view.y = (A.y0 + A.y1) / 2 - n.y * view.k;
+}
+
+/* ═══ 7. PANEL ══════════════════════════════════════════════════════════ */
+const panel = document.getElementById("panel");
+const body = document.getElementById("panel-body");
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const wl = (n, label) => `<span class="wl" data-id="${esc(n.id)}" role="link" tabindex="0">[[${esc(label || n.name)}]]</span>`;
+const dot = t => `<i style="background:var(--t-${t})"></i>`;
+const chip = n => `<button class="chip" data-id="${esc(n.id)}">${n.kind === "var" ? dot(n.type) : ""}${esc(n.name)}</button>`;
+const catLabel = c => `${pad(c.n)} · ${c.name}`;
+
+function composition(vars) {
+  const total = vars.length || 1;
+  return `<div class="comp" role="img" aria-label="Composición por tipo de dato">${TYPE_ORDER.map(t => {
+    const k = vars.filter(v => v.type === t).length;
+    return k ? `<i style="width:${(100 * k / total).toFixed(1)}%;background:var(--t-${t})" title="${TYPES[t].label}: ${k}"></i>` : "";
+  }).join("")}</div>`;
+}
+function groupedVars(vars) {
+  return TYPE_ORDER.filter(t => vars.some(v => v.type === t)).map(t => {
+    const list = vars.filter(v => v.type === t);
+    return `<div class="gh">${dot(t)} ${TYPES[t].plural} · ${list.length}</div><div class="chips">${list.map(chip).join("")}</div>`;
+  }).join("");
+}
+
+function noteVar(v) {
+  const cat = N[v.cat], parent = N[v.parent];
+  const yaml = [
+    ["variable", `<span class="v">${esc(v.name)}</span>`],
+    ["categoria", wl(cat, catLabel(cat))],
+    parent !== cat ? ["subcategoria", wl(parent)] : null,
+    ["tipo_dato", `${wl(N["t:" + v.type], v.type)} <span class="inf"># inferido</span>`],
+    ["estandar", v.std ? `${wl(N["s:" + v.std])} <span class="inf"># inferido</span>` : `<span class="v">—</span>`],
+    ["fuente", `<span class="v">${esc(SOURCE.file)}</span>`],
+    ["validacion", `<span class="inf">pendiente</span>`],
+  ].filter(Boolean).map(([k, val]) => `<span class="k">${k}:</span> ${val}`).join("\n");
+  const siblings = VARS.filter(x => x.parent === v.parent && x !== v);
+  const sameType = VARS.filter(x => x.type === v.type && x.cat !== v.cat);
+  const timeIn = ALL_LINKS.filter(l => l.kind === "time" && l.b === v.id).map(l => N[l.a]);
+  const timeOut = ALL_LINKS.filter(l => l.kind === "time" && l.a === v.id).map(l => N[l.b]);
+  return `
+    <div class="eyebrow">Variable · ${esc(TYPES[v.type].label)}</div>
+    <h2>${esc(v.name)}</h2>
+    <div class="yaml">---\n${yaml}\n---</div>
+    ${v.note ? `<p style="margin-top:.8rem">${esc(v.note)}</p>` : ""}
+    ${obsFor(v).length ? `<h3>Observaciones · ${obsFor(v).length}</h3>${obsFor(v).map(obsCard).join("")}` : ""}
+    ${timeIn.length || timeOut.length ? `<h3>Cronología esperada</h3><p>${timeIn.length ? "Posterior a " + timeIn.map(n => wl(n)).join(", ") + ". " : ""}${timeOut.length ? "Anterior a " + timeOut.map(n => wl(n)).join(", ") + "." : ""}</p>` : ""}
+    <h3>Reglas de calidad sugeridas por tipo</h3>
+    <ul class="rules">${TYPES[v.type].rules.map(r => `<li>${esc(r)}</li>`).join("")}</ul>
+    <h3>Misma ${parent !== cat ? "subcategoría" : "categoría"} · ${siblings.length}</h3>
+    <div class="chips">${siblings.map(chip).join("") || '<p>Sin otras variables.</p>'}</div>
+    <h3>Mismo tipo en otras categorías · ${sameType.length}</h3>
+    <div class="chips">${sameType.slice(0, 24).map(chip).join("")}${sameType.length > 24 ? `<button class="chip" data-id="t:${v.type}">+${sameType.length - 24} más</button>` : ""}</div>`;
+}
+
+function noteCat(c) {
+  const subs = Object.values(N).filter(n => n.kind === "sub" && n.parent === c.id);
+  return `
+    <div class="eyebrow">Categoría ${pad(c.n)} de 16 · ${c.vars.length} variables</div>
+    <h2>${esc(c.name)}</h2>
+    ${state.mode === "simple" ? `<button class="btn-inline" id="toggle-cat" data-cat="${c.id}">${state.expanded.has(c.id) ? "Cerrar categoría en el grafo" : "Abrir categoría en el grafo"}</button>` : ""}
+    <p>${esc(c.desc)}</p>
+    ${obsFor(c).length ? `<h3>Observaciones · ${obsFor(c).length}</h3>${obsFor(c).map(obsCard).join("")}` : ""}
+    ${composition(c.vars)}
+    ${subs.length ? `<h3>Subcategorías · ${subs.length}</h3><div class="chips">${subs.map(s => `<button class="chip" data-id="${esc(s.id)}">${esc(s.name)} · ${s.vars.length}</button>`).join("")}</div>` : ""}
+    <h3>Metadata agrupada por tipo</h3>
+    <div class="grouplist">${groupedVars(c.vars)}</div>`;
+}
+function noteSub(s) {
+  const c = N[s.parent];
+  return `
+    <div class="eyebrow">Subcategoría · ${s.vars.length} variables</div>
+    <h2>${esc(s.name)}</h2>
+    <p>Pertenece a ${wl(c, catLabel(c))}.</p>
+    ${composition(s.vars)}
+    <div class="grouplist">${groupedVars(s.vars)}</div>`;
+}
+function noteGroup(g) {
+  const parent = N[g.parent];
+  return `
+    <div class="eyebrow">Grupo de metadata · tipo × categoría</div>
+    <h2>${esc(TYPES[g.type].plural)} en ${esc(parent.kind === "cat" ? catLabel(parent) : parent.name)}</h2>
+    <p>${wl(N["t:" + g.type], TYPES[g.type].label)} · ${g.vars.length} variables.</p>
+    <div class="chips">${g.vars.map(chip).join("")}</div>`;
+}
+function noteType(t) {
+  const list = VARS.filter(v => v.type === t.type);
+  const perCat = CATS.map(c => ({ c: N["c:" + c.n], k: list.filter(v => v.cat === "c:" + c.n).length })).filter(x => x.k);
+  return `
+    <div class="eyebrow">Tipo de dato · ${list.length} de ${VARS.length} variables</div>
+    <h2>${esc(TYPES[t.type].label)}</h2>
+    <p>${esc(TYPES[t.type].def)}</p>
+    <h3>Reglas de validación sugeridas</h3>
+    <ul class="rules">${TYPES[t.type].rules.map(r => `<li>${esc(r)}</li>`).join("")}</ul>
+    <h3>Distribución por categoría</h3>
+    ${perCat.map(({ c, k }) => `<div class="cat-row" data-id="${c.id}"><span class="num">${pad(c.n)}</span><span class="nm">${esc(c.name)}</span><span class="ct">${k}</span></div>`).join("")}`;
+}
+function noteStd(s) {
+  const list = VARS.filter(v => v.std === s.std);
+  return `
+    <div class="eyebrow">Terminología · asociación inferida</div>
+    <h2>${esc(STDS[s.std].label)}</h2>
+    <p>${esc(STDS[s.std].full)}.</p>
+    <h3>Variables que la usan · ${list.length}</h3>
+    <div class="chips">${list.map(chip).join("")}</div>`;
+}
+function noteRoot() {
+  return `
+    <div class="eyebrow">Nodo raíz</div>
+    <h2>Caso oncológico</h2>
+    <p>Entidad central del registro. Las 16 categorías se disponen en sentido horario siguiendo la trayectoria del caso: identificación del paciente, diagnóstico, caracterización del tumor, gestión y tratamiento, evolución y desenlace.</p>
+    ${composition(VARS)}
+    <div class="grouplist">${TYPE_ORDER.map(t => `<div class="gh">${dot(t)} ${TYPES[t].plural} · ${typeCount(t)}</div>`).join("")}</div>`;
+}
+
+function renderNota() {
+  if (!selected) return renderIntro();
+  const n = selected;
+  body.innerHTML = n.kind === "var" ? noteVar(n) : n.kind === "cat" ? noteCat(n) : n.kind === "sub" ? noteSub(n)
+    : n.kind === "group" ? noteGroup(n) : n.kind === "type" ? noteType(n) : n.kind === "std" ? noteStd(n) : noteRoot();
+}
+function renderIntro() {
+  body.innerHTML = `
+    <div class="eyebrow">Propuesta · grafo de conocimiento</div>
+    <h2>Diccionario de variables del registro oncológico, como red navegable</h2>
+    <p>Cada variable es una nota; cada categoría, un nodo central. El color identifica el tipo de dato y los grupos anillados reúnen, dentro de cada categoría, la metadata del mismo tipo.</p>
+    <dl class="kv">
+      <dt>Categorías</dt><dd>16</dd>
+      <dt>Subcategorías</dt><dd>${Object.values(N).filter(n => n.kind === "sub").length}</dd>
+      <dt>Variables</dt><dd>${VARS.length}</dd>
+      <dt>Tipos de dato</dt><dd>${TYPE_ORDER.length} (inferidos)</dd>
+      <dt>Terminologías</dt><dd>${Object.keys(STDS).length} (inferidas)</dd>
+    </dl>
+    ${composition(VARS)}
+    <h3>Cómo leerlo</h3>
+    <ul class="rules">
+      <li>Pasa el cursor por un nodo para aislar su vecindario; haz clic para abrir su nota.</li>
+      <li>Arriba eliges el nivel de detalle: <b>Simplificada</b> (16 categorías, se abren con un clic) o <b>Detallada</b> (red completa).</li>
+      <li>En la versión detallada, cambia de vista en Ajustes: Estructura (fiel al documento), Combinada o Por tipo.</li>
+      <li><b>← Atrás</b> (o Alt + ←) vuelve al paso anterior; <b>Inicio</b> regresa a esta portada.</li>
+      <li>Activa las capas de terminologías o cronología para ver relaciones transversales.</li>
+      <li>Los anillos alrededor de un nodo indican observaciones de calidad: rojo = bloqueante, dorado = importante, punteado = menor. El detalle está en la pestaña Trazabilidad.</li>
+    </ul>`;
+}
+function renderCategorias() {
+  body.innerHTML = `<div class="eyebrow">Estructura del documento</div><h2>16 categorías</h2>
+    <p>La barra muestra la composición por tipo de dato de cada categoría.</p>` +
+    CATS.map(c => { const n = N["c:" + c.n]; return `
+      <div class="cat-row" data-id="${n.id}"><span class="num">${pad(c.n)}</span><span class="nm">${esc(c.name)}</span><span class="ct">${n.vars.length}</span>${composition(n.vars)}</div>`; }).join("");
+}
+function renderTipos() {
+  body.innerHTML = `<div class="eyebrow">Metadata agrupada por tipo</div><h2>6 tipos de dato</h2>
+    <p>Asignación inferida desde el nombre de cada variable y la convención clínica; requiere validación contra el diccionario operativo.</p>` +
+    TYPE_ORDER.map(t => `
+      <div class="type-card">
+        <div class="hd" data-id="t:${t}" role="button" tabindex="0"><i style="width:.7rem;height:.7rem;border-radius:50%;display:inline-block;background:var(--t-${t})"></i><b>${TYPES[t].label}</b><span class="ct">${typeCount(t)}</span></div>
+        <p>${esc(TYPES[t].def)}</p>
+        <ul class="rules">${TYPES[t].rules.map(r => `<li>${esc(r)}</li>`).join("")}</ul>
+      </div>`).join("");
+}
+function obsCard(o) {
+  const short = t => t.length > 34 ? t.slice(0, 32) + "…" : t;
+  const refs = [...o.ref.map(r => ({ id: "c:" + r, label: pad(r) + " · " + short(N["c:" + r].name) })),
+                ...(o.vars || []).map(v => ({ id: byName[v]?.id, label: v })).filter(x => x.id)];
+  return `<div class="obs"><span class="tag ${o.sev}">${PRIORITY[o.sev].label}</span><b>${esc(o.t)}</b>
+    <p>${esc(o.d)}</p><p class="act"><b>Qué hacer:</b> ${esc(o.a)}</p>
+    ${refs.length ? `<div class="chips" style="margin-top:.4rem">${refs.map(r => `<button class="chip" data-id="${esc(r.id)}">${esc(r.label)}</button>`).join("")}</div>` : `<p style="font-size:.76rem">Afecta a todas las variables.</p>`}</div>`;
+}
+function renderTraza() {
+  body.innerHTML = `
+    <div class="eyebrow">Trazabilidad</div><h2>Fuente, método y límites</h2>
+    <dl class="kv">
+      <dt>Fuente</dt><dd>${esc(SOURCE.file)} (${esc(SOURCE.origin)}, ${esc(SOURCE.date)})</dd>
+      <dt>Transcripción</dt><dd>Literal: 16 categorías, 6 subcategorías, ${VARS.length} variables. Solo se normalizaron tildes y mayúsculas en nombres de variables.</dd>
+      <dt>Tipo de dato</dt><dd>Inferido desde el nombre y la convención clínica. No proviene del documento.</dd>
+      <dt>Terminologías</dt><dd>Asociadas por inferencia (CIE-10, CIE-O-3, TNM, FIGO, OMS, Gleason/ISUP, GES, CUT).</dd>
+      <dt>Cronología</dt><dd>Secuencia clínica esperada entre fechas; propuesta como base de reglas de coherencia.</dd>
+      <dt>Grupos</dt><dd>Se crea un grupo de metadata cuando una categoría o subcategoría tiene 2 o más variables del mismo tipo.</dd>
+    </dl>
+    <h3>Observaciones al documento fuente · ${OBS.length}</h3>
+    <p>Hallazgos de calidad del diccionario, ordenados por <b>prioridad de corrección</b>:</p>
+    <div class="prio-legend">${Object.entries(PRIORITY).map(([k, v]) => `<div><span><span class="tag ${k}">${v.label}</span><span class="prio-count">${OBS.filter(o => o.sev === k).length}</span></span><span>${esc(v.def)}</span></div>`).join("")}</div>
+    ${OBS.map(obsCard).join("")}
+    <h3>Decisiones que requieren validación</h3>
+    <ul class="rules">
+      <li>Confirmar tipos de dato y dominios de valores con el responsable del registro.</li>
+      <li>Definir cardinalidad de tratamientos, comités y eventos de evolución.</li>
+      <li>Aprobar la agrupación por tipo como vista oficial para la presentación.</li>
+    </ul>`;
+}
+function renderTab() {
+  document.querySelectorAll("nav button[data-tab]").forEach(b => b.classList.toggle("active", b.dataset.tab === tab));
+  ({ nota: renderNota, categorias: renderCategorias, tipos: renderTipos, traza: renderTraza })[tab]();
+  body.scrollTop = 0;
+  syncBack();
+}
+function openPanel(open = true) {
+  panel.classList.toggle("open", open);
+  document.getElementById("btn-panel").setAttribute("aria-expanded", String(open));
+}
+const navHistory = [];
+function snapshot() {
+  return { sel: selected ? selected.id : null, tab, view: state.view, mode: state.mode, expanded: [...state.expanded] };
+}
+function remember() {
+  const s = snapshot(), top = navHistory[navHistory.length - 1];
+  if (top && JSON.stringify(top) === JSON.stringify(s)) return;
+  navHistory.push(s); if (navHistory.length > 60) navHistory.shift();
+  syncBack();
+}
+function syncBack() {
+  document.getElementById("btn-back").disabled = navHistory.length === 0;
+  const c = document.getElementById("crumb");
+  c.textContent = selected ? (selected.kind === "cat" ? pad(selected.n) + " · " + selected.name : selected.name) : ({ nota: "Inicio", categorias: "Categorías", tipos: "Tipos", traza: "Trazabilidad" })[tab];
+}
+function goBack() {
+  const s = navHistory.pop(); if (!s) return;
+  let rb = false;
+  if (s.mode !== state.mode) { setMode(s.mode, false); rb = true; }
+  if (s.view !== state.view) { setView(s.view); rb = true; }
+  if (JSON.stringify([...state.expanded]) !== JSON.stringify(s.expanded)) { state.expanded = new Set(s.expanded); rb = true; }
+  if (rb) rebuild();
+  selected = s.sel ? N[s.sel] : null; tab = s.tab;
+  openPanel(true); renderTab(); if (selected) centerOn(selected);
+  syncBack();
+}
+function goHome() {
+  remember(); selected = null; tab = "nota"; openPanel(true); renderTab(); fit();
+}
+function selectNode(n) {
+  if (selected !== n || tab !== "nota") remember();
+  selected = n; tab = "nota"; openPanel(true); renderTab();
+}
+function selectById(id) {
+  const n = N[id]; if (!n) return;
+  if (!nodeVisible(n) && state.mode === "simple") {
+    if (n.kind === "type" || n.kind === "std") { remember(); setMode("detalle", false); }
+    else { remember(); state.expanded.add(n.kind === "sub" ? n.parent : n.cat); if (n.type) { state.types.add(n.type); syncFilters(); } rebuild(); }
+  }
+  if (!nodeVisible(n)) {                     // si está oculto por la vista o el filtro, cambiar lo mínimo
+    if (n.kind === "var" || n.kind === "group" || n.kind === "type") { state.types.add(n.type); syncFilters(); }
+    if (n.kind === "std") { state.layerStd = true; document.getElementById("layer-std").checked = true; }
+    if ((n.kind === "cat" || n.kind === "sub") && state.view === "tipo") setView("combinada");
+    if ((n.kind === "type") && state.view === "estructura") setView("combinada");
+    if (n.kind === "group" && state.view !== "combinada") setView("combinada");
+    rebuild();
+  }
+  selectNode(n); centerOn(n);
+}
+body.addEventListener("click", e => {
+  const tg = e.target.closest("#toggle-cat");
+  if (tg) { toggleCat(N[tg.dataset.cat]); renderTab(); setTimeout(fit, 700); return; }
+  const el = e.target.closest("[data-id]"); if (el) selectById(el.dataset.id);
+});
+body.addEventListener("keydown", e => {
+  if (e.key === "Enter") { const el = e.target.closest("[data-id]"); if (el) selectById(el.dataset.id); }
+});
+document.querySelectorAll("nav button[data-tab]").forEach(b => b.addEventListener("click", () => {
+  if (b.dataset.tab !== tab || selected) remember();
+  tab = b.dataset.tab; if (tab !== "nota") selected = null; renderTab();
+}));
+document.getElementById("btn-back").addEventListener("click", goBack);
+document.getElementById("btn-home").addEventListener("click", goHome);
+window.addEventListener("keydown", e => {
+  const typing = /INPUT|TEXTAREA/.test(document.activeElement?.tagName || "");
+  if ((e.altKey && e.key === "ArrowLeft") || (!typing && e.key === "Backspace")) { e.preventDefault(); goBack(); }
+});
+document.getElementById("btn-close").addEventListener("click", () => openPanel(false));
+document.getElementById("btn-panel").addEventListener("click", () => { openPanel(!panel.classList.contains("open")); if (panel.classList.contains("open")) renderTab(); });
+
+/* ═══ 8. AJUSTES ════════════════════════════════════════════════════════ */
+const settings = document.getElementById("settings");
+document.getElementById("btn-settings").addEventListener("click", e => {
+  settings.hidden = !settings.hidden; e.currentTarget.setAttribute("aria-expanded", String(!settings.hidden));
+});
+function toggleCat(c) {          // abrir o cerrar una categoría (modo simplificado)
+  remember();
+  state.expanded.has(c.id) ? state.expanded.delete(c.id) : state.expanded.add(c.id);
+  rebuild();
+}
+function setMode(m, withFit = true) {
+  state.mode = m;
+  document.querySelectorAll(".modeseg button").forEach(b => b.classList.toggle("on", b.dataset.mode === m));
+  document.querySelectorAll(".seg button").forEach(b => { b.disabled = m === "simple"; });
+  document.getElementById("view-lock").textContent = m === "simple" ? "· fija en simplificada" : "";
+  document.getElementById("simple-tools").hidden = m !== "simple";
+  document.getElementById("view-hint").textContent = m === "simple"
+    ? "Versión simplificada: solo las 16 categorías, con un anillo que muestra su composición por tipo de dato. Haz clic en una categoría para abrirla y ver su metadata agrupada por tipo."
+    : VIEW_HINT[state.view];
+  rebuild();
+  if (withFit) setTimeout(fit, 600);
+  if (tab === "nota" && !selected) renderTab();
+}
+document.querySelectorAll(".modeseg button").forEach(b => b.addEventListener("click", () => {
+  if (b.dataset.mode === state.mode) return;
+  remember(); setMode(b.dataset.mode);
+}));
+document.getElementById("btn-expand-all").addEventListener("click", () => { remember(); CATS.forEach(c => state.expanded.add("c:" + c.n)); rebuild(); setTimeout(fit, 900); });
+document.getElementById("btn-collapse-all").addEventListener("click", () => { remember(); state.expanded.clear(); rebuild(); setTimeout(fit, 600); });
+function setView(v) {
+  state.view = v;
+  document.querySelectorAll(".seg button").forEach(b => b.classList.toggle("on", b.dataset.view === v));
+  if (state.mode !== "simple") document.getElementById("view-hint").textContent = VIEW_HINT[v];
+}
+document.querySelectorAll(".seg button").forEach(b => b.addEventListener("click", () => {
+  if (b.dataset.view === state.view) return;
+  remember(); setView(b.dataset.view); rebuild(); setTimeout(fit, 900);
+}));
+const tf = document.getElementById("type-filters");
+tf.innerHTML = TYPE_ORDER.map(t => `
+  <label class="row"><input type="checkbox" id="f-${t}" data-type="${t}" checked><span class="dot" style="background:var(--t-${t})"></span>${TYPES[t].label}<span class="n">${typeCount(t)}</span></label>`).join("");
+tf.addEventListener("change", e => {
+  const t = e.target.dataset.type; if (!t) return;
+  e.target.checked ? state.types.add(t) : state.types.delete(t); rebuild();
+});
+function syncFilters() { TYPE_ORDER.forEach(t => { document.getElementById("f-" + t).checked = state.types.has(t); }); }
+document.getElementById("n-std").textContent = VARS.filter(v => v.std).length;
+document.getElementById("n-time").textContent = TIMELINE.length;
+document.getElementById("layer-std").addEventListener("change", e => { state.layerStd = e.target.checked; rebuild(); });
+document.getElementById("layer-time").addEventListener("change", e => { state.layerTime = e.target.checked; rebuild(); });
+document.getElementById("labels-all").addEventListener("change", e => { state.labelsAll = e.target.checked; });
+document.getElementById("f-rep").addEventListener("input", e => { state.rep = +e.target.value; document.getElementById("o-rep").textContent = state.rep; alpha = Math.max(alpha, .5); });
+document.getElementById("f-rep").addEventListener("change", () => setTimeout(fit, 700));
+document.getElementById("f-len").addEventListener("input", e => { state.len = +e.target.value; document.getElementById("o-len").textContent = state.len.toFixed(2).replace(".", ",") + "×"; alpha = Math.max(alpha, .5); });
+document.getElementById("f-len").addEventListener("change", () => setTimeout(fit, 700));
+document.getElementById("btn-fit").addEventListener("click", fit);
+
+const search = document.getElementById("search");
+search.addEventListener("input", () => { state.query = search.value.trim(); updateStatus(); });
+search.addEventListener("keydown", e => {
+  if (e.key === "Enter") { const hit = visNodes.find(matches) || Object.values(N).find(matches); if (hit) selectById(hit.id); }
+  if (e.key === "Escape") { search.value = ""; state.query = ""; updateStatus(); }
+});
+
+function updateStatus() {
+  const hits = state.query ? visNodes.filter(matches).length : null;
+  document.getElementById("status").textContent = hits !== null
+    ? `${hits} coincidencias · Enter para abrir`
+    : state.mode === "simple"
+      ? `16 categorías · ${state.expanded.size} abiertas · ${visNodes.filter(n => n.kind === "var").length} variables visibles`
+      : `${visNodes.filter(n => n.kind === "var").length} variables · ${visLinks.length} enlaces · vista ${state.view}`;
+}
+
+/* ═══ 9. ARRANQUE ═══════════════════════════════════════════════════════ */
+setView("combinada");
+setMode("detalle", false);
+syncBack();
+if (W < 760) { settings.hidden = true; document.getElementById("btn-settings").setAttribute("aria-expanded", "false"); }
+else openPanel(true);
+renderTab();
+for (let i = 0; i < 260; i++) tick();   // pre-asentar la red para que la primera vista sea legible
+fit();
+requestAnimationFrame(draw);
+</script>
+</body>
+</html>

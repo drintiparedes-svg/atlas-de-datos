@@ -1,0 +1,719 @@
+{
+  "source": "info_para_presentacion.docx",
+  "expected": {
+    "sections_top": 16,
+    "subsections": 6,
+    "elements": 87,
+    "metadata_groups_threshold_2": 18,
+    "elements_by_data_type": {
+      "fecha": 14,
+      "numerica": 5,
+      "categorica": 45,
+      "identificador": 1,
+      "codigo": 12,
+      "binario": 10
+    },
+    "elements_with_vocabulary": 21,
+    "timeline_edges": 13,
+    "visible_edges_combined_view_no_layers": 176,
+    "type_rule_baseline_agreement": "85/87"
+  },
+  "catalog": [
+    {
+      "section": 1,
+      "subsection": null,
+      "name": "Fecha de nacimiento",
+      "data_type": "fecha",
+      "vocabulary": null,
+      "note": null
+    },
+    {
+      "section": 1,
+      "subsection": null,
+      "name": "Edad al diagnóstico",
+      "data_type": "numerica",
+      "vocabulary": null,
+      "note": "Variable derivable de fecha de nacimiento y fecha de diagnóstico."
+    },
+    {
+      "section": 1,
+      "subsection": null,
+      "name": "Sexo",
+      "data_type": "categorica",
+      "vocabulary": null,
+      "note": null
+    },
+    {
+      "section": 1,
+      "subsection": null,
+      "name": "Nacionalidad",
+      "data_type": "categorica",
+      "vocabulary": null,
+      "note": null
+    },
+    {
+      "section": 1,
+      "subsection": null,
+      "name": "Pueblo originario",
+      "data_type": "categorica",
+      "vocabulary": null,
+      "note": null
+    },
+    {
+      "section": 2,
+      "subsection": null,
+      "name": "Región de vivienda habitual",
+      "data_type": "categorica",
+      "vocabulary": "cut",
+      "note": null
+    },
+    {
+      "section": 2,
+      "subsection": null,
+      "name": "Comuna de vivienda habitual",
+      "data_type": "categorica",
+      "vocabulary": "cut",
+      "note": null
+    },
+    {
+      "section": 3,
+      "subsection": null,
+      "name": "Nivel educacional",
+      "data_type": "categorica",
+      "vocabulary": null,
+      "note": null
+    },
+    {
+      "section": 3,
+      "subsection": null,
+      "name": "Actividad ocupacional",
+      "data_type": "categorica",
+      "vocabulary": null,
+      "note": null
+    },
+    {
+      "section": 4,
+      "subsection": null,
+      "name": "Previsión primera consulta",
+      "data_type": "categorica",
+      "vocabulary": null,
+      "note": null
+    },
+    {
+      "section": 4,
+      "subsection": null,
+      "name": "Previsión al diagnóstico",
+      "data_type": "categorica",
+      "vocabulary": null,
+      "note": null
+    },
+    {
+      "section": 4,
+      "subsection": null,
+      "name": "Convenio oncológico",
+      "data_type": "categorica",
+      "vocabulary": null,
+      "note": null
+    },
+    {
+      "section": 5,
+      "subsection": null,
+      "name": "Categoría",
+      "data_type": "categorica",
+      "vocabulary": null,
+      "note": null
+    },
+    {
+      "section": 5,
+      "subsection": null,
+      "name": "Subcategoría",
+      "data_type": "categorica",
+      "vocabulary": null,
+      "note": null
+    },
+    {
+      "section": 5,
+      "subsection": null,
+      "name": "Clasificación GES",
+      "data_type": "categorica",
+      "vocabulary": "ges",
+      "note": null
+    },
+    {
+      "section": 5,
+      "subsection": null,
+      "name": "Fecha de ingreso al GES",
+      "data_type": "fecha",
+      "vocabulary": null,
+      "note": null
+    },
+    {
+      "section": 5,
+      "subsection": null,
+      "name": "Clasificación del caso (Diagnóstico/Tratamiento)",
+      "data_type": "categorica",
+      "vocabulary": null,
+      "note": null
+    },
+    {
+      "section": 5,
+      "subsection": null,
+      "name": "Centro Responsable del Diagnóstico",
+      "data_type": "categorica",
+      "vocabulary": null,
+      "note": null
+    },
+    {
+      "section": 6,
+      "subsection": null,
+      "name": "Fecha primera consulta",
+      "data_type": "fecha",
+      "vocabulary": null,
+      "note": null
+    },
+    {
+      "section": 6,
+      "subsection": null,
+      "name": "Base Diagnóstica",
+      "data_type": "categorica",
+      "vocabulary": null,
+      "note": null
+    },
+    {
+      "section": 6,
+      "subsection": null,
+      "name": "Fecha de toma del informe diagnóstico",
+      "data_type": "fecha",
+      "vocabulary": null,
+      "note": null
+    },
+    {
+      "section": 6,
+      "subsection": null,
+      "name": "Fecha de emisión diagnóstico",
+      "data_type": "fecha",
+      "vocabulary": null,
+      "note": null
+    },
+    {
+      "section": 6,
+      "subsection": null,
+      "name": "Número de Informe diagnóstico",
+      "data_type": "identificador",
+      "vocabulary": null,
+      "note": null
+    },
+    {
+      "section": 7,
+      "subsection": null,
+      "name": "Tipo de Neoplasia",
+      "data_type": "categorica",
+      "vocabulary": null,
+      "note": null
+    },
+    {
+      "section": 7,
+      "subsection": null,
+      "name": "Diagnóstico CIE 10",
+      "data_type": "codigo",
+      "vocabulary": "cie10",
+      "note": null
+    },
+    {
+      "section": 7,
+      "subsection": null,
+      "name": "Código de Topografía (CIEO)",
+      "data_type": "codigo",
+      "vocabulary": "cieo",
+      "note": null
+    },
+    {
+      "section": 7,
+      "subsection": null,
+      "name": "Código de Morfología (CIEO)",
+      "data_type": "codigo",
+      "vocabulary": "cieo",
+      "note": null
+    },
+    {
+      "section": 7,
+      "subsection": null,
+      "name": "Comportamiento",
+      "data_type": "codigo",
+      "vocabulary": "cieo",
+      "note": "En CIE-O corresponde al 5.º dígito de morfología (/0 a /3)."
+    },
+    {
+      "section": 8,
+      "subsection": null,
+      "name": "Grado de Diferenciación",
+      "data_type": "categorica",
+      "vocabulary": "cieo",
+      "note": null
+    },
+    {
+      "section": 8,
+      "subsection": null,
+      "name": "Focalidad Tumoral",
+      "data_type": "categorica",
+      "vocabulary": null,
+      "note": null
+    },
+    {
+      "section": 8,
+      "subsection": null,
+      "name": "Márgenes Quirúrgicos",
+      "data_type": "categorica",
+      "vocabulary": null,
+      "note": null
+    },
+    {
+      "section": 8,
+      "subsection": null,
+      "name": "Invasión Linfovascular",
+      "data_type": "binario",
+      "vocabulary": null,
+      "note": null
+    },
+    {
+      "section": 8,
+      "subsection": null,
+      "name": "Lateralidad",
+      "data_type": "categorica",
+      "vocabulary": null,
+      "note": null
+    },
+    {
+      "section": 9,
+      "subsection": null,
+      "name": "cTNM (Estadiaje Clínico)",
+      "data_type": "codigo",
+      "vocabulary": "tnm",
+      "note": null
+    },
+    {
+      "section": 9,
+      "subsection": null,
+      "name": "pTNM (Estadiaje Patológico)",
+      "data_type": "codigo",
+      "vocabulary": "tnm",
+      "note": null
+    },
+    {
+      "section": 9,
+      "subsection": null,
+      "name": "ypTNM (Estadiaje Post-tratamiento)",
+      "data_type": "codigo",
+      "vocabulary": "tnm",
+      "note": null
+    },
+    {
+      "section": 9,
+      "subsection": null,
+      "name": "Estadio de Diagnóstico",
+      "data_type": "categorica",
+      "vocabulary": "tnm",
+      "note": null
+    },
+    {
+      "section": 9,
+      "subsection": null,
+      "name": "Extensión al diagnóstico",
+      "data_type": "categorica",
+      "vocabulary": null,
+      "note": null
+    },
+    {
+      "section": 9,
+      "subsection": null,
+      "name": "Metástasis al diagnóstico",
+      "data_type": "binario",
+      "vocabulary": null,
+      "note": null
+    },
+    {
+      "section": 9,
+      "subsection": null,
+      "name": "Fecha metástasis",
+      "data_type": "fecha",
+      "vocabulary": null,
+      "note": null
+    },
+    {
+      "section": 9,
+      "subsection": null,
+      "name": "Topografía Metástasis",
+      "data_type": "codigo",
+      "vocabulary": "cieo",
+      "note": null
+    },
+    {
+      "section": 10,
+      "subsection": null,
+      "name": "Topografía Específica (Piel)",
+      "data_type": "categorica",
+      "vocabulary": null,
+      "note": null
+    },
+    {
+      "section": 10,
+      "subsection": null,
+      "name": "FIGO",
+      "data_type": "codigo",
+      "vocabulary": "figo",
+      "note": null
+    },
+    {
+      "section": 10,
+      "subsection": null,
+      "name": "Estadio/FIGO diagnóstico disponible en historia clínica",
+      "data_type": "binario",
+      "vocabulary": "figo",
+      "note": "Indicador de disponibilidad del dato: metadato de calidad más que variable clínica."
+    },
+    {
+      "section": 11,
+      "subsection": "Características histopatológicas y factores pronósticos",
+      "name": "S",
+      "data_type": "categorica",
+      "vocabulary": "tnm",
+      "note": "Sin definición en la fuente. Podría corresponder a la categoría S (marcadores séricos) de tumores de células germinales; requiere confirmación."
+    },
+    {
+      "section": 11,
+      "subsection": "Características histopatológicas y factores pronósticos",
+      "name": "Grado de la OMS",
+      "data_type": "categorica",
+      "vocabulary": "oms",
+      "note": null
+    },
+    {
+      "section": 11,
+      "subsection": "Características histopatológicas y factores pronósticos",
+      "name": "Tasa Mitótica",
+      "data_type": "numerica",
+      "vocabulary": null,
+      "note": null
+    },
+    {
+      "section": 11,
+      "subsection": "Características histopatológicas y factores pronósticos",
+      "name": "Breslow",
+      "data_type": "numerica",
+      "vocabulary": null,
+      "note": "Espesor en mm (melanoma)."
+    },
+    {
+      "section": 11,
+      "subsection": "Características histopatológicas y factores pronósticos",
+      "name": "Ulceración",
+      "data_type": "binario",
+      "vocabulary": null,
+      "note": null
+    },
+    {
+      "section": 11,
+      "subsection": "Características histopatológicas y factores pronósticos",
+      "name": "Gleason",
+      "data_type": "categorica",
+      "vocabulary": "isup",
+      "note": null
+    },
+    {
+      "section": 11,
+      "subsection": "Marcadores de inmunohistoquímica",
+      "name": "P16",
+      "data_type": "binario",
+      "vocabulary": null,
+      "note": null
+    },
+    {
+      "section": 11,
+      "subsection": "Marcadores de inmunohistoquímica",
+      "name": "Her2 Estómago",
+      "data_type": "categorica",
+      "vocabulary": null,
+      "note": null
+    },
+    {
+      "section": 11,
+      "subsection": "Marcadores de inmunohistoquímica",
+      "name": "Her2 Mama",
+      "data_type": "categorica",
+      "vocabulary": null,
+      "note": null
+    },
+    {
+      "section": 11,
+      "subsection": "Marcadores de inmunohistoquímica",
+      "name": "Receptor de Estrógeno",
+      "data_type": "categorica",
+      "vocabulary": null,
+      "note": null
+    },
+    {
+      "section": 11,
+      "subsection": "Marcadores de inmunohistoquímica",
+      "name": "Receptor de Progesterona",
+      "data_type": "categorica",
+      "vocabulary": null,
+      "note": null
+    },
+    {
+      "section": 11,
+      "subsection": "Marcadores de inmunohistoquímica",
+      "name": "Ki-67",
+      "data_type": "numerica",
+      "vocabulary": null,
+      "note": "Porcentaje de células positivas."
+    },
+    {
+      "section": 11,
+      "subsection": "Alteraciones genéticas y perfil molecular",
+      "name": "KRAS",
+      "data_type": "categorica",
+      "vocabulary": null,
+      "note": null
+    },
+    {
+      "section": 11,
+      "subsection": "Alteraciones genéticas y perfil molecular",
+      "name": "EGFR",
+      "data_type": "categorica",
+      "vocabulary": null,
+      "note": null
+    },
+    {
+      "section": 11,
+      "subsection": "Alteraciones genéticas y perfil molecular",
+      "name": "FISH (Hibridación fluorescente in situ)",
+      "data_type": "categorica",
+      "vocabulary": null,
+      "note": null
+    },
+    {
+      "section": 11,
+      "subsection": "Alteraciones genéticas y perfil molecular",
+      "name": "Subtipo Molecular",
+      "data_type": "categorica",
+      "vocabulary": null,
+      "note": null
+    },
+    {
+      "section": 11,
+      "subsection": "Infecciones oncogénicas y biomarcadores",
+      "name": "HPV",
+      "data_type": "binario",
+      "vocabulary": null,
+      "note": null
+    },
+    {
+      "section": 11,
+      "subsection": "Infecciones oncogénicas y biomarcadores",
+      "name": "PSA al diagnóstico",
+      "data_type": "numerica",
+      "vocabulary": null,
+      "note": "ng/mL."
+    },
+    {
+      "section": 12,
+      "subsection": null,
+      "name": "¿Presentado a Comité Oncológico?",
+      "data_type": "binario",
+      "vocabulary": null,
+      "note": null
+    },
+    {
+      "section": 12,
+      "subsection": null,
+      "name": "Tipo de Comité",
+      "data_type": "categorica",
+      "vocabulary": null,
+      "note": null
+    },
+    {
+      "section": 12,
+      "subsection": null,
+      "name": "Fecha de comité",
+      "data_type": "fecha",
+      "vocabulary": null,
+      "note": null
+    },
+    {
+      "section": 12,
+      "subsection": null,
+      "name": "Clase de Caso",
+      "data_type": "categorica",
+      "vocabulary": null,
+      "note": null
+    },
+    {
+      "section": 12,
+      "subsection": null,
+      "name": "Intención de la resolución",
+      "data_type": "categorica",
+      "vocabulary": null,
+      "note": null
+    },
+    {
+      "section": 13,
+      "subsection": null,
+      "name": "Tipo de Centro responsable del tratamiento",
+      "data_type": "categorica",
+      "vocabulary": null,
+      "note": null
+    },
+    {
+      "section": 13,
+      "subsection": null,
+      "name": "Categoría de tratamiento",
+      "data_type": "categorica",
+      "vocabulary": null,
+      "note": null
+    },
+    {
+      "section": 13,
+      "subsection": null,
+      "name": "Subcategoría de tratamiento",
+      "data_type": "categorica",
+      "vocabulary": null,
+      "note": null
+    },
+    {
+      "section": 13,
+      "subsection": null,
+      "name": "Intención del tratamiento",
+      "data_type": "categorica",
+      "vocabulary": null,
+      "note": null
+    },
+    {
+      "section": 13,
+      "subsection": null,
+      "name": "Fecha de inicio tratamiento (externos o en Fundación)",
+      "data_type": "fecha",
+      "vocabulary": null,
+      "note": null
+    },
+    {
+      "section": 13,
+      "subsection": null,
+      "name": "Fecha de término de tratamiento (externos o en Fundación)",
+      "data_type": "fecha",
+      "vocabulary": null,
+      "note": null
+    },
+    {
+      "section": 14,
+      "subsection": "Progresión",
+      "name": "¿Presenta evidencia de progresión?",
+      "data_type": "binario",
+      "vocabulary": null,
+      "note": null
+    },
+    {
+      "section": 14,
+      "subsection": "Progresión",
+      "name": "Fecha de progresión",
+      "data_type": "fecha",
+      "vocabulary": null,
+      "note": null
+    },
+    {
+      "section": 14,
+      "subsection": "Progresión",
+      "name": "Código de Topografía (CIEO) de progresión",
+      "data_type": "codigo",
+      "vocabulary": "cieo",
+      "note": null
+    },
+    {
+      "section": 14,
+      "subsection": "Progresión",
+      "name": "Tipo de progresión (extensión)",
+      "data_type": "categorica",
+      "vocabulary": null,
+      "note": null
+    },
+    {
+      "section": 14,
+      "subsection": "Recurrencia",
+      "name": "¿Presenta evidencia de recurrencia?",
+      "data_type": "binario",
+      "vocabulary": null,
+      "note": null
+    },
+    {
+      "section": 14,
+      "subsection": "Recurrencia",
+      "name": "Fecha de recurrencia",
+      "data_type": "fecha",
+      "vocabulary": null,
+      "note": null
+    },
+    {
+      "section": 14,
+      "subsection": "Recurrencia",
+      "name": "Código de Topografía (CIEO) de recurrencia",
+      "data_type": "codigo",
+      "vocabulary": "cieo",
+      "note": null
+    },
+    {
+      "section": 14,
+      "subsection": "Recurrencia",
+      "name": "Tipo de recurrencia (extensión)",
+      "data_type": "categorica",
+      "vocabulary": null,
+      "note": null
+    },
+    {
+      "section": 15,
+      "subsection": null,
+      "name": "Fecha de último contacto con Fundación",
+      "data_type": "fecha",
+      "vocabulary": null,
+      "note": null
+    },
+    {
+      "section": 15,
+      "subsection": null,
+      "name": "Fecha de último contacto con médico tratante",
+      "data_type": "fecha",
+      "vocabulary": null,
+      "note": null
+    },
+    {
+      "section": 15,
+      "subsection": null,
+      "name": "Condición del caso al último contacto",
+      "data_type": "categorica",
+      "vocabulary": null,
+      "note": null
+    },
+    {
+      "section": 16,
+      "subsection": null,
+      "name": "Estado Vital",
+      "data_type": "binario",
+      "vocabulary": null,
+      "note": "Vivo / fallecido."
+    },
+    {
+      "section": 16,
+      "subsection": null,
+      "name": "Fecha de defunción",
+      "data_type": "fecha",
+      "vocabulary": null,
+      "note": null
+    },
+    {
+      "section": 16,
+      "subsection": null,
+      "name": "Causa de defunción",
+      "data_type": "codigo",
+      "vocabulary": "cie10",
+      "note": null
+    }
+  ]
+}

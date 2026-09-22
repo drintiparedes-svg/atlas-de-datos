@@ -1,0 +1,13 @@
+# Motor de calidad (docs/SPEC.md §6.7). Prioridad de corrección visible al usuario.
+priorities:
+  bloqueante: "Impide construir la base de datos o validar el diccionario. Resolver primero."
+  importante: "Genera ambigüedad al registrar o analizar. Resolver antes de publicar la versión oficial."
+  menor: "Mejora de calidad. Puede resolverse en una revisión posterior."
+rules:
+  - {id: duplicate_description, priority: importante, detect: "dos secciones con descripción idéntica tras normalizar"}
+  - {id: undefined_element, priority: importante, detect: "nombre de 2 caracteres o menos, o sin palabras del léxico"}
+  - {id: possible_overlap, priority: importante, detect: "nombres de alta similitud semántica en secciones distintas"}
+  - {id: quality_metadata_mixed, priority: menor, detect: "nombre con 'disponible', 'registrado en', 'consignado'"}
+  - {id: derivable_element, priority: menor, detect: "plantilla derived_from (p. ej., edad <- fecha nacimiento + fecha dx)"}
+  - {id: unspecified_cardinality, priority: bloqueante, detect: "secciones de eventos repetibles sin cardinalidad"}
+  - {id: missing_value_domains, priority: bloqueante, detect: "categóricas sin value_domain (agregada)"}

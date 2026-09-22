@@ -1,0 +1,15 @@
+# Cronología esperada del caso oncológico (supuesto clínico, a validar). Cada arista genera una regla: destino >= origen.
+edges:
+  - [Fecha de nacimiento, Fecha primera consulta]
+  - [Fecha primera consulta, Fecha de toma del informe diagnóstico]
+  - [Fecha de toma del informe diagnóstico, Fecha de emisión diagnóstico]
+  - [Fecha de emisión diagnóstico, Fecha de ingreso al GES]
+  - [Fecha de emisión diagnóstico, Fecha de comité]
+  - [Fecha de comité, Fecha de inicio tratamiento (externos o en Fundación)]
+  - [Fecha de inicio tratamiento (externos o en Fundación), Fecha de término de tratamiento (externos o en Fundación)]
+  - [Fecha de término de tratamiento (externos o en Fundación), Fecha de progresión]
+  - [Fecha de término de tratamiento (externos o en Fundación), Fecha de recurrencia]
+  - [Fecha de progresión, Fecha de último contacto con Fundación]
+  - [Fecha de recurrencia, Fecha de último contacto con Fundación]
+  - [Fecha de último contacto con Fundación, Fecha de defunción]
+  - [Fecha de último contacto con médico tratante, Fecha de defunción]

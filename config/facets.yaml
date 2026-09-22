@@ -1,0 +1,8 @@
+# Facetas universales (docs/PLAN-modulo-proyectos.md §2.3). El orden define colores y posiciones.
+source_type:   {label: Tipo de fuente, applies_to: [source], values: [diccionario, tabla, esquema_bd, narrativo, presentacion, imagen, correo, formulario, otro]}
+element_kind:  {label: Tipo de elemento, applies_to: [element], values: [field, column, entity, concept, claim, decision, task, event, question, figure, table]}
+data_type:     {label: Tipo de dato, applies_to: [field, column], values: [fecha, categorica, binario, numerica, codigo, identificador, texto_libre, compuesto, archivo]}
+info_domain:   {label: Dominio de información, applies_to: [element, section], values: [demografico, territorial, previsional_administrativo, diagnostico, tratamiento, evolucion_desenlace, biomarcadores_laboratorio, operacional_proceso, financiero, investigacion, documental]}
+sensitivity:   {label: Sensibilidad, applies_to: [element, source], values: [publica, interna, confidencial, dato_personal, dato_sensible_salud], note: "Clasificación final requiere validación legal (decisión M2)."}
+status:        {label: Estado de validación, applies_to: [all], values: [proposed, validated, rejected]}
+origin:        {label: Origen, applies_to: [all], values: [extracted, inferred, manual]}

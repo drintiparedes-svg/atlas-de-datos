@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://atlas.local/schemas/agf-1.0.json",
+  "title": "Atlas Graph Format 1.0",
+  "description": "Contrato entre adaptadores y visor del Atlas. Ver docs/PLAN-modulo-proyectos.md, sección 3.",
+  "type": "object",
+  "required": ["agf_version", "project", "sources", "nodes", "edges"],
+  "properties": {
+    "agf_version": {"const": "1.0"},
+    "project": {"type": "object", "required": ["id", "name"],
+      "properties": {"id": {"type": "string"}, "name": {"type": "string"}}},
+    "profile": {"type": "string"},
+    "sources": {"type": "array", "items": {"$ref": "#/$defs/source"}},
+    "nodes": {"type": "array", "items": {"$ref": "#/$defs/node"}},
+    "edges": {"type": "array", "items": {"$ref": "#/$defs/edge"}},
+    "findings": {"type": "array", "items": {"$ref": "#/$defs/finding"}}
+  },
+  "$defs": {
+    "status": {"enum": ["proposed", "validated", "rejected"]},
+    "origin": {"enum": ["extracted", "inferred", "manual"]},
+    "source": {"type": "object", "required": ["id", "name"],
+      "properties": {"id": {"type": "string"}, "name": {"type": "string"}, "sha256": {"type": "string"},
+        "facets": {"type": "object"}, "adapter": {"type": "string"}, "ingested_at": {"type": "string"},
+        "status": {"$ref": "#/$defs/status"}}},
+    "node": {"type": "object", "required": ["id", "kind", "name"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "kind": {"enum": ["project_root", "source", "section", "element", "vocabulary", "chunk", "entity", "knowledge_object"]},
+        "name": {"type": "string"},
+        "source_id": {"type": "string"}, "parent_id": {"type": "string"}, "section_id": {"type": "string"},
+        "facets": {"type": "object", "additionalProperties": {"type": ["string", "null"]}},
+        "facet_origin": {"type": "object", "additionalProperties": {"$ref": "#/$defs/origin"}},
+        "provenance": {"type": "object", "properties": {"locator": {"type": "object"}, "excerpt": {"type": "string", "maxLength": 300}}},
+        "origin": {"$ref": "#/$defs/origin"}, "status": {"$ref": "#/$defs/status"},
+        "confidence": {"type": "number", "minimum": 0, "maximum": 1},
+        "rationale": {"type": ["string", "null"]},
+        "valid_from": {"type": ["string", "null"]}, "valid_to": {"type": ["string", "null"]}
+      },
+      "allOf": [{"if": {"properties": {"origin": {"const": "inferred"}}, "required": ["origin"]},
+                 "then": {"required": ["status"]}}]},
+    "edge": {"type": "object", "required": ["kind", "source", "target"],
+      "properties": {
+        "id": {"type": "string"},
+        "kind": {"enum": ["contains", "coded_with", "precedes", "derived_from", "same_as", "references", "mentions", "relates", "supports", "contradicts", "shares"]},
+        "source": {"type": "string"}, "target": {"type": "string"},
+        "layer": {"type": "string"}, "predicate": {"type": "string"},
+        "origin": {"$ref": "#/$defs/origin"}, "status": {"$ref": "#/$defs/status"},
+        "confidence": {"type": "number", "minimum": 0, "maximum": 1}}},
+    "finding": {"type": "object", "required": ["id", "priority", "title", "action", "status"],
+      "properties": {"id": {"type": "string"}, "priority": {"enum": ["bloqueante", "importante", "menor"]},
+        "title": {"type": "string"}, "detail": {"type": "string"}, "action": {"type": "string"},
+        "node_ids": {"type": "array", "items": {"type": "string"}},
+        "status": {"enum": ["open", "resolved", "accepted_risk"]}}}
+  }
+}

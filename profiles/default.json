@@ -1,0 +1,213 @@
+{
+  "profile": "default",
+  "default_group_by": "data_type",
+  "tokens": {
+    "dark": {
+      "bg": "#0b0e14",
+      "surface": "#141926",
+      "surface2": "#1b2233",
+      "line": "#252d40",
+      "ink": "#e8eaf2",
+      "inkDim": "#9aa3b8",
+      "inkFaint": "#5c6579",
+      "accent": "#e0b458",
+      "edge": "#2c3550",
+      "hub": "#e8eaf2",
+      "warn": "#e46a6a"
+    },
+    "light": {
+      "bg": "#f2f4f7",
+      "surface": "#ffffff",
+      "surface2": "#e9edf3",
+      "line": "#d7dde8",
+      "ink": "#1a2233",
+      "inkDim": "#4d5a72",
+      "inkFaint": "#8b96ab",
+      "accent": "#a97c1d",
+      "edge": "#c4cddc",
+      "hub": "#1a2233",
+      "warn": "#c2434f"
+    }
+  },
+  "fonts": {
+    "display": "Fraunces",
+    "body": "Albert Sans",
+    "mono": "JetBrains Mono"
+  },
+  "facets": {
+    "data_type": {
+      "label": "Tipo de dato",
+      "order": [
+        "fecha",
+        "categorica",
+        "binario",
+        "numerica",
+        "codigo",
+        "identificador"
+      ],
+      "values": {
+        "fecha": {
+          "label": "Fecha",
+          "plural": "Fechas",
+          "definition": "Marca temporal de un hito del caso.",
+          "quality_rules": [
+            "Formato ISO 8601 (AAAA-MM-DD).",
+            "Coherencia cronológica con los demás hitos del caso.",
+            "Nunca posterior a la fecha de defunción ni a la fecha de registro."
+          ],
+          "color_dark": "#e0b458",
+          "color_light": "#a97c1d"
+        },
+        "categorica": {
+          "label": "Categórica",
+          "plural": "Categóricas",
+          "definition": "Valor tomado de un catálogo cerrado de opciones, nominal u ordinal.",
+          "quality_rules": [
+            "Dominio de valores explícito y versionado.",
+            "«Desconocido / no consignado» distinto de campo vacío.",
+            "Mapeo a terminología de referencia cuando exista (catálogos MINSAL, SNOMED CT)."
+          ],
+          "color_dark": "#4fc8b4",
+          "color_light": "#157f6d"
+        },
+        "binario": {
+          "label": "Binario",
+          "plural": "Binarios",
+          "definition": "Presencia o ausencia de una condición: Sí / No / Desconocido.",
+          "quality_rules": [
+            "Tres estados explícitos: Sí, No, Desconocido.",
+            "Si el valor es «Sí», exigir sus variables dependientes (fecha, topografía, tipo).",
+            "Registrar la fuente documental de la afirmación."
+          ],
+          "color_dark": "#d0708f",
+          "color_light": "#a83c62"
+        },
+        "numerica": {
+          "label": "Numérica",
+          "plural": "Numéricas",
+          "definition": "Medición o valor derivado, siempre con unidad.",
+          "quality_rules": [
+            "Unidad declarada (años, mm, %, ng/mL, mitosis/mm²).",
+            "Rangos plausibles por variable.",
+            "Distinguir valor medido de valor derivado (p. ej., edad al diagnóstico)."
+          ],
+          "color_dark": "#6fa8e8",
+          "color_light": "#2f6fb8"
+        },
+        "codigo": {
+          "label": "Código estandarizado",
+          "plural": "Códigos",
+          "definition": "Valor codificado según una clasificación o terminología internacional.",
+          "quality_rules": [
+            "Validación contra la edición vigente del catálogo.",
+            "Registrar versión o edición utilizada (CIE-O-3.x, edición AJCC/UICC).",
+            "Coherencia cruzada topografía · morfología · comportamiento."
+          ],
+          "color_dark": "#9d8ae6",
+          "color_light": "#5b4aa8"
+        },
+        "identificador": {
+          "label": "Identificador",
+          "plural": "Identificadores",
+          "definition": "Referencia documental que asegura la trazabilidad a la fuente.",
+          "quality_rules": [
+            "Unicidad por documento.",
+            "Formato institucional definido.",
+            "Enlace verificable al documento de origen."
+          ],
+          "color_dark": "#a3adbf",
+          "color_light": "#66728a"
+        }
+      }
+    }
+  },
+  "priorities": {
+    "bloqueante": {
+      "label": "Bloqueante",
+      "def": "Impide construir la base de datos o validar el diccionario. Resolver primero."
+    },
+    "importante": {
+      "label": "Importante",
+      "def": "Genera ambigüedad al registrar o analizar. Resolver antes de publicar la versión oficial."
+    },
+    "menor": {
+      "label": "Menor",
+      "def": "Mejora de calidad. Puede resolverse en una revisión posterior."
+    }
+  },
+  "shapes": {
+    "project_root": "circle-accent",
+    "source": "rounded-square",
+    "section": "circle-hub",
+    "group": "ring",
+    "element": "dot",
+    "facet_value": "ring-core",
+    "vocabulary": "diamond"
+  },
+  "layout": {
+    "section_anchor_radius": 360,
+    "section_anchor_strength": 0.03,
+    "facet_ring_radius": 230,
+    "separar": {
+      "default": 1700,
+      "min": 200,
+      "max": 12000
+    },
+    "distancia": {
+      "default": 1,
+      "min": 0.3,
+      "max": 3
+    },
+    "springs": {
+      "root-section": [
+        260,
+        0.02
+      ],
+      "root-facet(tipo)": [
+        170,
+        0.05
+      ],
+      "group-element": [
+        26,
+        0.12
+      ],
+      "parent-group/subsection": [
+        48,
+        0.09
+      ],
+      "parent-element": [
+        40,
+        0.1
+      ],
+      "typed_as": [
+        70,
+        0.07
+      ],
+      "type_link": [
+        260,
+        0.0025
+      ],
+      "coded_with": [
+        150,
+        0.006
+      ],
+      "precedes": [
+        90,
+        0.006
+      ]
+    },
+    "damping": 0.82,
+    "cooling": 0.992,
+    "alpha_min": 0.004,
+    "prewarm_ticks": 260
+  },
+  "labels": {
+    "algorithm": "greedy-priority-4-positions",
+    "screen_scale_clamp": [
+      0.85,
+      1.1
+    ],
+    "section_wrap_chars": 24,
+    "element_truncate_chars": 34
+  }
+}

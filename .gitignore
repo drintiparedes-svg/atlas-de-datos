@@ -1,0 +1,17 @@
+node_modules/
+.venv/
+__pycache__/
+.pytest_cache/
+dist/
+data/
+*.log
+.env
+# Documento interno de FALP (sin datos de pacientes): no se sube a repositorios públicos (CLAUDE.md)
+backend/tests/fixtures/info_para_presentacion.docx
+frontend/node_modules/
+frontend/public/data/
+frontend/dist/
+frontend/test-results/
+backend/tests/screenshots/*.png
+*.egg-info/
+.hf-cache/
