@@ -1,0 +1,502 @@
+{
+  "_doc": "Reglas de inferencia compartidas por el backend (Python) y el visor (TypeScript). Toda asignación producida con estas reglas lleva origin: inferred y status: proposed. Fuente: docs/SPEC.md §6.4 (tipo de dato), docs/PLAN-modulo-proyectos.md §2.3 (dominio y sensibilidad).",
+  "data_type": {
+    "rules": [
+      {
+        "id": "fecha_prefix",
+        "type": "fecha",
+        "starts": [
+          "fecha"
+        ]
+      },
+      {
+        "id": "pregunta_binaria",
+        "type": "binario",
+        "starts": [
+          "¿",
+          "?"
+        ],
+        "contains": [
+          "evidencia de"
+        ]
+      },
+      {
+        "id": "numero_de",
+        "type": "identificador",
+        "starts": [
+          "numero de",
+          "n° de",
+          "nº de",
+          "id ",
+          "identificador"
+        ]
+      },
+      {
+        "id": "codigo",
+        "type": "codigo",
+        "contains": [
+          "codigo",
+          "cie 10",
+          "cie10",
+          "cie-10",
+          "(cieo)",
+          "cie-o",
+          "tnm"
+        ],
+        "equals": [
+          "figo"
+        ],
+        "starts": [
+          "topografia met"
+        ]
+      },
+      {
+        "id": "numerica",
+        "type": "numerica",
+        "starts": [
+          "edad",
+          "peso",
+          "talla",
+          "numero total",
+          "cantidad",
+          "dosis"
+        ],
+        "contains": [
+          "tasa",
+          "breslow",
+          "ki-67",
+          "ki67",
+          "psa",
+          "porcentaje",
+          "(mm)",
+          "(cm)",
+          "(%)",
+          "indice",
+          "score",
+          "puntaje"
+        ]
+      },
+      {
+        "id": "binario_lexico",
+        "type": "binario",
+        "contains": [
+          "invasion",
+          "ulceracion",
+          "estado vital",
+          "disponible en",
+          "presencia de",
+          "si/no"
+        ],
+        "equals": [
+          "hpv",
+          "p16"
+        ],
+        "starts": [
+          "metastasis al",
+          "tiene ",
+          "presenta "
+        ]
+      },
+      {
+        "id": "texto_libre",
+        "type": "texto_libre",
+        "starts": [
+          "observacion",
+          "observaciones",
+          "comentario",
+          "comentarios",
+          "descripcion",
+          "notas",
+          "nota "
+        ],
+        "contains": [
+          "texto libre"
+        ]
+      }
+    ],
+    "default": "categorica",
+    "from_values": {
+      "_doc": "Adaptador tabla: el tipo se infiere desde los valores de la columna, no desde el nombre (PLAN §4.2).",
+      "date_patterns": [
+        "^\\d{4}-\\d{2}-\\d{2}$",
+        "^\\d{2}/\\d{2}/\\d{4}$",
+        "^\\d{2}-\\d{2}-\\d{4}$",
+        "^\\d{4}-\\d{2}-\\d{2}[T ]\\d{2}:\\d{2}"
+      ],
+      "binary_sets": [
+        [
+          "si",
+          "no"
+        ],
+        [
+          "si",
+          "no",
+          "desconocido"
+        ],
+        [
+          "0",
+          "1"
+        ],
+        [
+          "true",
+          "false"
+        ],
+        [
+          "s",
+          "n"
+        ],
+        [
+          "verdadero",
+          "falso"
+        ],
+        [
+          "vivo",
+          "fallecido"
+        ],
+        [
+          "vivo",
+          "fallecido",
+          "desconocido"
+        ],
+        [
+          "presente",
+          "ausente"
+        ],
+        [
+          "positivo",
+          "negativo"
+        ]
+      ],
+      "code_patterns": [
+        "^[A-Z]\\d{2}(\\.\\d{1,2})?$",
+        "^C\\d{2}\\.\\d$",
+        "^\\d{4}/\\d$",
+        "^[cyp]?T[0-4isx][a-c]?N[0-3x][a-c]?M[01x]$"
+      ],
+      "categorical_max_distinct_ratio": 0.2,
+      "categorical_max_distinct": 30,
+      "identifier_unique_ratio": 0.98,
+      "free_text_min_avg_len": 40
+    }
+  },
+  "info_domain": {
+    "section_keywords": {
+      "demografico": [
+        "demograf",
+        "identificacion del paciente",
+        "datos del paciente",
+        "socioecon",
+        "educacion"
+      ],
+      "territorial": [
+        "geograf",
+        "territorial",
+        "residencia"
+      ],
+      "previsional_administrativo": [
+        "prevision",
+        "administrativ",
+        "regulacion",
+        "ges",
+        "convenio",
+        "aseguramiento"
+      ],
+      "diagnostico": [
+        "diagnost",
+        "tumor",
+        "codificacion",
+        "estadific",
+        "extension de la enfermedad",
+        "histopatolog"
+      ],
+      "tratamiento": [
+        "tratamiento",
+        "comite",
+        "terapia",
+        "cirugia",
+        "quimio",
+        "radio"
+      ],
+      "evolucion_desenlace": [
+        "evolucion",
+        "progresion",
+        "recurrencia",
+        "seguimiento",
+        "desenlace",
+        "estatus vital",
+        "estado vital",
+        "defuncion"
+      ],
+      "biomarcadores_laboratorio": [
+        "biomarcador",
+        "biologic",
+        "molecular",
+        "laboratorio",
+        "inmunohisto",
+        "genetic"
+      ],
+      "operacional_proceso": [
+        "proceso",
+        "flujo",
+        "operacion",
+        "agenda",
+        "atencion",
+        "ingreso",
+        "egreso"
+      ],
+      "financiero": [
+        "financ",
+        "costo",
+        "presupuesto",
+        "factur",
+        "arancel"
+      ],
+      "investigacion": [
+        "investigacion",
+        "protocolo",
+        "ensayo",
+        "estudio"
+      ],
+      "documental": [
+        "documento",
+        "informe",
+        "adjunto",
+        "archivo",
+        "acta"
+      ]
+    },
+    "element_keywords": {
+      "demografico": [
+        "nacimiento",
+        "edad",
+        "sexo",
+        "genero",
+        "nacionalidad",
+        "pueblo originario",
+        "estado civil",
+        "nombre",
+        "apellido",
+        "rut"
+      ],
+      "territorial": [
+        "region",
+        "comuna",
+        "direccion",
+        "domicilio",
+        "ciudad",
+        "pais"
+      ],
+      "previsional_administrativo": [
+        "prevision",
+        "convenio",
+        "ges",
+        "isapre",
+        "fonasa",
+        "seguro",
+        "tramo"
+      ],
+      "diagnostico": [
+        "diagnostic",
+        "cie",
+        "topografia",
+        "morfologia",
+        "comportamiento",
+        "tnm",
+        "estadio",
+        "figo",
+        "metastasis",
+        "neoplasia",
+        "grado",
+        "lateralidad",
+        "margenes",
+        "focalidad",
+        "invasion",
+        "gleason",
+        "breslow",
+        "ulceracion"
+      ],
+      "tratamiento": [
+        "tratamiento",
+        "comite",
+        "cirugia",
+        "quimio",
+        "radioterapia",
+        "inmunoterapia",
+        "intencion"
+      ],
+      "evolucion_desenlace": [
+        "progresion",
+        "recurrencia",
+        "ultimo contacto",
+        "seguimiento",
+        "estado vital",
+        "defuncion",
+        "fallec",
+        "condicion del caso"
+      ],
+      "biomarcadores_laboratorio": [
+        "her2",
+        "ki-67",
+        "ki67",
+        "receptor",
+        "kras",
+        "egfr",
+        "fish",
+        "molecular",
+        "hpv",
+        "p16",
+        "psa",
+        "marcador",
+        "mitotica",
+        "oms"
+      ],
+      "operacional_proceso": [
+        "centro",
+        "establecimiento",
+        "unidad",
+        "profesional",
+        "fecha de ingreso",
+        "fecha de egreso"
+      ],
+      "financiero": [
+        "costo",
+        "monto",
+        "valor",
+        "factura"
+      ],
+      "investigacion": [
+        "protocolo",
+        "ensayo",
+        "consentimiento"
+      ],
+      "documental": [
+        "informe",
+        "documento",
+        "adjunto",
+        "numero de informe"
+      ]
+    },
+    "element_keyword_confidence": 0.75,
+    "section_inherit_confidence": 0.6
+  },
+  "sensitivity": {
+    "_doc": "Clasificación provisional inspirada en la Ley 19.628 (reformada por la Ley 21.719) y la Ley 20.584. Requiere validación de la asesoría legal de FALP (decisión M2, nivel N3).",
+    "rules": [
+      {
+        "value": "dato_personal",
+        "confidence": 0.85,
+        "contains": [
+          "rut",
+          "run ",
+          "pasaporte",
+          "nombre",
+          "apellido",
+          "direccion",
+          "domicilio",
+          "telefono",
+          "celular",
+          "correo",
+          "email",
+          "e-mail",
+          "numero de ficha",
+          "ficha clinica",
+          "fecha de nacimiento",
+          "comuna",
+          "region de",
+          "nivel educacional",
+          "actividad ocupacional",
+          "nacionalidad",
+          "pueblo originario",
+          "sexo",
+          "estado civil"
+        ]
+      },
+      {
+        "value": "dato_sensible_salud",
+        "confidence": 0.8,
+        "contains": [
+          "diagnost",
+          "tumor",
+          "neoplasia",
+          "cie",
+          "tnm",
+          "estadio",
+          "metastasis",
+          "tratamiento",
+          "comite",
+          "progresion",
+          "recurrencia",
+          "defuncion",
+          "estado vital",
+          "condicion del caso",
+          "her2",
+          "ki-67",
+          "ki67",
+          "receptor",
+          "kras",
+          "egfr",
+          "fish",
+          "hpv",
+          "p16",
+          "psa",
+          "gleason",
+          "breslow",
+          "figo",
+          "prevision",
+          "convenio",
+          "ges",
+          "grado",
+          "lateralidad",
+          "margenes",
+          "focalidad",
+          "invasion",
+          "ulceracion",
+          "mitotica",
+          "oms",
+          "informe diagnostico",
+          "primera consulta",
+          "ultimo contacto",
+          "seguimiento",
+          "edad al diagnostico",
+          "topografia",
+          "morfologia",
+          "comportamiento",
+          "subtipo molecular",
+          "centro responsable",
+          "base diagnostica",
+          "extension",
+          "categoria de tratamiento",
+          "intencion",
+          "clase de caso",
+          "tipo de centro",
+          "tipo de comite",
+          "clasificacion del caso"
+        ]
+      },
+      {
+        "value": "interna",
+        "confidence": 0.6,
+        "contains": [
+          "codigo interno",
+          "id interno",
+          "usuario",
+          "responsable",
+          "version",
+          "fecha de registro",
+          "fecha de carga"
+        ]
+      }
+    ],
+    "default": null
+  },
+  "personal_data_guard": {
+    "_doc": "Guardia de datos personales: si un documento contiene estos patrones, se advierte y se bloquea el uso de IA hasta confirmación explícita (PLAN §7).",
+    "patterns": {
+      "rut_chileno": "\\b\\d{1,2}\\.?\\d{3}\\.?\\d{3}-[\\dkK]\\b",
+      "email": "[\\w.+-]+@[\\w-]+\\.[\\w.]+",
+      "telefono_cl": "\\+?56\\s?9\\s?\\d{4}\\s?\\d{4}",
+      "fecha_con_nombre": "\\b[A-ZÁÉÍÓÚ][a-záéíóú]+\\s+[A-ZÁÉÍÓÚ][a-záéíóú]+\\b.{0,40}\\b\\d{2}[/-]\\d{2}[/-]\\d{4}\\b"
+    },
+    "max_hits_to_show": 5
+  }
+}
