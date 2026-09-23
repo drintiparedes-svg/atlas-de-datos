@@ -7,7 +7,7 @@ El Atlas responde tres preguntas sobre la información de un proyecto: **qué ex
 | **Simplificada** (predeterminado) | Solo secciones (o fuentes) con un anillo de composición; cada una se abre con un clic. Portada con preguntas guiadas. |
 | **Detallada** | Red completa: vistas Estructura, Combinada y Por tipo, capas, «Agrupar por» cualquier faceta y fuerzas. |
 
-Todas las pestañas (Nota, Proyectos, Secciones, Facetas, Relaciones, Fuentes, Trazabilidad) están disponibles en ambos niveles. La elección se recuerda en el navegador.
+Todas las pestañas (Nota, Proyectos, Secciones, Facetas, Relaciones, Patrones, Fuentes, Trazabilidad) están disponibles en ambos niveles. La elección se recuerda en el navegador.
 
 ## 1. Poner en marcha
 
@@ -76,23 +76,25 @@ atlas export-memory proyecto.agf.json -o memoria/   # memory.jsonl + fichas mark
 
 `atlas ingest` se detiene con código 2 si la guardia detecta datos personales; `--allow-personal-data` solo debe usarse tras confirmar que el documento no contiene datos de pacientes.
 
-## 5. Backend de proyectos (pestaña Proyectos)
+## 5. Proyectos y archivos (para personas no técnicas)
 
-La pestaña **Proyectos** permite crear proyectos, subir documentos con distintas extensiones y publicar versiones con trazabilidad completa. Requiere el backend:
+**Proyectos.** Crea un proyecto con nombre y propósito. Queda guardado en tu navegador y, si quieres un espacio seguro, pulsa «Elegir carpeta en este equipo»: el Atlas escribirá ahí el proyecto completo (manifiesto, documentos originales, grafo por fuente y grafo consolidado). Si esa carpeta está dentro de **Google Drive**, **OneDrive** o de un **repositorio**, la copia se sincroniza sola. También puedes «Descargar paquete .zip» para enviarlo o abrirlo en otro equipo («Abrir paquete .zip» o «Abrir carpeta de un proyecto»). No hay que indicar direcciones ni contraseñas: los documentos nunca salen del equipo.
 
-```bash
-pip install -e "backend[server]"
-cp backend/.env.example backend/.env       # DATABASE_URL de Neon, ATLAS_API_TOKEN, ATLAS_CORS_ORIGINS
-export $(grep -v '^#' backend/.env | xargs)
-uvicorn atlas.api.app:app --host 127.0.0.1 --port 8000   # documentación interactiva en /api/docs
-```
+**Fuentes.** Sube uno o varios archivos a la vez (docx, csv, tsv, xlsx, sql, md, txt, json). Cada archivo aparece con una casilla para **activarlo o desactivarlo** en el grafo y un botón **Quitar**. Al cambiar algo, el grafo, el inventario y las relaciones se recalculan solos. Si la guardia detecta posibles datos personales (RUT, correos, teléfonos, nombres con fecha), el archivo queda pendiente hasta que escribas tu nombre y confirmes que no contiene datos de pacientes; la confirmación queda registrada.
 
-En el visor: Proyectos › Conexión con el backend › URL (`http://127.0.0.1:8000`), token y tu nombre (queda en la auditoría). Flujo: crear proyecto → subir fuentes (docx, csv, tsv, xlsx, sql, md, txt, json) → confirmar las que la guardia detenga → «Publicar versión» → ver grafo, inventario y relaciones. Las decisiones de revisión (aceptar o rechazar equivalencias) se guardan en el backend y se conservan al publicar versiones nuevas.
+**Modo institucional (opcional).** Para equipos con servidor propio existe un backend (FastAPI, PostgreSQL en Neon) que centraliza proyectos, versiones y auditoría. Se activa solo añadiendo `?api=URL` a la dirección del visor; no aparece en la interfaz normal. Arranque: `pip install -e "backend[server]"`, `cp backend/.env.example backend/.env`, `uvicorn atlas.api.app:app`.
 
-Persistencia: PostgreSQL en Neon (`DATABASE_URL`), con SQLite local como respaldo para desarrollo y pruebas. Se guardan metadatos, AGF y auditoría; nunca filas de datos. Los archivos subidos quedan en `ATLAS_UPLOAD_DIR` referenciados por sha256.
+## 6. Patrones: relaciones que no se ven a simple vista
 
-Seguridad: token obligatorio fuera de localhost, CORS restringido, extensiones y tamaño limitados, guardia de datos personales con confirmación nominal, auditoría de cada acción, IA apagada por defecto. El backend con carga de documentos se despliega en infraestructura institucional o con autenticación, no en la URL pública del visor (decisión M7).
+La pestaña **Patrones** entrena en tu navegador un pequeño modelo de atención (una capa del tipo que usan los transformers, aplicada al vecindario de cada dato en el grafo). El modelo aprende a predecir qué datos están conectados y, con eso, propone:
 
-## 6. Modelos abiertos
+- **Relaciones latentes:** pares de datos sin relación registrada que el modelo considera conectados, con puntaje y explicación (vecinos en común, palabras compartidas, tipo de dato). Se pueden agregar al grafo como propuestas (capa «Relaciones latentes») o descartar.
+- **Comunidades:** grupos de datos que el modelo ve juntos más allá de la sección donde están escritos, nombrados por sus palabras más frecuentes.
+- **Flujos de fechas:** secuencias de fechas en el orden del documento, indicando qué pasos tienen cronología registrada y cuáles solo predicha.
+- **Posibles reubicaciones:** datos que el modelo sitúa más cerca de otra sección que de la suya.
+
+Antes de mostrar resultados, el modelo se evalúa a ciegas: oculta el 15 % de las equivalencias y cronologías conocidas y mide cuántas veces prefiere el enlace real oculto a uno al azar. Ese porcentaje se muestra; por debajo del 70 % conviene desconfiar. Todo lo que produce es hipótesis (`origin: inferred`, `status: proposed`) sobre metadata: nunca ve filas ni datos de pacientes. Desde la línea de comandos: `atlas patterns proyecto.agf.json --add`.
+
+## 7. Modelos abiertos
 
 Ver `docs/MODELOS-ABIERTOS.md`. En resumen: el proveedor `hash` funciona sin red y se replica en el navegador; `st` usa `intfloat/multilingual-e5-small` (sentence-transformers) y `ollama` usa modelos servidos localmente. Ambos requieren `AI_ENABLED=true`.

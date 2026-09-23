@@ -65,6 +65,9 @@ Niveles del responsable: N2 = recomendación con aprobación; N3 = requiere revi
 | Nueva | Reglas compartidas | `config/inference.json` es la fuente de verdad de inferencia para backend y visor; los YAML de estándares y cronología se convierten a JSON al sincronizar | `frontend/scripts/sync-data.mjs` |
 | M7 (aplicación) | Publicación en Vercel solicitada por Inti (2026-09-22) | Se publica solo el visor con las muestras; la carga de documentos queda desactivada en la compilación pública (`VITE_PUBLIC_DEPLOY=true`) y se habilita solo en instalación local o institucional | `frontend/src/ui/sources.ts`, `frontend/vercel.json` |
 | T10 | Backend del módulo Proyectos (FastAPI) con token, CORS, límites de carga, guardia con confirmación nominal y auditoría; el visor lo usa desde la pestaña Proyectos y sigue funcionando sin él | `backend/atlas/api/` |
+| T11 | Proyectos para personas no técnicas: se guardan en el navegador y en una carpeta del equipo elegida por la persona (File System Access API); Google Drive, OneDrive o un repositorio sincronizan esa carpeta; paquete .zip para respaldo. Sin URL ni token en la interfaz; el backend queda como modo institucional opcional (`?api=`) | 2026-09-23 | Inti |
+| T12 | Fuentes con activar/desactivar y quitar por archivo; el grafo se recalcula con las fuentes activas | 2026-09-23 | Inti |
+| T13 | Patrones ocultos con un codificador de grafo de una capa de atención (tipo transformer) entrenado en el navegador y en la CLI; solo metadata; resultados siempre `inferred`/`proposed` con puntaje, justificación y prueba ciega | 2026-09-23 | Inti |
 | Nueva | Fixture interno | `info_para_presentacion.docx` no se versiona (repositorio público); las pruebas que lo usan se omiten si falta | `.gitignore`, `tests/conftest.py` |
 
 ## Observaciones del documento fuente pendientes (equipo de registro)

@@ -4,7 +4,8 @@ import { esc, fmtNum, norm } from "../lib/text";
 import { LAYER_LABEL } from "../model";
 import { shortestPath } from "../search/search";
 import type { AgfEdge } from "../types";
-import { apiClient, projectsState } from "./projects";
+import { apiClient, projectsState } from "./projects_api";
+import { edgeKey, local, recordReview } from "../project_local";
 
 export const relState = { a: "", b: "", filter: "proposed" as "proposed" | "all" };
 
@@ -89,6 +90,7 @@ export function applyReview(app: App, edgeId: string, decision: "validated" | "r
   app.reviewed.set(edgeId, decision); e.status = decision;
   (e as AgfEdge & { reviewed_at?: string }).reviewed_at = new Date().toISOString();
   app.rebuildModel(false); app.renderTab();
+  if (local.project && local.project.id === app.agf.project.id) { void recordReview("edge", edgeKey(e), decision); }
   const api = apiClient(), cur = projectsState.current;
   if (api && cur && cur.id === app.agf.project.id) {
     api.reviewEdge(cur.id, edgeId, decision).then(() => app.toast(decision === "validated" ? "Equivalencia aceptada y guardada en el backend (auditoría)." : "Propuesta rechazada y registrada en el backend."))

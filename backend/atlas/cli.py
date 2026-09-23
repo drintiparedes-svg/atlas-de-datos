@@ -187,6 +187,27 @@ def cmd_enrich(a):
     return 0
 
 
+def cmd_patterns(a):
+    """Patrones ocultos: relaciones latentes, comunidades y prueba ciega del modelo de atención."""
+    from .analysis.latent import as_edges, train_latent
+    g = _load(a.file)
+    r = train_latent(g, epochs=a.epochs, seed=a.seed, top_pairs=a.top, min_score=a.min_score)
+    names = {n["id"]: n["name"] for n in g["nodes"]}
+    t = r["training"]
+    print(f"{t['nodes']} nodos, {t['edges']} relaciones, {t['epochs']} épocas, pérdida {t['lossStart']} → {t['lossEnd']}, prueba ciega {t['holdoutAuc']}, {t['ms']} ms", file=sys.stderr)
+    for p in r["pairs"]:
+        print(f"{p['score']:.2f}  {names.get(p['a'], p['a'])}  ↔  {names.get(p['b'], p['b'])}   ({p['why']})")
+    for c in r["communities"]:
+        print(f"comunidad «{c['label']}» · {len(c['members'])} · cohesión {c['cohesion']}")
+    if a.add:
+        start = sum(1 for e in g["edges"] if str(e.get("id", "")).startswith("lt"))
+        g["edges"] += as_edges(r["pairs"], start)
+        A.validate(g)
+        _save(g, a.output or a.file)
+        print(f"{len(r['pairs'])} relaciones latentes agregadas como propuestas", file=sys.stderr)
+    return 0
+
+
 def cmd_inventory(a):
     print(json.dumps(P.inventory(_load(a.file), _profile()), ensure_ascii=False, indent=1)); return 0
 
@@ -220,6 +241,9 @@ def main(argv=None):
     s = sp.add_parser("search"); s.add_argument("file"); s.add_argument("query"); s.add_argument("-k", type=int, default=10); s.add_argument("--provider", default=None); s.set_defaults(fn=cmd_search)
     s = sp.add_parser("path"); s.add_argument("file"); s.add_argument("a"); s.add_argument("b"); s.set_defaults(fn=cmd_path)
     s = sp.add_parser("enrich"); s.add_argument("file"); s.add_argument("-o", "--output"); s.add_argument("--vocabulary", action="store_true"); s.set_defaults(fn=cmd_enrich)
+    s = sp.add_parser("patterns"); s.add_argument("file"); s.add_argument("-o", "--output"); s.add_argument("--epochs", type=int, default=120)
+    s.add_argument("--seed", type=int, default=7); s.add_argument("--top", type=int, default=40); s.add_argument("--min-score", type=float, default=0.8)
+    s.add_argument("--add", action="store_true", help="agrega los pares como aristas relates/latent propuestas"); s.set_defaults(fn=cmd_patterns)
     s = sp.add_parser("inventory"); s.add_argument("file"); s.set_defaults(fn=cmd_inventory)
     s = sp.add_parser("validate"); s.add_argument("file"); s.set_defaults(fn=cmd_validate)
     s = sp.add_parser("stats"); s.add_argument("file"); s.set_defaults(fn=cmd_stats)

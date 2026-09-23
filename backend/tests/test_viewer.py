@@ -259,7 +259,7 @@ def test_projects_tab_end_to_end_with_backend(browser, server, tmp_path):
             break
         time.sleep(0.1)
     try:
-        page, errors = open_page(browser, server, "?mode=detalle")
+        page, errors = open_page(browser, server, f"?mode=detalle&api=http://127.0.0.1:{port}")
         page.click("#tabs button[data-tab=proyectos]")
         page.fill("#api-url", f"http://127.0.0.1:{port}")
         page.fill("#api-token", "e2e-token")
@@ -292,3 +292,66 @@ def test_projects_tab_end_to_end_with_backend(browser, server, tmp_path):
         t.join(timeout=5)
         for k in ("ATLAS_CORS_ORIGINS", "ATLAS_API_TOKEN"):
             os.environ.pop(k, None)
+
+
+def test_local_projects_sources_toggle_remove_and_guard(browser, server, tmp_path):
+    """Proyectos guardados en el equipo (sin URL ni token): crear, subir varios archivos, activar/desactivar, quitar,
+    guardia con confirmación nominal y persistencia al recargar."""
+    page, errors = open_page(browser, server, "?mode=detalle")
+    page.on("dialog", lambda d: d.accept())
+    page.click("#tabs button[data-tab=proyectos]")
+    assert "URL del backend" not in page.inner_text("#panel-body"), "la pestaña no debe pedir URL ni token"
+    page.fill("#lp-name", "Proyecto local de prueba")
+    page.click("#lp-create")
+    page.wait_for_function("() => document.querySelector('#lp-export') !== null", timeout=10000)
+    page.click("#tabs button[data-tab=fuentes]")
+    page.set_input_files("#file-input", [str(FIX / "registro_sintetico.csv"), str(FIX / "esquema_registro.sql"), str(FIX / "minuta_registro.md")])
+    page.wait_for_function("() => document.querySelectorAll('#panel-body [data-active]').length >= 3", timeout=20000)
+    page.wait_for_function("() => window.__atlas.app.agf.sources.length === 3", timeout=10000)
+    assert page.evaluate("window.__atlas.app.agf.edges.filter(e => e.kind === 'same_as').length") >= 10
+    page.locator("[data-active]").nth(0).uncheck()
+    page.wait_for_function("() => window.__atlas.app.agf.sources.length === 2", timeout=10000)
+    page.locator("[data-remove]").nth(2).click()
+    page.wait_for_function("() => document.querySelectorAll('#panel-body [data-remove]').length === 2", timeout=10000)
+    page.locator("[data-active]").nth(0).check()
+    page.wait_for_function("() => window.__atlas.app.agf.sources.length === 2", timeout=10000)
+    p = tmp_path / "pacientes.csv"
+    p.write_text("rut,nombre,fecha\n12.345.678-9,Juan Perez,12/03/2024\n", encoding="utf-8")
+    page.set_input_files("#file-input", [str(p)])
+    page.wait_for_selector("[data-confirm]", timeout=10000)
+    assert page.evaluate("window.__atlas.app.agf.sources.length") == 2, "no entra al grafo sin confirmación"
+    page.click("[data-confirm]")   # sin nombre: no avanza
+    assert page.locator("[data-confirm]").count() == 1
+    page.fill("[data-actor-for]", "Inti")
+    page.click("[data-confirm]")
+    page.wait_for_function("() => window.__atlas.app.agf.sources.length === 3", timeout=10000)
+    assert "confirmado por Inti" in page.inner_text("#panel-body")
+    page.goto(server + "/?mode=detalle")
+    page.wait_for_selector("body[data-ready='1']")
+    page.click("#tabs button[data-tab=proyectos]")
+    page.wait_for_selector("[data-open-local]", timeout=10000)
+    page.click("[data-open-local]")
+    page.wait_for_function("() => window.__atlas.app.agf.project.name === 'Proyecto local de prueba' && window.__atlas.app.agf.sources.length === 3", timeout=10000)
+    assert not errors, errors
+    page.close()
+
+
+def test_patterns_tab_trains_and_proposes_latent_relations(browser, server):
+    page, errors = open_page(browser, server, "?mode=detalle&agf=./data/proyecto_registro.agf.json")
+    page.click("#tabs button[data-tab=patrones]")
+    assert "hipótesis" in page.inner_text("#panel-body")
+    page.click("#pt-run")
+    page.wait_for_selector("#pt-add-all", timeout=180000)
+    body = page.inner_text("#panel-body")
+    assert "Relaciones latentes" in body and "Comunidades" in body and "Prueba ciega" in body
+    auc = page.evaluate("window.__atlas.app && (function(){ const t = document.querySelector('#panel-body').innerText.match(/acierta el (\\d+) %/); return t ? +t[1] : null; })()")
+    assert auc is None or auc >= 70, f"el modelo debe superar claramente el azar (auc {auc})"
+    known = page.evaluate("new Set(window.__atlas.app.agf.edges.map(e => [e.source, e.target].sort().join('|'))).size")
+    page.locator("[data-pt-add]").first.click()
+    page.wait_for_timeout(300)
+    lat = page.evaluate("window.__atlas.app.agf.edges.filter(e => e.predicate === 'latent')")
+    assert len(lat) == 1 and lat[0]["status"] == "proposed" and lat[0]["origin"] == "inferred" and lat[0]["confidence"] >= 0.8
+    assert "latent" in page.evaluate("window.__atlas.app.model.layers")
+    assert page.evaluate("new Set(window.__atlas.app.agf.edges.map(e => [e.source, e.target].sort().join('|'))).size") == known + 1, "la relación latente no duplica una relación registrada"
+    assert not errors, errors
+    page.close()

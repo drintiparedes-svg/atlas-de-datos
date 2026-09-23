@@ -44,6 +44,7 @@ function intro(app: App): string {
     <button class="qbtn" data-go="search"><b>Buscar un dato</b><span>Escribe un nombre o una idea («fecha de diagnóstico», «biomarcadores», «comuna»). También encuentra parecidos.</span></button>
     <button class="qbtn" data-go="proyectos"><b>¿Qué tipos de información hay?</b><span>Proyectos e inventario: cuántos datos existen por tipo, dominio y sensibilidad, y qué falta por clasificar.</span></button>
     <button class="qbtn" data-go="relaciones"><b>¿Cómo se relacionan dos datos?</b><span>Elige dos datos y el Atlas muestra el camino que los une y explica cada paso.</span></button>
+    <button class="qbtn" data-go="patrones"><b>¿Qué relaciones no se ven a simple vista?</b><span>Un modelo entrenado en tu navegador propone relaciones ocultas, comunidades y flujos entre los datos.</span></button>
     <button class="qbtn" data-go="secciones"><b>¿Cómo se organiza el documento?</b><span>Lista de ${what} con su composición.</span></button>
     <button class="qbtn" data-go="traza"><b>¿Qué falta o hay que corregir?</b><span>${s.findings} hallazgos de calidad con prioridad y «qué hacer».</span></button>
     <p style="font-size:.78rem">Muestras: <a class="wl" href="?agf=./data/oncologia.agf.json">diccionario oncológico</a> · <a class="wl" href="?agf=./data/proyecto_registro.agf.json">proyecto de 4 fuentes</a>.</p>
@@ -65,7 +66,8 @@ function intro(app: App): string {
       <li><b>← Atrás</b> (o Alt + ←) vuelve al paso anterior; <b>Inicio</b> regresa a esta portada.</li>
       <li>Los anillos alrededor de un punto marcan hallazgos: rojo = bloqueante, dorado = importante, punteado = menor. El detalle está en Trazabilidad.</li>
       <li>Lo marcado como <span style="color:var(--warn)">inferido</span> fue propuesto por reglas o modelos y aún no está validado.</li>
-      <li>Pestaña <b>Fuentes</b>: carga documentos (docx, csv, xlsx, sql, md, json) sin que salgan de este equipo${PUBLIC_DEPLOY ? " (desactivada en esta versión pública)" : ""}. Pestaña <b>Proyectos</b>: gestión con el backend.</li>
+      <li>Pestaña <b>Proyectos</b>: crea un proyecto y guárdalo en una carpeta de tu equipo (Google Drive, OneDrive o un repositorio si quieres respaldo). Pestaña <b>Fuentes</b>: sube uno o varios archivos y actívalos o quítalos${PUBLIC_DEPLOY ? " (carga desactivada en esta versión pública)" : ""}.</li>
+      <li>Pestaña <b>Patrones</b>: un modelo de atención entrenado en tu navegador propone relaciones que no están escritas, comunidades y flujos.</li>
     </ul>`;
 }
 

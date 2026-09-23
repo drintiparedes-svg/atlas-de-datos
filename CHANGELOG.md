@@ -35,6 +35,12 @@ Primera versión construida a partir del paquete de traspaso. Fases F0, F1 y F2 
 ### Consolidación de niveles (2026-09-22, tercera entrega)
 - Se elimina el selector Explorar/Experto (T8). Quedan Simplificada (predeterminado) y Detallada; una sola portada guiada y todas las pestañas y controles siempre visibles.
 
+### Proyectos locales, fuentes activables y patrones ocultos (2026-09-23)
+- Pestaña **Proyectos** sin URL ni token: proyectos en el navegador (IndexedDB), carpeta segura en el equipo (File System Access API; apta para Google Drive, OneDrive o un repositorio), paquete .zip exportable e importable. El backend queda como modo institucional con `?api=`.
+- Pestaña **Fuentes**: subir uno o varios archivos, activar o desactivar cada uno, quitar, guardia con confirmación nominal; el grafo se recalcula con las fuentes activas y las decisiones de revisión se conservan.
+- Pestaña **Patrones**: codificador de grafo con atención entrenado en el navegador (y `atlas patterns` en la CLI con numpy): relaciones latentes con puntaje y explicación, comunidades, flujos de fechas, posibles reubicaciones, prueba ciega. Capa «Relaciones latentes (modelo)».
+- Pruebas: 3 del modelo latente y 2 de Playwright (proyectos locales y patrones).
+
 ### Publicación
 - Compilación pública (`VITE_PUBLIC_DEPLOY=true`) que desactiva la carga de documentos según M7; `frontend/vercel.json`; enlaces a las muestras en la portada.
 

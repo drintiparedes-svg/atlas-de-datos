@@ -23,14 +23,18 @@ Todo lo producido por modelos queda como `origin: inferred`, `status: proposed`,
 
 El índice se guarda junto al AGF (`X.vectors.json`) con el nombre del proveedor y del modelo. El visor lo carga automáticamente. Las consultas libres del navegador se vectorizan con el mismo proveedor solo si está disponible en el cliente: `hash` siempre lo está; para `st` u `ollama` el navegador usa los vecinos precalculados y la búsqueda léxica, o un proveedor registrado con `window.atlasRegisterEmbeddings` (por ejemplo, transformers.js con el mismo modelo, cuando la persona activa la IA local).
 
-## 3. Guardrails
+## 3. Modelo de patrones ocultos (propio, entrenado en el navegador)
+
+`frontend/src/analysis/latent.ts` y `backend/atlas/analysis/latent.py` implementan un codificador de grafo con una capa de atención: cada nodo (elemento o sección) parte de su vector léxico `hash` (256 dimensiones), se proyecta a 32 dimensiones y atiende a sus vecinos con consultas, claves y valores aprendidos (la operación central de un transformer, restringida al vecindario del grafo). El objetivo de entrenamiento es predecir enlaces (contraste positivo/negativo con muestreo de negativos), con retropropagación manual y descenso de gradiente; unas 120 épocas tardan uno a tres segundos con 300 nodos. Antes de proponer nada, retiene el 15 % de las equivalencias y cronologías como prueba ciega y reporta el acierto frente a pares al azar. No usa pesos externos ni red; es determinista por semilla. Sus salidas (relaciones latentes, comunidades, flujos, reubicaciones) son hipótesis sobre metadata y entran al grafo solo como `relates` con `predicate: latent`, `status: proposed`.
+
+## 4. Guardrails
 
 - Con `AI_ENABLED=false` el comando `atlas` rechaza `st` y `ollama` y no hay llamadas de red en tiempo de ejecución (prueba `test_provider_gating_by_ai_enabled`).
 - La guardia de datos personales bloquea la IA para cualquier archivo con patrones de datos personales hasta confirmación explícita.
 - El adaptador de bases de datos y el de tablas trabajan solo con metadatos y estadísticas agregadas: los modelos nunca ven filas.
 - Ningún proveedor fusiona nodos: solo propone aristas.
 
-## 4. Qué está verificado y qué no
+## 5. Qué está verificado y qué no
 
 - Verificado en este repositorio: proveedor `hash` (paridad Python ↔ TypeScript, determinismo), propuestas `same_as` sobre el conjunto de 4 fuentes (43 propuestas, todas correctas por construcción del fixture en las de nombre idéntico), búsqueda híbrida y camino explicado.
 - No verificado aquí: la descarga y ejecución de `multilingual-e5-small` y de Ollama, porque el entorno de construcción no tiene acceso a Hugging Face ni a un servidor Ollama. El código del proveedor está escrito contra la API estable de `sentence-transformers` (`encode(normalize_embeddings=True)`) y de Ollama (`POST /api/embed`), y debe validarse en un equipo con acceso antes de confiar en las cifras. Se recomienda medir precisión de `same_as` (objetivo ≥ 0,9, PLAN §11 F4) sobre un conjunto de referencia con el modelo elegido.

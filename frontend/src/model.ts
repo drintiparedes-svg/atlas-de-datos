@@ -5,7 +5,7 @@ import { facetValue, ProfileView, UNCLASSIFIED } from "./profile";
 import type { Agf, AgfEdge, AgfFinding, AgfNode } from "./types";
 
 export type VKind = "root" | "source" | "section" | "sub" | "group" | "facet" | "element" | "vocab";
-export type LinkKind = "struct" | "type" | "typefaint" | "std" | "time" | "link" | "ref" | "sim" | "derived" | "shares";
+export type LinkKind = "struct" | "type" | "typefaint" | "std" | "time" | "link" | "ref" | "sim" | "latent" | "derived" | "shares";
 export type View = "estructura" | "combinada" | "tipo";
 export type Mode = "simple" | "detalle";
 
@@ -34,11 +34,12 @@ export interface ModelOptions { groupBy: string; scope: Scope; threshold: number
 
 const SEV_RANK: Record<string, number> = { bloqueante: 0, importante: 1, menor: 2 };
 export const LAYER_OF_EDGE: Record<string, string> = { coded_with: "std", precedes: "time", same_as: "link", references: "ref", relates: "sim", derived_from: "derived", mentions: "sim", supports: "sim", contradicts: "sim" };
+export const layerOfEdge = (e: AgfEdge) => (e.kind === "relates" && e.predicate === "latent" ? "latent" : LAYER_OF_EDGE[e.kind]);
 export const LAYER_LABEL: Record<string, string> = {
   std: "Terminologías y estándares", time: "Cronología esperada", link: "Equivalencias entre fuentes (same_as)",
-  ref: "Referencias y llaves foráneas", sim: "Parecidos semánticos (propuestos)", derived: "Derivaciones", shares: "Fuentes que comparten datos",
+  ref: "Referencias y llaves foráneas", sim: "Parecidos semánticos (propuestos)", latent: "Relaciones latentes (modelo)", derived: "Derivaciones", shares: "Fuentes que comparten datos",
 };
-const LINK_KIND_OF_LAYER: Record<string, LinkKind> = { std: "std", time: "time", link: "link", ref: "ref", sim: "sim", derived: "derived", shares: "shares" };
+const LINK_KIND_OF_LAYER: Record<string, LinkKind> = { std: "std", time: "time", link: "link", ref: "ref", sim: "sim", latent: "latent", derived: "derived", shares: "shares" };
 
 export class Model {
   N: Record<string, VNode> = {};
@@ -123,7 +124,7 @@ export class Model {
     }
     // aristas transversales (capas): solo entre nodos visibles en el ámbito
     for (const e of agf.edges) {
-      const layer = LAYER_OF_EDGE[e.kind]; if (!layer) continue;
+      const layer = layerOfEdge(e); if (!layer) continue;
       const a = this.agfIdToV.get(e.source) || e.source, b = this.agfIdToV.get(e.target) || e.target;
       if (!this.N[a] || !this.N[b]) continue;
       if (e.kind === "coded_with") this.N[b].elements.push(this.N[a]);

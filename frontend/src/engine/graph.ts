@@ -225,6 +225,7 @@ export class Graph {
       if (l.kind === "link") { color = P.accent; a = 0.8; width = 1.6; dash = [1, 3]; }
       if (l.kind === "ref") { color = P.ink; a = 0.6; width = 1.2; dash = [6, 3]; }
       if (l.kind === "sim") { color = P.dim; a = 0.35; dash = [2, 4]; }
+      if (l.kind === "latent") { color = P.warn; a = 0.55; width = 1.2; dash = [1, 4]; }
       if (l.kind === "derived") { color = P.warn; a = 0.6; dash = [4, 2]; }
       if (l.kind === "shares") { color = P.accent; a = 0.5; width = 1 + Math.min(6, (l.weight || 1) * 0.6); }
       if (focus) { a = on ? 0.95 : 0.05; if (on) width += 0.5; } else if (hits) a *= hits.has(l.a) || hits.has(l.b) ? 1 : 0.25;
