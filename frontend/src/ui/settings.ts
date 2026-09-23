@@ -13,7 +13,7 @@ const VIEW_HINT: Record<View, string> = {
 export function initSettings(app: App) {
   const $ = (id: string) => document.getElementById(id) as HTMLElement;
   const settings = $("settings");
-  $("btn-settings").addEventListener("click", (e) => { settings.hidden = !settings.hidden; (e.currentTarget as HTMLElement).setAttribute("aria-expanded", String(!settings.hidden)); });
+  $("btn-settings").addEventListener("click", (e) => { settings.hidden = !settings.hidden; (e.currentTarget as HTMLElement).setAttribute("aria-expanded", String(!settings.hidden)); setTimeout(() => app.graph.fit(), 40); });
   document.querySelectorAll<HTMLButtonElement>(".seg button[data-view]").forEach((b) => b.addEventListener("click", () => {
     if (b.dataset.view === state.view) return;
     app.remember(); app.setView(b.dataset.view as View); app.rebuild(); setTimeout(() => app.graph.fit(), 900);

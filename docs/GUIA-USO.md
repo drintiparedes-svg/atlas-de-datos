@@ -57,6 +57,7 @@ Todo lo marcado como **# inferido** fue propuesto por reglas o por modelos y aú
 - **Fuentes:** arrastrar docx, csv, tsv, xlsx, sql, md, txt, json o `.agf.json`. Se procesan en el navegador; ningún dato sale del equipo. La guardia de datos personales detiene el archivo si detecta RUT, correos, teléfonos o nombres con fechas, y exige confirmación explícita.
 - **Relaciones:** revisar las equivalencias propuestas (aceptar ✓ o rechazar ✕), aceptar en bloque las de nombre idéntico y descargar el AGF con la revisión.
 - **Fuerzas:** Separar (200 a 12000) y Distancia (0,3× a 3,0×).
+- **Tamaño de los cuadros:** Ajustes y Nota tienen un asa en su borde interior: arrástrala para cambiar el ancho, haz doble clic para volver al ancho original o usa las flechas del teclado con el asa enfocada (Mayús avanza más rápido). El botón **Ampliar** (⤢ en Nota) ensancha el cuadro para leer tablas largas o el inventario; **Reducir** vuelve al ancho elegido. **Ocultar** cierra Ajustes (se reabre desde la barra superior). Los anchos se recuerdan en este navegador. En pantallas estrechas los cuadros ocupan todo el ancho.
 
 ## 4. Línea de comandos (`atlas`)
 

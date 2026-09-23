@@ -67,6 +67,7 @@ Niveles del responsable: N2 = recomendación con aprobación; N3 = requiere revi
 | T10 | Backend del módulo Proyectos (FastAPI) con token, CORS, límites de carga, guardia con confirmación nominal y auditoría; el visor lo usa desde la pestaña Proyectos y sigue funcionando sin él | `backend/atlas/api/` |
 | T11 | Proyectos para personas no técnicas: se guardan en el navegador y en una carpeta del equipo elegida por la persona (File System Access API); Google Drive, OneDrive o un repositorio sincronizan esa carpeta; paquete .zip para respaldo. Sin URL ni token en la interfaz; el backend queda como modo institucional opcional (`?api=`) | 2026-09-23 | Inti |
 | T12 | Fuentes con activar/desactivar y quitar por archivo; el grafo se recalcula con las fuentes activas | 2026-09-23 | Inti |
+| T14 | Los cuadros Ajustes y Nota son redimensionables por la persona (asa, teclado, Ampliar) con anchos guardados en el navegador; los anchos iniciales (17,5 rem y 27 rem) y los parámetros visuales del perfil no cambian | 2026-09-23 | Inti (solicitud de usabilidad) |
 | T13 | Patrones ocultos con un codificador de grafo de una capa de atención (tipo transformer) entrenado en el navegador y en la CLI; solo metadata; resultados siempre `inferred`/`proposed` con puntaje, justificación y prueba ciega | 2026-09-23 | Inti |
 | Nueva | Fixture interno | `info_para_presentacion.docx` no se versiona (repositorio público); las pruebas que lo usan se omiten si falta | `.gitignore`, `tests/conftest.py` |
 

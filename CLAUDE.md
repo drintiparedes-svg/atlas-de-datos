@@ -29,7 +29,7 @@ Donde el PLAN sea más específico que la SPEC, prevalece el PLAN.
 | `backend/tests/fixtures/` | `info_para_presentacion.docx` y `golden_expected.json` | Caso dorado |
 | `backend/tests/test_golden.py` | 3 pruebas del caso dorado y del AGF | En verde |
 | `backend/atlas/` | Paquete Python: adaptadores, inferencia, calidad, relaciones, embeddings, memoria, CLI `atlas` | Construido 2026-09-22, 28 pruebas |
-| `frontend/` | Visor TypeScript + Vite (motor del prototipo, niveles Simplificada/Detallada, búsqueda, proyectos, relaciones, fuentes) | Construido 2026-09-22, 10 pruebas Playwright |
+| `frontend/` | Visor TypeScript + Vite (motor del prototipo, niveles Simplificada/Detallada, búsqueda, proyectos, relaciones, fuentes) | Construido 2026-09-22, cuadros ajustables 2026-09-23, 14 pruebas Playwright |
 | `config/inference.json` | Reglas de inferencia compartidas por backend y visor | Borrador |
 | `samples/proyecto_registro.agf.json` | Proyecto de 4 fuentes con equivalencias propuestas | Válido contra el esquema |
 | `docs/GUIA-USO.md`, `docs/MODELOS-ABIERTOS.md` | Guía para ambos públicos; modelos abiertos y límites verificados | 2026-09-22 |

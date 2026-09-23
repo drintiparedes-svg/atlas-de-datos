@@ -370,3 +370,51 @@ def test_patterns_tab_trains_and_proposes_latent_relations(browser, server):
     assert page.evaluate("new Set(window.__atlas.app.agf.edges.map(e => [e.source, e.target].sort().join('|'))).size") == known + 1, "la relación latente no duplica una relación registrada"
     assert not errors, errors
     page.close()
+
+
+def test_settings_and_note_panels_are_resizable_and_persist(browser, server):
+    """Ajustes y Nota se redimensionan (arrastre, teclado, Ampliar), el grafo respeta los anchos y el tamaño persiste."""
+    page, errors = open_page(browser, server, "?mode=detalle")
+    page.wait_for_timeout(400)   # fin de la transición de apertura del panel
+    w = lambda sel: page.evaluate(f"document.querySelector('{sel}').getBoundingClientRect().width")
+    area = lambda: page.evaluate("window.__atlas.app.graph.graphArea()")
+    assert abs(w("#settings") - 17.5 * 16) < 2 and abs(w("#panel") - 27 * 16) < 2
+    a0 = area()
+    assert a0["x0"] > 280 and a0["x1"] == 1440 - 27 * 16, a0
+    # arrastre del asa del panel de nota (hacia la izquierda = más ancho)
+    h = page.locator("#rh-panel").bounding_box()
+    page.mouse.move(h["x"] + 5, h["y"] + 300); page.mouse.down(); page.mouse.move(h["x"] - 200, h["y"] + 300, steps=8); page.mouse.up()
+    page.wait_for_timeout(120)
+    assert abs(w("#panel") - (27 * 16 + 200)) < 8, w("#panel")
+    assert area()["x1"] == 1440 - round(w("#panel"))
+    # arrastre del asa de ajustes (hacia la derecha = más ancho)
+    h = page.locator("#rh-settings").bounding_box()
+    page.mouse.move(h["x"] + 5, h["y"] + 200); page.mouse.down(); page.mouse.move(h["x"] + 125, h["y"] + 200, steps=6); page.mouse.up()
+    page.wait_for_timeout(120)
+    assert abs(w("#settings") - (17.5 * 16 + 120)) < 8, w("#settings")
+    assert area()["x0"] > 16 + 17.5 * 16 + 120
+    # teclado: flechas sobre el asa; límites mínimos
+    page.focus("#rh-settings"); page.keyboard.press("Shift+ArrowLeft")
+    assert abs(w("#settings") - (17.5 * 16 + 120 - 64)) < 8
+    for _ in range(20): page.keyboard.press("Shift+ArrowLeft")
+    assert abs(w("#settings") - 224) < 2, "no baja del mínimo"
+    # Ampliar y Reducir
+    page.click("#btn-panel-wide"); page.wait_for_timeout(80)
+    assert w("#panel") > 900 and page.get_attribute("#btn-panel-wide", "aria-pressed") == "true"
+    page.click("#btn-panel-wide"); page.wait_for_timeout(80)
+    assert abs(w("#panel") - (27 * 16 + 200)) < 8, "al reducir vuelve al ancho elegido"
+    page.click("#btn-settings-wide"); page.wait_for_timeout(80)
+    assert w("#settings") > 500 and page.inner_text("#btn-settings-wide") == "Reducir"
+    # persistencia tras recargar
+    page.reload(); page.wait_for_selector("body[data-ready='1']", timeout=20000); page.wait_for_timeout(400)
+    assert abs(w("#panel") - (27 * 16 + 200)) < 8 and w("#settings") > 500
+    # doble clic restablece; Ocultar cierra los ajustes y libera el área
+    page.dblclick("#rh-panel"); page.wait_for_timeout(80)
+    assert abs(w("#panel") - 27 * 16) < 2
+    page.click("#btn-settings-hide")
+    assert page.evaluate("document.querySelector('#settings').hidden") and area()["x0"] == 0
+    # pantalla estrecha: el panel ocupa todo el ancho y las asas desaparecen
+    page.set_viewport_size({"width": 600, "height": 800}); page.wait_for_timeout(120)
+    assert abs(w("#panel") - 600) < 2 and page.evaluate("getComputedStyle(document.querySelector('#rh-panel')).display") == "none"
+    assert not errors, errors
+    page.close()

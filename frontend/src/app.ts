@@ -1,5 +1,6 @@
 /** Orquestación del visor: carga AGF + perfil, modelo, motor, historial y pestañas. */
 import { Graph } from "./engine/graph";
+import { occupied } from "./ui/resize";
 import { esc, pad } from "./lib/text";
 import { Model, type Scope, type View, type VNode, type Mode } from "./model";
 import { currentTheme, ProfileView, UNCLASSIFIED } from "./profile";
@@ -36,9 +37,12 @@ export class App {
     });
     this.graph.graphArea = () => {
       const W = this.graph.W, H = this.graph.H;
-      const panelOpen = this.panel.classList.contains("open") && W > 900;
-      const settingsOpen = !(document.getElementById("settings") as HTMLElement).hidden && W > 900;
-      return { x0: settingsOpen ? 300 : 0, x1: W - (panelOpen ? Math.min(27 * 16, W * 0.94) : 0), y0: 60, y1: H - 20 };
+      // anchos reales de los cuadros (ajustables por la persona); en pantallas estrechas se superponen al grafo
+      const panelW = W > 900 ? occupied("panel") : 0;
+      const settingsRight = W > 900 ? occupied("settings") : 0;
+      const x0 = settingsRight ? settingsRight + 12 : 0, x1 = W - panelW;
+      // si los cuadros ampliados dejan menos de 320 px libres, el grafo usa toda la ventana (los cuadros lo cubren parcialmente)
+      return x1 - x0 < 320 ? { x0: 0, x1: W, y0: 60, y1: H - 20 } : { x0, x1, y0: 60, y1: H - 20 };
     };
   }
 

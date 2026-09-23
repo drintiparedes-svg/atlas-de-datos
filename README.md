@@ -8,7 +8,7 @@ Sirve a quienes solo quieren saber qué datos existen o cómo se relacionan dos 
 
 ```
 backend/atlas/     paquete Python: adaptadores → AGF, inferencia, calidad, relaciones, embeddings, memoria, CLI `atlas`
-backend/tests/     38 pruebas: caso dorado, adaptadores, inferencia, proyecto multi fuente, memoria, visor (Playwright)
+backend/tests/     48 pruebas: caso dorado, adaptadores, inferencia, proyecto multi fuente, memoria, visor (Playwright)
 frontend/          visor TypeScript + Vite: motor canvas del prototipo, dos niveles de detalle, búsqueda híbrida, inventario, relaciones, carga en el navegador
 schemas/agf-1.0.json   contrato Atlas Graph Format 1.0
 profiles/default.json  perfil de visualización (tokens, facetas y colores, formas, fuerzas, etiquetas)
