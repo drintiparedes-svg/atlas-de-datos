@@ -65,6 +65,16 @@ def stats(page):
     return page.evaluate("window.__atlas.stats()")
 
 
+def new_local_project(page, name="Proyecto de prueba"):
+    """Crea un proyecto local (sin URL ni token) y deja abierta la pestaña Fuentes."""
+    page.click("#tabs button[data-tab=proyectos]")
+    page.fill("#lp-name", name)
+    page.click("#lp-create")
+    page.wait_for_function("() => document.querySelector('#lp-export') !== null", timeout=10000)
+    page.click("#tabs button[data-tab=fuentes]")
+    page.wait_for_selector("#file-input", state="attached", timeout=10000)
+
+
 def test_golden_case_in_viewer(browser, server):
     """CLAUDE.md, forma de trabajo 3: 16 / 6 / 87 / 18 grupos, 176 aristas en Combinada sin capas."""
     page, errors = open_page(browser, server)
@@ -182,10 +192,10 @@ def test_project_sample_inventory_relations_and_path(browser, server):
 
 def test_browser_ingest_of_synthetic_fixtures(browser, server):
     """F2: carga en el navegador sin red. csv, sql y md producen las mismas cifras que el backend."""
-    page, errors = open_page(browser, server, "?mode=detalle&agf=./data/registro_sintetico.agf.json")
-    page.click("#tabs button[data-tab=fuentes]")
-    page.set_input_files("#file-input", [str(FIX / "esquema_registro.sql"), str(FIX / "minuta_registro.md")])
-    page.wait_for_timeout(2500)
+    page, errors = open_page(browser, server, "?mode=detalle")
+    new_local_project(page, "Fixtures sintéticos")
+    page.set_input_files("#file-input", [str(FIX / "registro_sintetico.csv"), str(FIX / "esquema_registro.sql"), str(FIX / "minuta_registro.md")])
+    page.wait_for_function("() => document.querySelector('#panel-body').innerText.includes('markdown@1.0') && window.__atlas.app.agf.sources.length === 3", timeout=30000)
     body = page.inner_text("#panel-body")
     assert "esquema-bd@1.0: 4 secciones, 27 elementos, 0 sin clasificar" in body
     assert "markdown@1.0: 3 secciones, 10 elementos, 0 sin clasificar" in body
@@ -201,12 +211,13 @@ def test_browser_ingest_of_synthetic_fixtures(browser, server):
 
 @pytest.mark.skipif(not DOCX.exists(), reason="fixture interno de FALP ausente")
 def test_browser_ingest_docx_reproduces_golden(browser, server):
-    page, errors = open_page(browser, server, "?mode=detalle&agf=./data/registro_sintetico.agf.json")
-    page.click("#tabs button[data-tab=fuentes]")
+    page, errors = open_page(browser, server, "?mode=detalle")
+    new_local_project(page, "Diccionario docx")
     page.set_input_files("#file-input", [str(DOCX)])
-    page.wait_for_timeout(2500)
+    page.wait_for_function("() => document.querySelector('#panel-body').innerText.includes('docx-diccionario@1.0') && window.__atlas.app.agf.sources.length === 1", timeout=30000)
     body = page.inner_text("#panel-body")
     assert "docx-diccionario@1.0: 16 secciones, 87 elementos, 0 sin clasificar" in body
+    assert stats(page)["elements"] == 87
     assert not errors, errors
     page.close()
 
@@ -214,13 +225,13 @@ def test_browser_ingest_docx_reproduces_golden(browser, server):
 def test_personal_data_guard_blocks_in_browser(browser, server, tmp_path):
     p = tmp_path / "pacientes.csv"
     p.write_text("rut,nombre,fecha\n12.345.678-9,Juan Perez,12/03/2024\n", encoding="utf-8")
-    page, errors = open_page(browser, server)
-    page.click("#tabs button[data-tab=fuentes]")
+    page, errors = open_page(browser, server, "?mode=detalle")
+    new_local_project(page, "Guardia")
     page.set_input_files("#file-input", [str(p)])
-    page.wait_for_timeout(1000)
+    page.wait_for_selector("[data-confirm]", timeout=10000)
     body = page.inner_text("#panel-body")
     assert "PENDIENTE DE CONFIRMACIÓN" in body.upper() and "rut_chileno" in body
-    assert page.evaluate("window.__atlas.app.agf.sources.length") == 1, "no se publica sin confirmación"
+    assert page.evaluate("window.__atlas.app.agf.sources.length") == 0, "no se publica sin confirmación"
     assert not errors, errors
     page.close()
 
@@ -268,7 +279,12 @@ def test_projects_tab_end_to_end_with_backend(browser, server, tmp_path):
         page.wait_for_selector("#np-name", timeout=10000)
         page.fill("#np-name", "Proyecto E2E")
         page.click("#np-create")
-        page.wait_for_selector("#p-file-input", state="attached", timeout=10000)
+        try:
+            page.wait_for_selector("#p-file-input", state="attached", timeout=10000)
+        except Exception:
+            import httpx as _hx
+            r = _hx.get(f"http://127.0.0.1:{port}/api/projects", headers={"X-Atlas-Token": "e2e-token"})
+            raise AssertionError(f"panel tras crear: {page.inner_text('#panel-body')[:300]} | errores: {errors} | GET projects {r.status_code} {r.text[:300]} | db {os.environ.get('DATABASE_URL')} | engine {db.database_url()}")
         page.set_input_files("#p-file-input", [str(FIX / "registro_sintetico.csv"), str(FIX / "esquema_registro.sql"), str(FIX / "minuta_registro.md")])
         page.wait_for_function("() => document.querySelectorAll('#panel-body .src-row .st').length >= 3 && [...document.querySelectorAll('#panel-body .src-row .st')].filter(e => e.textContent.includes('publicado')).length >= 3", timeout=20000)
         page.click("#p-build")
@@ -324,13 +340,12 @@ def test_local_projects_sources_toggle_remove_and_guard(browser, server, tmp_pat
     assert page.locator("[data-confirm]").count() == 1
     page.fill("[data-actor-for]", "Inti")
     page.click("[data-confirm]")
-    page.wait_for_function("() => window.__atlas.app.agf.sources.length === 3", timeout=10000)
-    assert "confirmado por Inti" in page.inner_text("#panel-body")
+    page.wait_for_function("() => window.__atlas.app.agf.sources.length === 3 && document.querySelector('#panel-body').innerText.includes('confirmado por Inti')", timeout=15000)
     page.goto(server + "/?mode=detalle")
     page.wait_for_selector("body[data-ready='1']")
     page.click("#tabs button[data-tab=proyectos]")
     page.wait_for_selector("[data-open-local]", timeout=10000)
-    page.click("[data-open-local]")
+    page.click("[data-open-local][data-open-local*='proyecto-local-de-prueba']")
     page.wait_for_function("() => window.__atlas.app.agf.project.name === 'Proyecto local de prueba' && window.__atlas.app.agf.sources.length === 3", timeout=10000)
     assert not errors, errors
     page.close()

@@ -66,7 +66,7 @@ function sourceRow(s: ApiSource, pid: string) {
 export function renderProyectos(app: App): string {
   const s = projectsState, api = apiClient();
   const cfgBox = `
-    <details ${s.showConfig || !api ? "open" : ""} style="margin:.5rem 0">
+    <details ${s.showConfig || !api || !s.cfg?.token ? "open" : ""} style="margin:.5rem 0">
       <summary class="eyebrow" style="cursor:pointer">Conexión con el backend</summary>
       <div class="pick" style="margin-top:.5rem">
         <input id="api-url" placeholder="URL del backend, p. ej. http://127.0.0.1:8000" value="${esc(s.cfg?.url || "")}" autocomplete="off">

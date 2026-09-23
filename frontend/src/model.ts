@@ -135,6 +135,10 @@ export class Model {
       this.link(e.source, e.target, "shares", ["estructura", "combinada", "tipo"], { layer: "shares", edge: e, weight: e.weight || 1 });
       this.layerCount.shares = (this.layerCount.shares || 0) + 1;
     }
+    for (const e of agf.edges) { const layer = layerOfEdge(e); if (layer && !this.layerCount[layer] && e.status !== "rejected") this.layerCount[layer] = 0; }
+    const all: Record<string, number> = {};
+    for (const e of agf.edges) { const layer = layerOfEdge(e); if (layer && e.status !== "rejected") all[layer] = (all[layer] || 0) + 1; }
+    for (const [l, k] of Object.entries(all)) if (!this.layerCount[l]) this.layerCount[l] = k;
     this.layers = Object.keys(LAYER_LABEL).filter((l) => this.layerCount[l]);
     for (const n of Object.values(this.N)) n.obsSev = n.agf ? worst(n.agf.id) : null;
   }
@@ -198,7 +202,8 @@ export class Model {
     const { agf, opt } = this;
     const srcNodes = agf.nodes.filter((n) => n.kind === "source");
     const bridged = new Set<string>();
-    for (const e of agf.edges) if (e.kind === "same_as" && e.status !== "rejected") { bridged.add(e.source); bridged.add(e.target); }
+    const srcOf = new Map(agf.nodes.map((n) => [n.id, n.source_id]));
+    for (const e of agf.edges) if ((e.kind === "same_as" || (e.kind === "relates" && e.predicate === "latent" && srcOf.get(e.source) !== srcOf.get(e.target))) && e.status !== "rejected") { bridged.add(e.source); bridged.add(e.target); }
     srcNodes.forEach((s, i) => {
       const src = this.add({ id: s.id, kind: "source", name: s.title || s.name, n: i + 1, order: i + 1, agf: s, source: s.id, value: s.facets?.source_type || UNCLASSIFIED });
       this.agfIdToV.set(s.id, s.id);

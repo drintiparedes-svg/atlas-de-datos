@@ -14,7 +14,8 @@ let cache: StoredProject[] = [];
 
 export async function refreshLocal(app: App) {
   cache = await listProjects().catch(() => []);
-  if (app.tab === "proyectos") app.renderTab();
+  // no interrumpir a la persona: solo se vuelve a dibujar si no está escribiendo en el panel
+  if (app.tab === "proyectos" && !apiMode() && !app.body.contains(document.activeElement)) app.renderTab();
 }
 
 export function renderProyectos(app: App): string {
